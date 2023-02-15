@@ -105,9 +105,13 @@ const orderController= {
   getOrder:asyncHandler(async(req,res)=>{
     const {id}=req.user;
 
-    const order= await Order.findOne({orderby:id}).populate('products.product').exec()
+    try {
+      const order = await Order.findOne({orderby:id}).populate('products.product').exec()
+    } catch (error) {
+      console.log(error);
+    }
 
-    res.json({order})
+       res.json(order)
 
   }),
   updateOrder:asyncHandler(async(req,res)=>{

@@ -3,13 +3,13 @@ const multer  = require('multer')
 const { getAllUsers, adminLogin, userBan, userUnBan } = require("../controllers/adminController")
 const {createCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById} = require("../controllers/categoryController")
 const { createCoupon, getAllCoupon, updateCoupon, deleteCoupon } = require("../controllers/couponController")
+const { addOffer, updateOffer, deleteOffer } = require("../controllers/offferController")
 const { getOrders, editOrder, getOrderbyId, getOrder, updateOrder } = require("../controllers/orderController")
 const { getAllProduct, getProductById, updateProductById, deleteProductById, addProduct } = require("../controllers/productController")
 const verifyUser = require("../middleware/veryfyuser")
 // const multiupload = require("../middleware/multer"
 
 const router = express.Router()
-// const multer = require('multer')
 // const morgan = require("morgan")
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -28,7 +28,7 @@ router.get("/login",adminLogin)
 router.get("/dash",getAllUsers)
 router.get("/ban/:id",userBan)
 router.get("/unban/:id",userUnBan)
-router.post("/add address",)
+// router.post("/add address",)
 
 
 
@@ -51,6 +51,10 @@ router.post("/coupon",createCoupon  )
 router.get("/coupon",getAllCoupon  )
 router.put("/coupon/:id", updateCoupon  )
 router.delete("/coupon/:id", deleteCoupon  )
+// offer
+router.post("/offer",addOffer  )
+router.put("/offer/:id",updateOffer  )
+router.delete("/offer/:id",deleteOffer  )
 
 
 

@@ -1,11 +1,17 @@
 const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcrypt")
 const User = require("../model/userModel");
+const Product = require("../model/productModel");
 
 
 
 // desc Register users
 //@routes GET/ api/admin/register
+
+const registerPage = (req,res)=> {
+  res.render("signup.hbs")
+  
+}
 
 const registerUser = asyncHandler(async (req, res) => {
   
@@ -45,26 +51,36 @@ const registerUser = asyncHandler(async (req, res) => {
 // desc Login user
 //@routes GET/ api/admin/login
 
+const login = ((req, res) => {
+  console.log("GEt login ");
+  res.render("login")
+    
+})
+
+
 const loginUser = asyncHandler(async (req, res) => {
+  // res.render("login")
   console.log(req.body);
   const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400);
-    throw new Error("All fields are mandatory")
+  // if (!email || !password) {
+  //   res.status(400);
+  //   throw new Error("All fields are mandatory")
     
-  }
-  const user = await User.findOne({ email });
+  // }
+  const user = await User.findOne({ email});
 
   if (user && (await bcrypt.compare(password, user.password))) {
     req.session.user = {
       id: user._id
   }
-  console.log(req.session.user);
-   res.json({ message: "logged the user" })
+  res.redirect('/')
+  // console.log(req.session.user);
+  //  res.json({ message: "logged the user" })
 
   }
     
 })
+
 // desc Current user info
 //@routes GET/ api/admin/current
 //@access private
@@ -78,12 +94,27 @@ const getAllUsers = asyncHandler(async (req, res) => {
 console.log("this is user id",req.user);
   const user =await User.findById(req.user.id);
   console.log(user);
-  res.status(200).json(user)
+  // res.status(200).json(user)
+
+  
 });
+
+const getLandingPage = asyncHandler(async(req,res)=>{
+  const products = await Product.find().lean()
+  // console.log("product",products);
+  res.render("landingPage",{products})
+  
+
+})
+const getHomePage = asyncHandler(async(req,res)=>{
+
+  res.render("landingPage")
+
+})
 
 const saveAddress = asyncHandler(async (req, res) => {
      const {id}=req.user
-     const{address}= req.body;
+    //  const{address}= req.body;
 
      try {
       
@@ -96,4 +127,20 @@ const saveAddress = asyncHandler(async (req, res) => {
 
   })
 
-module.exports = { registerUser, loginUser, userLogout, getAllUsers,saveAddress }
+
+  const profile= asyncHandler(async(req,res)=>{
+        const {id}= req.user
+
+        try {
+          const userProfile = await User.findById(id)
+          res.json(userProfile)
+
+        } catch (error) {
+          console.log(error);
+        }
+
+
+
+  })
+
+module.exports = { registerUser, loginUser, userLogout, getAllUsers,saveAddress , login , getHomePage,getLandingPage, registerPage, profile }

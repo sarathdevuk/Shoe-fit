@@ -224,6 +224,7 @@ emptyCart: asyncHandler(async(req,res)=>{
 applyCoupon:asyncHandler(async(req,res)=>{
 
   const{coupon}=req.body;
+  
   const{id}=req.user;
    
   const validCoupon = await Coupon.findOne({name:coupon})

@@ -82,10 +82,10 @@ const productController = {
         name, price, description, quantity,
         image: req.files.image[0],
         sideImage: req.files.sideImage
-      }
+      },
     })
     res.json(product)
-    console.log(req.body)
+    console.log(product)
   },
 
   deleteProductById: asyncHandler(async (req, res) => {
@@ -135,6 +135,20 @@ const productController = {
     console.log(error);    
     }
 
+
+  }),
+  getWishlist: asyncHandler(async(req,res)=>{
+    const {id}=req.user;
+    try {
+      const {wishlist} = await User.findById(id) 
+      console.log(wishlist);
+      res.json(wishlist)
+
+    } catch (error) {
+      
+    }
+ 
+  
 
   })
 
