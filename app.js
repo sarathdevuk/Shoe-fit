@@ -33,7 +33,10 @@ app.use(morgan("dev"))
 app.get('/sample', (req,res)=>{
   // res.send("hey")
   // res.render("login")
-  res.render("homepage")
+  // res.render("homepage")
+  res.render("produc6")
+  // res.render("productPage")
+  // res.render("landingPage")
 })
 
 

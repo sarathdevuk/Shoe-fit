@@ -10,7 +10,6 @@ const Product = require("../model/productModel");
 
 const registerPage = (req,res)=> {
   res.render("signup.hbs")
-  
 }
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -39,8 +38,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
   console.log(`user created ${user}`);
   if (user) {
-
-    res.status(201).json({ _id: user.id, email: user.email })
+    res.redirect('/login')
+    // res.status(201).json({ _id: user.id, email: user.email })
   } else {
     res.status(400)
     throw new Error("User data is not valid")
@@ -51,33 +50,29 @@ const registerUser = asyncHandler(async (req, res) => {
 // desc Login user
 //@routes GET/ api/admin/login
 
-const login = ((req, res) => {
-  console.log("GEt login ");
+const getLogin = ((req, res) => {
+
   res.render("login")
     
 })
 
 
 const loginUser = asyncHandler(async (req, res) => {
-  // res.render("login")
   console.log(req.body);
   const { email, password } = req.body;
-  // if (!email || !password) {
+  // if (!email || !password){
   //   res.status(400);
   //   throw new Error("All fields are mandatory")
-    
   // }
   const user = await User.findOne({ email});
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    req.session.user = {
-      id: user._id
-  }
-  res.redirect('/')
-  // console.log(req.session.user);
-  //  res.json({ message: "logged the user" })
+    req.session.user =  user;
+    res.redirect('/')
+  }else
+   res.render('login', {  err:true , message:"Invalid Email or Password.!" })
 
-  }
+  //  res.json({ message: "logged the user" })
     
 })
 
@@ -86,11 +81,11 @@ const loginUser = asyncHandler(async (req, res) => {
 //@access private
 const userLogout = asyncHandler(async (req, res) => {
   req.session.destroy();
-  res.json({ message: "User logged out" })
+  res.redirect("/")
 })
 
 const getAllUsers = asyncHandler(async (req, res) => {
-//  res.json({message: " home"})
+
 console.log("this is user id",req.user);
   const user =await User.findById(req.user.id);
   console.log(user);
@@ -108,7 +103,21 @@ const getLandingPage = asyncHandler(async(req,res)=>{
 })
 const getHomePage = asyncHandler(async(req,res)=>{
 
-  res.render("landingPage")
+  try {
+
+    const products = await Product.find().lean()
+    if(req.session.user){
+        Log= req.session.user;
+        res.render("homepage.hbs",{products,Log})
+    }
+    res.render("homepage.hbs",{products})
+
+  } catch (error) {
+    console.log(error);
+  }
+   
+  
+ 
 
 })
 
@@ -143,4 +152,4 @@ const saveAddress = asyncHandler(async (req, res) => {
 
   })
 
-module.exports = { registerUser, loginUser, userLogout, getAllUsers,saveAddress , login , getHomePage,getLandingPage, registerPage, profile }
+module.exports = { registerUser, loginUser, userLogout, getAllUsers,saveAddress , getLogin , getHomePage,getLandingPage, registerPage, profile }

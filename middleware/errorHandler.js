@@ -24,7 +24,7 @@ const errorHandler = (err,req,res,next)=>{
 
       case constants.UNAUTHORISED:
         res.json({
-          title: "unAuthorizwd",
+          title: "unAuthorized",
          message: err.message,
           stackTrace: err.stack,
          })

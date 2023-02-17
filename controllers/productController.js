@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler")
+const { get } = require("mongoose")
 const Product = require("../model/productModel")
 const User = require("../model/userModel")
 
@@ -53,12 +54,15 @@ const productController = {
   }),
 
   getProductById: asyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product.findById(req.params.id).lean()
+    const products = await Product.find().lean()
+    // console.log(product);
     if (!product) {
       res.status(404)
       throw new Error("product not found")
     }
-    res.status(200).json(product)
+    res.render("productPage", {product,products})
+    // res.status(200).json(product)
   }),
 
   // updateProductById:asyncHandler(async(req,res)=>{
@@ -138,7 +142,7 @@ const productController = {
 
   }),
   getWishlist: asyncHandler(async(req,res)=>{
-    const {id}=req.user;
+    const id=req.user;
     try {
       const {wishlist} = await User.findById(id) 
       console.log(wishlist);
