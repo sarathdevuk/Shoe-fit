@@ -1,16 +1,16 @@
 const express = require("express")
 const multer  = require('multer')
-const { getAllUsers, adminLogin, userBan, userUnBan } = require("../controllers/adminController")
+const { getAllUsers, adminLogin, userBan, userUnBan, getAdminLogin, getAdminDash } = require("../controllers/adminController")
 const {createCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById} = require("../controllers/categoryController")
 const { createCoupon, getAllCoupon, updateCoupon, deleteCoupon } = require("../controllers/couponController")
 const { addOffer, updateOffer, deleteOffer } = require("../controllers/offferController")
 const { getOrders, editOrder, getOrderbyId, getOrder, updateOrder } = require("../controllers/orderController")
-const { getAllProduct, getProductById, updateProductById, deleteProductById, addProduct } = require("../controllers/productController")
+const { getAllProduct, getProductById, updateProductById, deleteProductById, addProduct, getAddProductPage, getEditProduct } = require("../controllers/productController")
 const verifyUser = require("../middleware/veryfyuser")
-// const multiupload = require("../middleware/multer"
+
 
 const router = express.Router()
-// const morgan = require("morgan")
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads')
@@ -24,8 +24,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
-router.get("/login",adminLogin)
-router.get("/dash",getAllUsers)
+router.get("/",getAdminDash)
+router.get("/login",getAdminLogin)
+router.post("/login",adminLogin)
+router.get("/users",getAllUsers)
 router.get("/ban/:id",userBan)
 router.get("/unban/:id",userUnBan)
 // router.post("/add address",)
@@ -42,9 +44,11 @@ router.delete('/category/:id',deleteCategoryById)
 // @product Routes
 
 router.post('/product', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]),  addProduct)
+router.get('/addProduct',getAddProductPage)
 router.get('/product',getAllProduct)
 router.get('/product/:id',getProductById)
-router.put('/product/:id',upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]), updateProductById)
+router.get('/editProduct/:id',getEditProduct)
+router.post('/product/:id',upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]), updateProductById)
 router.delete('/product/:id',deleteProductById)
 // coupon
 router.post("/coupon",createCoupon  )

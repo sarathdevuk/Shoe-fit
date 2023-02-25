@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords"
+    content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Flexy lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Flexy admin lite design, Flexy admin lite dashboard bootstrap 5 dashboard template">
+  <meta name="description"
+    content="Flexy Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Flexy Admin Lite Template by WrapPixel</title>
+  <link rel="canonical" href="https://www.wrappixel.com/templates/Flexy-admin-lite/" />
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="/admin/assets/images/favicon.png">
+  <!-- Custom CSS -->
+  <link href="/admin/dist/css/style.min.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+  <style>
+
+    .form-control {
+    
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #151515;
+    background-color: #f2f2f2;
+   
+    border: 1px solid #ecf0f2;
+  
+    
+    transition: border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+}
+    {{!-- form {
+      background-color: rgb(255, 255, 255);
+    }
+
+     label{
+       font-color: rgb(0, 0, 0);
+     } 
+     input{
+      color: antiquewhite;
+     } --}}
+    .container-fluid {
+      background-color: rgb(222, 222, 222);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+    }
+
+    textarea {
+
+
+      border: solid;
+      background-color: aqua;
+    }
+
+    .add-product {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 8vh;
+    }
+
+    .productlist {
+      width: 20vh;
+      position: relative;
+      margin-right: 20px;
+      cursor: pointer;
+    }
+
+    .productlist img {
+      width: 100%;
+      padding-left: 2vh;
+    }
+  </style>
+  <!-- ============================================================== -->
+  <!-- Preloader - style you can find in spinners.css -->
+  <!-- ============================================================== -->
+  <div class="preloader">
+    <div class="lds-ripple">
+      <div class="lds-pos"></div>
+      <div class="lds-pos"></div>
+    </div>
+  </div>
+  <!-- ============================================================== -->
+  <!-- Main wrapper - style you can find in pages.scss -->
+  <!-- ============================================================== -->
+  <div id="main-wrapper" data-layout="vertical" data-navbarbg="skin5" data-sidebartype="full"
+    data-sidebar-position="absolute" data-header-position="absolute" data-boxed-layout="full">
+    <!-- ============================================================== -->
+    <!-- Topbar header - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <header class="topbar" data-navbarbg="skin6">
+      <nav class="navbar top-navbar navbar-expand-md navbar-light">
+        <div class="navbar-header" data-logobg="skin6">
+          <!-- ============================================================== -->
+          <!-- Logo -->
+          <!-- ============================================================== -->
+          <a class="navbar-brand" href="index.html">
+            <!-- Logo icon -->
+            <b class="logo-icon">
+              <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+              <!-- Dark Logo icon -->
+              <img src="/admin/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+              <!-- Light Logo icon -->
+              <img src="/admin/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+            </b>
+            <!--End Logo icon -->
+            <!-- Logo text -->
+            <span class="logo-text">
+              <!-- dark Logo text -->
+              <img src="/admin/assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+              <!-- Light Logo text -->
+              <img src="/admin/assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
+            </span>
+          </a>
+          <!-- ============================================================== -->
+          <!-- End Logo -->
+          <!-- ============================================================== -->
+          <!-- This is for the sidebar toggle which is visible on mobile only -->
+          <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+              class="mdi mdi-menu"></i></a>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Logo -->
+        <!-- ============================================================== -->
+        <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
+          <!-- ============================================================== -->
+          <!-- toggle and nav items -->
+          <!-- ============================================================== -->
+          <ul class="navbar-nav float-start me-auto">
+            <!-- ============================================================== -->
+            <!-- Search -->
+            <!-- ============================================================== -->
+            <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i
+                  class="mdi mdi-magnify me-1"></i> <span class="font-16">Search</span></a>
+              <form class="app-search position-absolute">
+                <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i
+                    class="mdi mdi-window-close"></i></a>
+              </form>
+            </li>
+          </ul>
+          <!-- ============================================================== -->
+          <!-- Right side toggle and nav items -->
+          <!-- ============================================================== -->
+          <ul class="navbar-nav float-end">
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="#"
+                id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="/admin/assets/images/users/profile.png" alt="user" class="rounded-circle" width="31">
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end user-dd animated" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i>
+                  My Profile</a>
+                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i>
+                  My Balance</a>
+                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i>
+                  Inbox</a>
+              </ul>
+            </li>
+            <!-- ============================================================== -->
+            <!-- User profile and search -->
+            <!-- ============================================================== -->
+          </ul>
+        </div>
+      </nav>
+    </header>
+    <!-- ============================================================== -->
+    <!-- End Topbar header -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <aside class="left-sidebar" data-sidebarbg="skin6">
+      <!-- Sidebar scroll-->
+      <div class="scroll-sidebar">
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav">
+          <ul id="sidebarnav">
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
+                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
+                aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">User
+                  Managment</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/product"
+                aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">Product
+                  Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
+                  class="hide-menu">Category Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/coupon"
+                aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">Coupon Management</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
+                  Management</span></a></li>
+
+          </ul>
+
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!-- ============================================================== -->
+    <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- Page wrapper  -->
+    <!-- ============================================================== -->
+    <div class="page-wrapper">
+      <div class="container">
+        <div class=" text-center mt-5 ">
+
+          <h1>Edit Product</h1>
+
+
+        </div>
+
+
+        <div class="row ">
+          <div class="col-lg-7 mx-auto">
+            <div class="card mt-2 mx-auto p-4 ">
+              <div class="card-body ">
+
+                <div class="container">
+                  <form id="contact-form" role="form" action="/admin/product/{{product._id}}" method="post" enctype="multipart/form-data">
+      
+
+
+                    <div class="controls">
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="form_name">Product Name</label>
+                            <input id="form_name" type="text" name="name" class="form-control" value="{{product.name}}"
+                              required="required" data-error="Firstname is required.">
+
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="form_need">Select Category</label>
+                            <select id="form_need" name="category" class="form-control" required="required"
+                              data-error="Please specify your need.">
+                              <option value="" selected disabled>Select Category</option>
+
+                              {{#each category}}
+                              <option>{{this.name}}</option>
+                              {{/each}}
+                            
+                              <option>Other</option>
+                            </select>
+
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="form_price">MRP</label>
+                            <input id="form_number" type="number" name="mrp" class="form-control" value="{{product.price}}"
+                              required="required" data-error="Valid email is required.">
+
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="form_price">price</label>
+                            <input id="form_number" type="number" name="price" class="form-control" value="{{product.price}}"
+                              required="required" data-error="price require.">
+
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="form_price">Quantity</label>
+                            <input id="form_number" type="number" name="quantity" class="form-control" value="{{product.quantity}}"
+                              required="required" data-error="Valid Quantity is required.">
+
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="form_message">Description</label>
+                            <textarea id="form_message" name="description" class="form-control"
+                              rows="4" required="required" value="{{product.description}}"
+                              data-error="Please, leave us a message."></textarea>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6 productlist">
+                            <img src="/uploads/{{product.image.filename}}" alt="Product_IMG">
+                          </div>
+                          <div class="mb-6 mt-4">
+                            <input class="form-control" type="file" id="formFile">
+                          </div>
+                        </div>
+
+                        <div class="col-md-12 text-center">
+
+
+                          <button type="submit" class="btn btn-success mt-5"> Update Product</button>
+
+                        </div>
+
+                      </div>
+
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+
+            </div>
+            <!-- /.8 -->
+
+          </div>
+          <!-- /.row-->
+
+        </div>
+      </div>
+
+      <!-- ============================================================== -->
+      <!-- Bread crumb and right sidebar toggle -->
+      <!-- ============================================================== -->
+      {{!-- <div class="container-fluid py-2">
+        <form class="" method="post" action="">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="name">Category</label>
+            <input type="text" class="form-control" id="category" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" class="form-control" id="price" name="price" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="price">MRP</label>
+            <input type="number" class="form-control" id="price" name="mrp" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="0" required>
+          </div>
+          <label for="formFileDisabled" class="form-label">Disabled file input example</label>
+          <input class="form-control" type="file" id="formFileDisabled" />
+          <div class="add-product">
+            <button type="submit" class="btn btn-primary  text-center ">Update Product</button>
+          </div>
+
+        </form>
+
+        <!-- ============================================================== -->
+        <!-- End Bread crumb and right sidebar toggle -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Container fluid  -->
+        <!-- ============================================================== -->
+
+
+        <!-- column -->
+
+      </div> --}}
+
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Page wrapper  -->
+    <!-- ============================================================== -->
+  </div>
+  <!-- ============================================================== -->
+  <!-- End Wrapper -->
+  <!-- ============================================================== -->
+  <!-- ============================================================== -->
+  <!-- All Jquery -->
+  <!-- ============================================================== -->
+  <script src="/admin/assets/libs/jquery/dist/jquery.min.js"></script>
+  <!-- Bootstrap tether Core JavaScript -->
+  <script src="/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/admin/dist/js/app-style-switcher.js"></script>
+  <!--Wave Effects -->
+  <script src="/admin/dist/js/waves.js"></script>
+  <!--Menu sidebar -->
+  <script src="/admin/dist/js/sidebarmenu.js"></script>
+  <!--Custom JavaScript -->
+  <script src="/admin/dist/js/custom.js"></script>
+</body>
+
+</html>

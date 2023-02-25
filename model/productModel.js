@@ -27,11 +27,19 @@ const productSchema = mongoose.Schema({
       type: Number,
       require:true
   },
+    mrp: {
+      type: Number,
+      require:false
+  },
+    sold: {
+      type: Number,
+      
+  },
   category:{
     type:String,
 
   },
-  sold:String
+  
 },{
   timestamps:true
 })

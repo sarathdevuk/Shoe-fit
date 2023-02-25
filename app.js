@@ -11,13 +11,18 @@ const path = require("path")
 const morgan = require('morgan')
 const dbconnect=require('./config/dbconnection')
 
+
  
 const app = express()
 dbconnect()//database
 app.engine("hbs", engine({extname:".hbs"}))
 app.set('view engine', 'hbs');
 
+app.use(function(req, res, next) {
 
+      res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
 
 app.use(session({
   secret: 'secret key',
@@ -31,19 +36,23 @@ app.use(express.json())
 app.use(morgan("dev"))
 // app.use()
 app.get('/sample', (req,res)=>{
-  // res.send("hey")
-  // res.render("login")
-  // res.render("homepage")
-  res.render("produc6")
-  // res.render("productPage")
+ 
   // res.render("landingPage")
+  // res.render("admin/dash")
+  // res.render("admin/userManagement")
+  res.render("admin/editProduct")
+  // res.render("admin/productManagement")
+  // res.render("admin/updateProduct")
+  // res.render("admin/profile")
+  
 })
 
 
 
-// app.use('/user',userRoutes)
-app.use('/',userRoutes)
+
 app.use('/admin',adminRoutes)
+app.use('/',userRoutes)
+
 
 
 // app.use('/product',productRoutes)

@@ -25,12 +25,13 @@ const adminUserSchema = mongoose.Schema({
   },
 
   address:{
+
     type:String,
     
   },
   wishlist:[{type:mongoose.Schema.Types.ObjectId, ref:"Wishlist"}],
-    
-  
+  otp:String,
+
 },
 {
   timestamps:true,

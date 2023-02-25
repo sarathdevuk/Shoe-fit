@@ -49,7 +49,7 @@ const Product = require('../model/productModel')
 const orderController= {
   createOrder: asyncHandler(async(req,res)=>{
     const {COD , couponApplied } = req.body
-    const {id}=req.user;
+    const id=req.user;
     if(!COD){
       res.status(404)
       throw new Error("Create Cash order failed")
@@ -83,35 +83,46 @@ const orderController= {
     })
     newOrder.save();
 
-    // console.log(newOrder);
+    console.log(newOrder);
     // let update = userCart.products.map((item)=>{
-    //   return{
-    //     updateOne:{
+    //   // Check if quantity is a valid number
+    //   console.log(item.quantity,"sold",item.sold);
+    //   if (isNaN(item.sold)) {
+    //     res.json({msg: " its not a number"})
+    //   }
+    //   return {
+    //     updateOne: {
     //       filter: {_id: item.product._id},
-    //       update:{$inc : {quantity: -item.count, sold: +item.count } }
-    //     },
+    //       update: {
+    //         $inc: {
+    //           quantity: -item.quantity,
+    //           sold: +item.sold
+    //         }
+    //       }
+    //     }
     //   };
     // });
     // console.log("updated",update);
     
     // const updated = await Product.bulkWrite(update,{})
     res.json({message:"success"})
-    // console.log(updated); 
+    console.log(updated); 
 
     } catch (error) {
       console.log(error);
     }
   }),
   getOrder:asyncHandler(async(req,res)=>{
-    const {id}=req.user;
+    const id=req.user;
 
     try {
       const order = await Order.findOne({orderby:id}).populate('products.product').exec()
+      res.json(order)
     } catch (error) {
       console.log(error);
     }
 
-       res.json(order)
+     
 
   }),
   updateOrder:asyncHandler(async(req,res)=>{

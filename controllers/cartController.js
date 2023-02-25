@@ -7,7 +7,7 @@
 // const cartController = {
 //   addToCart: async (req, res) => {
 //     const { productId } = req.body;
-//     const quantity = Number.parseInt(req.body.quantity)
+// const quantity = Number.parseInt(req.body.quantity)
 
 //     try {
 //       let cart = await Cart.findOne().populate({
@@ -142,124 +142,153 @@ const User = require("../model/userModel")
 const Coupon = require("../model/couponModel")
 
 
-const cartController={
+const cartController = {
 
-userCart: asyncHandler(async(req,res)=>{
-  //  res.json({msg: "user cart"})
-  const{id}=req.user;
-  // res.json(id)
-  const {cart}=req.body;
-  // console.log(cart);
-try {
-  let products = []
-  const user= await User.findById(id)
-  alreadyExistCart= await Cart.findOne({orderby :user._id})
-  // console.log("no items in cart",alreadyExistCart)
 
-  if(alreadyExistCart){
-     alreadyExistCart.remove();
-  }
- 
-  for(let i=0; i< cart.length;i++ ){
-    // console.log("inside loop");
-    let object ={};
-    console.log(cart[i].id);
-    object.product = cart[i].id;
-    object.quantity = cart[i].quantity;
-    object.color = cart[i].color;
-    let getPrice =await Product.findById(cart[i].id).select('price').exec()
-    // console.log("get price",getPrice);
-    object.price= getPrice.price;
-    // console.log("objexcft",object);
+  userCart: asyncHandler(async (req, res) => {
+    // res.render("cartpage")
+    const id = req.user;
+    // res.json(id)
+    const cart = req.body;
 
-    products.push(object)
-  }
+    console.log("req.body", req.body);
 
-let cartTotal= 0;
-  for(let i=0; i<products.length; i++){
-    console.log("pp pridsijfi",products[i].price);
-    console.log("pp qwrqewrqqqqi",products[i].quantity);
-    cartTotal=cartTotal+ products[i].price * products[i].quantity
-  }
-  console.log("cartTotal",cartTotal);
-  let newCart = await new Cart({
-    products,
-    cartTotal,
-    orderby:user._id
-  }).save();
-  res.json(newCart)
+    try {
+      let products = []
+      const user = await User.findById(id)
+      // alreadyExistCart= await Cart.findOne({orderby :user._id})
+      // console.log("no items in cart",alreadyExistCart)
 
-  if(!products){
-    res.status(404)
-    throw new Error("No products")
-  }
+      // if(alreadyExistCart){
+      //    alreadyExistCart.remove();
+      // }
 
-} catch (error) {
-  throw new Error(error)
-}
-}),
-getUserCart :asyncHandler(async(req,res)=>{
-  const{id}=req.user;
-  try {
-    const cart = await Cart.findOne({orderby:id}).populate('products.product')
-    res.json(cart)
-  } catch (error) {
-    throw new Error(error)
 
-  }
-}),
-emptyCart: asyncHandler(async(req,res)=>{
-  const {id}= req.user;
-  try {
-    const cart = await Cart.findOne({orderby:id})
-    await Cart.remove()
-    // await cart.remove()
+      // console.log("inside loop");
+      let object = {};
+      console.log(cart.id);
+      object.product = cart.id;
+      object.quantity = Number.parseInt(cart.quantity)
+      object.color = cart.color;
+      let getPrice = await Product.findById(cart.id).select('price').exec()
+      console.log("get price", getPrice);
+      object.price = getPrice.price;
+      // console.log("objexcft",object);
+      products.push(object)
 
-    res.json(cart)
 
-  } catch (error) {
-    throw new Error(error)
-  }
-}),
-applyCoupon:asyncHandler(async(req,res)=>{
+      let cartTotal = 0;
+      for (let i = 0; i < products.length; i++) {
+        console.log("product price", products[i].price);
+        console.log("product quantity", products[i].quantity);
+        cartTotal = cartTotal + products[i].price * products[i].quantity
+      }
+      console.log("cartTotal", cartTotal);
+      let newCart = await new Cart({
+        products,
+        cartTotal,
+        orderby: user._id
+      }).save();
+      // res.json(newCart)
+      console.log(newCart);
 
-  const{coupon}=req.body;
-  
-  const{id}=req.user;
+      res.redirect("/cart")
+      if (!products) {
+        res.status(404)
+        throw new Error("No products")
+      }
+
+    } catch (error) {
+      // throw new Error(error)
+      console.log(error);
+
+    }
+  }),
+  getUserCart: asyncHandler(async (req, res) => {
+    console.log("get cart");
+    const id = req.user;
+    console.log(req.user)
+    try {
+      const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
+      console.log("cart ", cart);
+      // res.json(cart)
+      res.render("cartpage", { cart })
+    } catch (error) {
+      res.send(error)
+      throw new Error(error)
+    }
+  }),
+  emptyCart: asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    try {
+      const cart = await Cart.findOne({ orderby: id })
+      await Cart.remove()
+      // await cart.remove()
+
+      res.json(cart)
+
+    } catch (error) {
+      throw new Error(error)
+    }
+  }),
+  deleteCartItem: asyncHandler(async (req, res) => {
+    console.log("dlt cart Itm");
+    const id = req.user
+    const prodId = req.params.id
+    const cart = await Cart.findOne({ orderby: id })
+    console.log(cart);
+
+    let deleteproduct = await Cart.updateOne(
+      {_id: id},
+      {
+        $pull: {products:{product:prodId}},
+      },
+      {
+        multi:true
+      }
    
-  const validCoupon = await Coupon.findOne({name:coupon})
-  console.log("1st");
-  // console.log(validCoupon);
-  if(!validCoupon){
-    res.status(404)
-    throw new Error("invalid coupon")
-  }
- 
-  
-//  const user =await User.findOne({_id:id})
-  // console.log("userid",user);
- const {cartTotal,products}= await Cart.findOne({
-  orderby: id,
- }).populate("products.product")
- console.log("its total ",cartTotal);
-
- let totalAfterDiscount= (cartTotal - (cartTotal* validCoupon.discount)/100).toFixed(2)
- console.log( "total after disc", totalAfterDiscount)
-
- const newCart = await Cart.findOneAndUpdate({orderby:id},{totalAfterDiscount},{new:true})
+    );
+    res.json(deleteproduct)
 
 
-res.json(totalAfterDiscount)
-// res.json(newCart)
+  }),
+  applyCoupon: asyncHandler(async (req, res) => {
 
-  console.log(validCoupon);
+    const { coupon } = req.body;
 
+    const id = req.user;
 
+    try {
+      const validCoupon = await Coupon.findOne({ name: coupon })
+      console.log("1st");
+      console.log(validCoupon);
+      if (!validCoupon) {
+        res.status(404)
+        throw new Error("invalid coupon")
+      }
 
+      const { cartTotal, products } = await Cart.findOne({
+        orderby: id,
+      }).populate("products.product")
+      console.log("its total ", cartTotal);
 
-})
+      let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2)
+      console.log("total after disc", totalAfterDiscount)
+
+      const newCart = await Cart.findOneAndUpdate({ orderby: id }, { totalAfterDiscount }, { new: true })
+
+      console.log(newCart);
+      res.json(totalAfterDiscount)
+      // res.json(newCart)
+
+      console.log(validCoupon);
+
+    } catch (error) {
+      console.log(error);
+    }
+  })
 
 }
 
 
-module.exports= cartController
+module.exports = cartController
