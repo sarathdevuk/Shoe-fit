@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
@@ -10,11 +11,12 @@ const orderSchema = mongoose.Schema({
     quantity:{
       type: Number,
     },
-    color:{
-      type: String
-    },
+  
   }],
   paymentIntent:{
+    
+  },
+  address:{
     
   },
 

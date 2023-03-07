@@ -311,15 +311,29 @@
                               rows="4" required="required" value="{{product.description}}"
                               data-error="Please, leave us a message."></textarea>
                           </div>
-
                         </div>
 
+
+
                         <div class="row">
-                          <div class="col-md-6 productlist">
+
+                          <div class="col-md-6 productlist d-flex ">
+                  
                             <img src="/uploads/{{product.image.filename}}" alt="Product_IMG">
+                            {{#each product.sideImage}}
+                            <img src="/uploads/{{this.filename}}" alt="Product_IMG">
+                            {{!-- <img src="/uploads/{{product.image.filename}}" alt="Product_IMG">
+                            <img src="/uploads/{{product.image.filename}}" alt="Product_IMG"> --}}
+                            {{/each}}
+                          </div>
+                          <div class="col-md-6 productlist">
                           </div>
                           <div class="mb-6 mt-4">
-                            <input class="form-control" type="file" id="formFile">
+                            <label for="">Main image</label>
+                            <input name="image"   class="form-control mb-2" type="file" id="formFile" >
+                            <label for="">You can add multiple Side image here </label>
+                            
+                            <input name="sideImage" multiple  class="form-control mb-2" type="file" id="formFile" >
                           </div>
                         </div>
 

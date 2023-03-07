@@ -30,11 +30,11 @@
   <!-- Preloader - style you can find in spinners.css -->
   <!-- ============================================================== -->
   <div class="preloader">
-    <div class="lds-ripple">
-      <div class="lds-pos"></div>
-      <div class="lds-pos"></div>
-    </div>
+    <div class="lds-ripple"></div>
+    <div class="lds-pos"></div>
+    <div class="lds-pos"></div>
   </div>
+
   <!-- ============================================================== -->
   <!-- Main wrapper - style you can find in pages.scss -->
   <!-- ============================================================== -->
@@ -101,7 +101,7 @@
             <!-- User profile and search -->
             <!-- ============================================================== -->
             <li class="nav-item dropdown">
-           <button type="button" class="btn btn-lg text-white btn-danger me-4 mt-4">Logout</button>
+              <a href="/admin/logout" type="button" class="btn btn-lg text-white btn-danger me-4 mt-4">Logout</a>
             </li>
             <!-- ============================================================== -->
             <!-- User profile and search -->
@@ -122,26 +122,26 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
           <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
-                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
-                                    class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/users" aria-expanded="false"><i class="mdi mdi-account-network"></i><span
-                                    class="hide-menu">User Managment</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
-                                    class="hide-menu">Product Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
-                                    class="hide-menu">Category Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-file"></i><span
-                                    class="hide-menu">Coupon Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/offer" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
-                                    class="hide-menu">Banner Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
+                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
+                aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">User
+                  Managment</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/product"
+                aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">Product
+                  Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
+                  class="hide-menu">Category Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/coupon"
+                aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">Coupon Management</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
+                  Management</span></a></li>
 
-                    </ul>
+          </ul>
 
         </nav>
         <!-- End Sidebar navigation -->
@@ -203,40 +203,95 @@
             <tr>
               <td>
                 <div class="d-flex align-items-center">
-                 
+
                   <div class="ms-3">
                     <p class="fw-bold mb-1 text-dark">{{this._id}}</p>
-                
+
                   </div>
                 </div>
               </td>
               <td>
                 <p class="fw-normal mb-1 text-dark">{{this.username}}</p>
-                
+
               </td>
               <td>
                 <span class="text-success text-dark">{{this.email}}</span>
               </td>
               <td>
-                <p class="text-dark" >292929292929</p>
+                <p class="text-dark">{{this.phone}}</p>
               </td>
               <td>
-                <span class="text-success">active</span>
+                {{#if this.ban}}
+                <span class="text-danger">Banned</span>
+                {{else}}
+                <span class="text-success">Active</span>
+                {{/if}}
+
               </td>
-             
-              {{#if Block}}
+
+              {{#if this.ban}}
               <td>
-                <button type="button" class="btn btn-warning">
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#{{this._id}}">
                   UnBlock
                 </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog ">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Unblock</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h4> Unblock This user ..?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <a href="/admin/unban/{{this._id}}" class="btn btn-warning"> YES </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {{!--
+                <a href="/admin/unban/{{this._id}}"> <button type="button" class="btn btn-warning">
+                    UnBlock
+                  </button></a> --}}
               </td>
-              {{/if}}
+              {{else}}
               <td>
-                <button type="button" class="btn btn-danger text-white">Block</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#{{this._id}}">
+                  Ban
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">BAN USER</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h4> Do you want to Ban This user ..?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+                        <a href="/admin/ban/{{this._id}}" class="btn btn-danger"> Confirm </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
+            {{/if}}
             {{/each}}
-            <tr>
+            {{!-- <tr>
               <td>
                 <div class="d-flex align-items-center">
                   <img src="https://mdbootstrap.com/img/new/avatars/6.jpg" class="rounded-circle" alt=""
@@ -285,7 +340,7 @@
                   Edit
                 </button>
               </td>
-            </tr>
+            </tr> --}}
           </tbody>
         </table>
         {{!-- <div class="container-fluid">
@@ -357,27 +412,30 @@
           <!-- ============================================================== -->
           <!-- End footer -->
           <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
-      </div>
-      <!-- ============================================================== -->
-      <!-- End Wrapper -->
-      <!-- ============================================================== -->
-      <!-- ============================================================== -->
-      <!-- All Jquery -->
-      <!-- ============================================================== -->
-      <script src="/admin/assets/libs/jquery/dist/jquery.min.js"></script>
-      <!-- Bootstrap tether Core JavaScript -->
-      <script src="/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-      <script src="/admin/dist/js/app-style-switcher.js"></script>
-      <!--Wave Effects -->
-      <script src="/admin/dist/js/waves.js"></script>
-      <!--Menu sidebar -->
-      <script src="/admin/dist/js/sidebarmenu.js"></script>
-      <!--Custom JavaScript -->
-      <script src="/admin/dist/js/custom.js"></script>
+          {{!--
+          --}}
+          <!-- ============================================================== -->
+          <!-- End Page wrapper  -->
+          <!-- ============================================================== -->
+        
+      
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="/admin/assets/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/admin/dist/js/app-style-switcher.js"></script>
+    <!--Wave Effects -->
+    <script src="/admin/dist/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="/admin/dist/js/sidebarmenu.js"></script>
+    <!--Custom JavaScript -->
+    <script src="/admin/dist/js/custom.js"></script>
 </body>
 
 </html>

@@ -15,6 +15,10 @@ const adminUserSchema = mongoose.Schema({
     type:String,
     required: [true,"please add the user name"],
   },
+  phone:{
+    type:String,
+    unique:true
+  },
   ban:{ 
     type: Boolean,
     default: false,
@@ -23,14 +27,12 @@ const adminUserSchema = mongoose.Schema({
     type:Array,
     default: []
   },
-
   address:{
+    type:Array,
+    default: []
 
-    type:String,
-    
-  },
+  }, 
   wishlist:[{type:mongoose.Schema.Types.ObjectId, ref:"Wishlist"}],
-  otp:String,
 
 },
 {

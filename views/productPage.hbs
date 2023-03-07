@@ -352,7 +352,7 @@
 			</span>
 		</div>
 	</div>
-
+    
 
 	<!-- Product Detail -->
 	<section class="sec-product-detail bg0 p-t-65 p-b-60">
@@ -366,8 +366,8 @@
 							<div class="wrap-slick3-dots"></div>
 							<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 							<div class="slick3 gallery-lb">
-								<div class="item-slick3" data-thumb="/images/product-detail-01.jpg">
-									<div class="wrap-pic-w pos-relative">
+								<div class="item-slick3"  data-thumb="/images/product-detail-01.jpg">
+									<div class="wrap-pic-w pos-relative ">
 										<img src="/uploads/{{product.image.filename}}" alt="IMG-PRODUCT">
 										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
 											href="/images/product-detail-01.jpg">
@@ -375,6 +375,11 @@
 										</a>
 									</div>
 								</div>
+
+
+								
+
+
 								{{#each product.sideImage}}
 
 								<div class="item-slick3" data-thumb="/uploads/{{this.filename}}">
@@ -419,7 +424,7 @@
 
 						<!--  -->
 						<div class="p-t-33">
-							<form action="/cart" method="post">
+							{{!-- <form action="/cart/{{product._id}}" method="post"> --}}
 								{{!-- <div class="flex-w flex-r-m p-b-10">
 									<div class="size-203 flex-c-m respon6">
 										Size
@@ -438,7 +443,7 @@
 										</div>
 									</div>
 								</div> --}}
-								<input type="hidden" name="id" value="{{product._id}}">
+								{{!-- <input type="hidden" name="id" value="{{product._id}}"> --}}
 								<div class="flex-w flex-r-m p-b-10">
 									<div class="size-203 flex-c-m respon6">
 										Color
@@ -471,13 +476,14 @@
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
-										<button	class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
+								<a href="/cart/{{product._id}}">
+							<button	class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit">
 												Add to cart
-											</button>
+											</button></a>
 
 									</div>
 								</div>
-							</form>
+							{{!-- </form> --}}
 						</div>
 
 						<!--  -->
@@ -710,7 +716,7 @@
 							<div class="block2-pic hov-img0">
 								<img src="/uploads/{{this.image.filename}}" alt="IMG-PRODUCT">
 
-								<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+								<a href="/productDetails/{{this._id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
 									Quick View
 								</a>
 							</div>
@@ -1313,6 +1319,15 @@
 		$('.parallax100').parallax100();
 	</script>
 	<!--===============================================================================================-->
+	
+	
+	
+
+	
+	
+	
+	
+	
 	{{!--
 	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script> --}}
 	{{!--

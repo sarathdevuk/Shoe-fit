@@ -140,69 +140,66 @@ const Cart = require("../model/cartModel")
 const Product = require("../model/productModel")
 const User = require("../model/userModel")
 const Coupon = require("../model/couponModel")
-
+const mongoose = require("mongoose")
+const { response } = require("express")
+const { remove } = require("../model/cartModel")
 
 const cartController = {
 
 
   userCart: asyncHandler(async (req, res) => {
-    // res.render("cartpage")
-    const id = req.user;
-    // res.json(id)
-    const cart = req.body;
+    console.log("add to cart");
 
-    console.log("req.body", req.body);
+    const userId = req.user;
+    const productId = req.params.id;
 
     try {
-      let products = []
-      const user = await User.findById(id)
-      // alreadyExistCart= await Cart.findOne({orderby :user._id})
-      // console.log("no items in cart",alreadyExistCart)
+      // Look for cart with the given user ID
+      let cart = await Cart.findOne({ orderby: userId });
 
-      // if(alreadyExistCart){
-      //    alreadyExistCart.remove();
-      // }
+      if (!cart) {
+        // If cart does not exist, create a new one
+        cart = await new Cart({
+          products: [],
+          cartTotal: 0,
+          orderby: userId
+        }).save();
+      }
 
+      // Check if product already exists in cart
+      const productObjectId = mongoose.Types.ObjectId(productId);
+      const productIndex = cart.products.findIndex(product => product.product && product.product.equals(productObjectId));
 
-      // console.log("inside loop");
-      let object = {};
-      console.log(cart.id);
-      object.product = cart.id;
-      object.quantity = Number.parseInt(cart.quantity)
-      object.color = cart.color;
-      let getPrice = await Product.findById(cart.id).select('price').exec()
-      console.log("get price", getPrice);
-      object.price = getPrice.price;
-      // console.log("objexcft",object);
-      products.push(object)
+      if (productIndex !== -1) {
+        // Product already exists in cart, increment quantity
+        cart.products[productIndex].quantity += 1;
+        
+      } else {
+        // Product does not exist in cart, add it with quantity 1
+        const product = {
+          product: productId,
+          quantity: 1,
+        };
+        const productPrice = await Product.findById(productId).select("price").exec();       
+        product.price = productPrice.price;
+        cart.products.push(product);
+      }
 
-
+      // Update cart total
       let cartTotal = 0;
-      for (let i = 0; i < products.length; i++) {
-        console.log("product price", products[i].price);
-        console.log("product quantity", products[i].quantity);
-        cartTotal = cartTotal + products[i].price * products[i].quantity
+      for (const product of cart.products) {
+        cartTotal += product.price * product.quantity;
       }
-      console.log("cartTotal", cartTotal);
-      let newCart = await new Cart({
-        products,
-        cartTotal,
-        orderby: user._id
-      }).save();
-      // res.json(newCart)
-      console.log(newCart);
+      cart.cartTotal = cartTotal;
 
+      await cart.save();
       res.redirect("/cart")
-      if (!products) {
-        res.status(404)
-        throw new Error("No products")
-      }
-
+      // res.json(cart);
     } catch (error) {
-      // throw new Error(error)
       console.log(error);
-
     }
+
+
   }),
   getUserCart: asyncHandler(async (req, res) => {
     console.log("get cart");
@@ -239,23 +236,100 @@ const cartController = {
     console.log(cart);
 
     let deleteproduct = await Cart.updateOne(
-      {_id: id},
+      { _id: id },
       {
-        $pull: {products:{product:prodId}},
+        $pull: { products: { product: prodId } },
       },
       {
-        multi:true
+        multi: true
       }
-   
+
     );
-    res.json(deleteproduct)
+    console.log("deleted  Product",deleteproduct);
+      res.redirect("/cart")
+    // res.json(deleteproduct)
 
 
   }),
+  changeQuantity: asyncHandler(async (req, res) => {
+    const userId = req.user;
+const {  cartId, prodId, count, quantity  } = req.body;
+console.log("count",count );
+console.log("quantity",quantity );
+try {
+  const parsedCount = parseInt(count);
+  console.log(parsedCount);
+  const productObjectId = mongoose.Types.ObjectId(prodId);
+
+  let cart = await Cart.findOne({ orderby: userId });
+
+  if(count==-1&& quantity==1 ){
+    console.log("inside loop");
+    console.log("cartid",cart._id);
+    console.log("prodId",prodId);
+     const removeProduct =  await Cart.findByIdAndUpdate(cart._id,
+        {
+          $pull:{products:{product:prodId}}
+        },{new:true} ) 
+        let notRemove=false
+        console.log('product removed');
+        console.log( "rempovsdfdsf",removeProduct);
+        res.json(notRemove)
+
+  }else{
+
+    const productIndex = cart.products.findIndex(product => product.product && product.product.equals(productObjectId));
+
+    if (productIndex === -1) {
+      res.status(404)
+      throw new Error('Product not found');
+    }
+  
+    cart.products[productIndex].quantity += parsedCount;
+  
+    const cartTotal = cart.products.reduce((total, product) => {
+      return total + (product.price * product.quantity);
+    }, 0);
+      if(cart.totalAfterDiscount){
+     let price = cart.products[productIndex].price*parsedCount
+     cart.totalAfterDiscount += price;
+     cart.totalAfterDiscount = Number(cart.totalAfterDiscount.toFixed(2));
+     console.log("price",cart.totalAfterDiscount);
+
+      }
+    
+    cart.cartTotal = cartTotal;
+  
+    const updatedCart = await Cart.findByIdAndUpdate(
+      cart._id,
+      { products: cart.products, cartTotal: cart.cartTotal, totalAfterDiscount:cart?.totalAfterDiscount },
+      { new: true }
+    );
+  
+    console.log('Updated cart:', updatedCart);
+   let remove =false;
+
+    res.json(updatedCart);
+
+  }
+  
+
+ 
+} catch (error) {
+  console.log('Error:', error.message);
+  res.status(400).json({ error: error.message });
+}
+
+
+
+
+
+  }),
+
   applyCoupon: asyncHandler(async (req, res) => {
 
     const { coupon } = req.body;
-
+    console.log(req.body);
     const id = req.user;
 
     try {
@@ -278,8 +352,9 @@ const cartController = {
       const newCart = await Cart.findOneAndUpdate({ orderby: id }, { totalAfterDiscount }, { new: true })
 
       console.log(newCart);
-      res.json(totalAfterDiscount)
+      // res.json(totalAfterDiscount)
       // res.json(newCart)
+      res.redirect("/cart")
 
       console.log(validCoupon);
 

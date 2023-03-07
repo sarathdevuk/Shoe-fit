@@ -15,8 +15,8 @@ const errorHandler = (err,req,res,next)=>{
       break;
 
       case constants.NOT_FOUND:
-        res.json({
-          title: "404 error found",
+        res.render("errorPage",{
+          title: "404 ",
          message: err.message,
           stackTrace: err.stack,
          })

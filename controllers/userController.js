@@ -3,19 +3,22 @@ const bcrypt = require("bcrypt")
 const User = require("../model/userModel");
 const Product = require("../model/productModel");
 const sentOTP = require("../services/otp");
-const otpGenerator = require("otp-generator")
+const otpGenerator = require("otp-generator");
+const Category = require("../model/categoryModel")
+const uniqid = require("uniqid")
+
 
 // let otp = Math.floor(Math.random() * 1000000)
 
 
 
 
-let otp = otpGenerator.generate(6,{ upperCaseAlphabets: false, lowerCaseAlphabets:false,  specialChars: false,})
+let otp = otpGenerator.generate(6, { upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false, })
 // desc Register users
 //@routes GET/ api/admin/register
 
 const registerPage = (req, res) => {
-  if(req.session.uer){
+  if (req.session.uer) {
     res.redirect("/")
   }
   res.render("signup.hbs")
@@ -34,7 +37,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const userAvailable = await User.findOne({ email })
   if (userAvailable) {
-    res.status(400);
+    res.status(404);
     throw new Error("The user already registered! ")
   }
   //  Hash password
@@ -48,27 +51,6 @@ const registerUser = asyncHandler(async (req, res) => {
   req.session.otp = otp
   res.render("submitOtp")
 
-  // const hashedPassword = await bcrypt.hash(password, 10)
-  // console.log("hashed password :", hashedPassword);
-  // const user = await User.create({
-  //   username,
-  //   email,
-  //   password: hashedPassword,
-  // });
-
-  // if (user){
-  //   req.session.email = email
-  // }
-  // console.log(`user created ${user}`);
-  // if (user) {
-  //   res.redirect('/login')
-  //   // res.status(201).json({ _id: user.id, email: user.email })
-  // } else {
-  //   res.status(400)
-  //   throw new Error("User data is not valid")
-  // }
-
-  // res.json({ message: "Register the user" })
 })
 
 const verifyOtp = asyncHandler(async (req, res) => {
@@ -91,28 +73,28 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
 })
 const getForgotPass = async (req, res) => {
-  if(req.session.otpPage){   
-    res.render("forgotPass",{otpPage:true})
-  req.session.otpPage=false
+  if (req.session.otpPage) {
+    res.render("forgotPass", { otpPage: true })
+    req.session.otpPage = false
 
-  }else if(req.session.changePassword){
-    res.render("forgotPass",{changePassword:true})
-    req.session.changePassword= false
+  } else if (req.session.changePassword) {
+    res.render("forgotPass", { changePassword: true })
+    req.session.changePassword = false
 
   }
-  res.render("forgotPass",{mail:true})
+  res.render("forgotPass", { mail: true })
 }
 const sendForgotOtp = async (req, res) => {
   sentOTP(req.body.email, otp)
   req.session.forgotOtp = otp
   req.session.forgotBody = req.body
-  req.session.otpPage=true
+  req.session.otpPage = true
   res.redirect("/forgot")
 
 }
 const verifyForgotOtp = async (req, res) => {
   if (req.body.otp == req.session.forgotOtp) {
-    req.session.changePassword= true
+    req.session.changePassword = true
     res.redirect("/forgot")
 
   } else
@@ -121,20 +103,20 @@ const verifyForgotOtp = async (req, res) => {
 }
 const resetPassword = async (req, res) => {
   const { password, cfmPassword } = req.body;
-  if(password != cfmPassword){
-    res.render("forgotPass", {error: true,message: "password Mismatch.!"})
+  if (password != cfmPassword) {
+    res.render("forgotPass", { error: true, message: "password Mismatch.!" })
   }
   const { email } = req.session.forgotBody
   const user = await User.findOne({ email })
   const hashedPassword = await bcrypt.hash(password, 10)
   console.log(user._id);
-    const updatePassword = await User.updateOne({_id:user._id},{$set:{password:hashedPassword}})
-    console.log(updatePassword);
-    res.redirect("/login") 
+  const updatePassword = await User.updateOne({ _id: user._id }, { $set: { password: hashedPassword } })
+  console.log(updatePassword);
+  res.redirect("/login")
 
-       
 
-     
+
+
 }
 
 
@@ -143,11 +125,11 @@ const resetPassword = async (req, res) => {
 //@routes GET/ api/admin/login
 
 const getLogin = ((req, res) => {
-if(req.session.user){
-res.redirect('/')
-}
-else
-  res.render("login")
+  if (req.session.user) {
+    res.redirect('/')
+  }
+  else
+    res.render("login")
 
 })
 
@@ -161,14 +143,18 @@ const loginUser = asyncHandler(async (req, res) => {
   //   throw new Error("All fields are mandatory")
   // }
   const user = await User.findOne({ email });
+  console.log("user", user);
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    req.session.user = user;
-    res.redirect('/')
+    if (user.ban) {
+      res.render('login', { err: true, message: "Sorry You are Banned !!!" })
+    } else {
+      req.session.user = user;
+      res.redirect('/')
+    }
+
   } else
     res.render('login', { err: true, message: "Invalid Email or Password.!" })
-
-  //  res.json({ message: "logged the user" })
 
 })
 
@@ -176,7 +162,7 @@ const loginUser = asyncHandler(async (req, res) => {
 //@routes GET/ api/admin/current
 //@access private
 const userLogout = asyncHandler(async (req, res) => {
-  req.session.destroy();
+  req.session.user = null
   res.redirect("/")
 })
 
@@ -190,18 +176,66 @@ const getAllUsers = asyncHandler(async (req, res) => {
 
 });
 
-const getLandingPage = asyncHandler(async (req, res) => {
-  const products = await Product.find().lean()
-  // console.log("product",products);
-  res.render("landingPage", { products })
+const shopPage = asyncHandler(async (req, res) => {
 
+  try {
+    // Filtering
+    const queryObj = { ...req.query };
+    const excludeFields = ["page", "sort", "limit", "fields"];
+    excludeFields.forEach((el) => delete queryObj[el]);
+    let queryStr = JSON.stringify(queryObj);
+
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    let query = Product.find(JSON.parse(queryStr));
+
+    // Sorting
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(",").join(" ");
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort("-createdAt");
+    }
+
+    // limiting the fields
+
+    if (req.query.fields) {
+      const fields = req.query.fields.split(",").join(" ");
+      query = query.select(fields);
+    } else {
+      query = query.select("-__v");
+    }
+
+    // pagination
+
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const skip = (page - 1) * limit;
+    query = query.skip(skip).limit(limit);
+    if (req.query.page) {
+      const productCount = await Product.countDocuments();
+      if (skip >= productCount) throw new Error("This Page does not exists");
+    }
+    const products = await query.lean()
+    const category = await Category.find().lean()
+    console.log("category", category[0].name);
+    // res.json(product);
+    res.render("shopPage", { products, category })
+
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("not found");
+
+  }
 
 })
 const getHomePage = asyncHandler(async (req, res) => {
 
   try {
 
-    const products = await Product.find().lean()
+    const products = await Product.find({ unlist: false }).lean()
     if (req.session.user) {
       Log = req.session.user;
       res.render("homepage.hbs", { products, Log })
@@ -213,40 +247,150 @@ const getHomePage = asyncHandler(async (req, res) => {
   }
 
 
-
-
-})
-
-const saveAddress = asyncHandler(async (req, res) => {
-  const { id } = req.user
-  //  const{address}= req.body;
-
-  try {
-
-    const user = await User.findByIdAndUpdate(id, req.body,
-      { new: true })
-    res.json(user)
-  } catch (error) {
-    console.log(error);
-  }
-
 })
 
 
 const profile = asyncHandler(async (req, res) => {
-  const { id } = req.user
+  const id = req.user
 
   try {
-    const userProfile = await User.findById(id)
-    res.json(userProfile)
+    const profile = await User.findById(id).lean()
+    console.log("userprofile", profile);
+
+    // res.json(userProfile)
+    res.render("newProfile", { profile })
+  } catch (error) {
+    console.log(error);
+  }
+
+})
+
+const addAddress = (req, res) => {
+  res.render("addAddress")
+}
+const postAddress = asyncHandler(async (req, res) => {
+
+  const { firstname, lastname, phone, pincode, address, state, locality, city } = req.body
+  console.log(req.body);
+  const id = req.user
+  try {
+    const user = await User.findById(id)
+
+    let object = {
+      id: uniqid(),
+      firstname,
+      lastname,
+      phone,
+      address,
+      pincode,
+      state,
+      locality,
+      city
+    }
+    user.address.push(object);
+
+
+    await user.save()
+    res.redirect("/profile")
 
   } catch (error) {
     console.log(error);
   }
 
+})
 
+const updateProfile = asyncHandler(async (req, res) => {
+
+  const id = req.user
+  try {
+
+    await User.updateOne(
+      { _id: id, address: { $elemMatch: { id: req.body.id } } },
+      {
+        $set: {
+          "address.$": req.body,
+        },
+      }
+    );
+
+    res.redirect("/profile")
+
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("Not Found")
+  }
 
 })
+const getEditAddress = asyncHandler(async (req, res) => {
+  console.log("edit address Page");
+  // const id = req.user
+  try {
+
+    let { address } = await User.findOne(
+      { "address.id": req.params.id },
+      { _id: 0, address: { $elemMatch: { id: req.params.id } } }
+    );
+    console.log("addresss", address);
+    res.render("editAddress", { address: address[0] })
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("Page not found")
+  }
+
+})
+const updateAddress = asyncHandler(async (req, res) => {
+  const id = req.user
+  console.log("req.body", req.body);
+  try {
+
+    await User.updateOne(
+      { _id: id, address: { $elemMatch: { id: req.body.id } } },
+      {
+        $set: {
+          "address.$": req.body,
+        },
+      }
+    );
+
+    res.redirect("/profile")
+
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("Not found")
+  }
+
+})
+const deleteAddress = asyncHandler(async (req, res) => {
+  const id = req.user;
+
+  try {
+    await User.updateOne(
+      {
+        _id: id,
+        address: { $elemMatch: { id: req.params.id } },
+      },
+      {
+        $pull: {
+          address: {
+            id: req.params.id,
+          },
+        },
+      }
+    );
+    res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("Not Found");
+  }
+
+})
+
 
 module.exports =
 {
@@ -254,15 +398,21 @@ module.exports =
   loginUser,
   userLogout,
   getAllUsers,
-  saveAddress,
+  addAddress,
+  postAddress,
   getLogin,
   getHomePage,
-  getLandingPage,
+  shopPage,
   registerPage,
   profile,
   verifyOtp,
   getForgotPass,
   sendForgotOtp,
   verifyForgotOtp,
-  resetPassword
+  resetPassword,
+  updateProfile,
+  getEditAddress,
+  updateAddress,
+  deleteAddress,
+  
 }

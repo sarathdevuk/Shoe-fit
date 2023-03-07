@@ -196,8 +196,7 @@
             </div>
             <div class="col-6">
               <div class="text-end upgrade-btn">
-                <a href="/admin/addProduct"
-                  class="btn btn-success text-white" target="_blank">Add Product</a>
+                <a href="/admin/addProduct" class="btn btn-success text-white" target="_blank">Add Product</a>
               </div>
             </div>
           </div>
@@ -243,13 +242,15 @@
                       <th class="border-top-0">Price</th>
                       <th class="border-top-0">MRP</th>
                       <th class="border-top-0">Quantity</th>
+                      <th class="border-top-0">Status</th>
+                      <th class="border-top-0">Action</th>
 
                     </tr>
                   </thead>
                   <tbody>
                     {{#each products}}
                     <tr>
-                      <td>{{addOne @index}}</td>
+                      <td>1</td>
 
                       <td>
                         <div class="d-flex align-items-center">
@@ -269,76 +270,80 @@
                       <td>
                         <label class="badge bg-danger">{{this.price}}</label>
                       </td>
+                      {{!-- <td>{{this.quantity}}</td> --}}
+                      <td>{{this.mrp}}</td>
                       <td>{{this.quantity}}</td>
-                      <td>356</td>
+
+                      {{#if this.unlist}}
                       <td>
-                        <a href="/admin/editProduct/{{this._id}}"><button type="button" class="btn btn-primary">Edit Product</button></a>
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                          data-bs-target="#{{this._id}}">
+                          List
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog ">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">List Product</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <h4> List This Product ..?</h4>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <a href="/admin/listProduct/{{this._id}}" class="btn btn-warning"> YES </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {{!--
+                        <a href="/admin/unban/{{this._id}}"> <button type="button" class="btn btn-warning">
+                            UnBlock
+                          </button></a> --}}
+                      </td>
+                      {{else}}
+              <td>
+                 <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#{{this._id}}">
+                  Unlist
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Unlist Product</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h4> Do you want to Unlist This Product ..?</h4>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+                        <a href="/admin/unlistProduct/{{this._id}}"  class="btn btn-danger"> Confirm </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+              {{/if}}
+
+                      <td>
+                        <a href="/admin/editProduct/{{this._id}}"><button type="button" class="btn btn-primary">Edit
+                            Product</button></a>
                       </td>
                     </tr>
                     {{/each}}
-                    {{!-- <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="m-r-10"><a class="btn btn-circle d-flex btn-orange text-white">MA</a>
-                          </div>
-                          <div class="">
-                            <h4 class="m-b-0 font-16">Monster Admin</h4>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Single Use</td>
-                      <td>Venessa Fern</td>
-                      <td>
-                        <label class="badge bg-info">Vue Js</label>
-                      </td>
-                      <td>46</td>
-                      <td>356</td>
-                      <td>
-                        <h5 class="m-b-0">$2850.06</h5>
-                      </td>
-                    </tr> --}}
-                    {{!-- <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="m-r-10"><a class="btn btn-circle d-flex btn-success text-white">MP</a>
-                          </div>
-                          <div class="">
-                            <h4 class="m-b-0 font-16">Material Pro Admin</h4>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Single Use</td>
-                      <td>John Doe</td>
-                      <td>
-                        <label class="badge bg-success">Bootstrap</label>
-                      </td>
-                      <td>46</td>
-                      <td>356</td>
-                      <td>
-                        <h5 class="m-b-0">$2850.06</h5>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="d-flex align-items-center">
-                          <div class="m-r-10"><a class="btn btn-circle d-flex btn-purple text-white">AA</a>
-                          </div>
-                          <div class="">
-                            <h4 class="m-b-0 font-16">Ample Admin</h4>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Single Use</td>
-                      <td>John Doe</td>
-                      <td>
-                        <label class="badge bg-purple">React</label>
-                      </td>
-                      <td>46</td>
-                      <td>356</td>
-                      <td>
-                        <a href="#"><button type="button" class="btn btn-primary">Edit Product</button></a>
-                      </td>
-                    </tr> --}}
+
                   </tbody>
                 </table>
               </div>
@@ -346,96 +351,18 @@
           </div>
         </div>
       </div>
-      {{!-- <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Start Page Content -->
-        <!-- ============================================================== -->
-        <!-- Row -->
-        <div class="row">
-          <!-- Column -->
-          <div class="col-lg-4 col-xlg-3 col-md-5">
-            <div class="card">
-              <div class="card-body">
-                <center class="m-t-30"> <img src="/admin/assets/images/users/5.jpg" class="rounded-circle"
-                    width="150" />
-                  <h4 class="card-title m-t-10">Hanna Gover</h4>
-                  <h6 class="card-subtitle">Accoubts Manager Amix corp</h6>
-                  <div class="row text-center justify-content-md-center">
-                    <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-people"></i>
-                        <font class="font-medium">254</font>
-                      </a></div>
-                    <div class="col-4"><a href="javascript:void(0)" class="link"><i class="icon-picture"></i>
-                        <font class="font-medium">54</font>
-                      </a></div>
-                  </div>
-                </center>
-              </div>
-              <div>
-                <hr>
-              </div>
-              <div class="card-body"> <small class="text-muted">Email address </small>
-                <h6>hannagover@gmail.com</h6> <small class="text-muted p-t-30 db">Phone</small>
-                <h6>+91 654 784 547</h6> <small class="text-muted p-t-30 db">Address</small>
-                <h6>71 Pilgrim Avenue Chevy Chase, MD 20815</h6>
-                <div class="map-box">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d470029.1604841957!2d72.29955005258641!3d23.019996818380896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C+Gujarat!5e0!3m2!1sen!2sin!4v1493204785508"
-                    width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
-                </div> <small class="text-muted p-t-30 db">Social Profile</small>
-                <br />
-                <button class="btn btn-circle btn-secondary"><i class="fab fa-facebook-f"></i></button>
-                <button class="btn btn-circle btn-secondary"><i class="fab fa-twitter"></i></button>
-                <button class="btn btn-circle btn-secondary"><i class="fab fa-youtube"></i></button>
-              </div>
-            </div>
-          </div>
-          <!-- Column -->
-          <!-- Column -->
-          <div <!-- Column -->
-          </div>
-          <!-- Row -->
-          <!-- ============================================================== -->
-          <!-- End PAge Content -->
-          <!-- ============================================================== -->
-          <!-- ============================================================== -->
-          <!-- Right sidebar -->
-          <!-- ============================================================== -->
-          <!-- .right-sidebar -->
-          <!-- ============================================================== -->
-          <!-- End Right sidebar -->
-          <!-- ============================================================== -->
-        </div> --}}
-        <!-- ============================================================== -->
-        <!-- End Container fluid  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
 
-        <!-- ============================================================== -->
-        <!-- End footer -->
-        <!-- ============================================================== -->
-      </div>
       <!-- ============================================================== -->
-      <!-- End Page wrapper  -->
-      <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="/admin/assets/libs/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/admin/dist/js/app-style-switcher.js"></script>
-    <!--Wave Effects -->
-    <script src="/admin/dist/js/waves.js"></script>
-    <!--Menu sidebar -->
-    <script src="/admin/dist/js/sidebarmenu.js"></script>
-    <!--Custom JavaScript -->
-    <script src="/admin/dist/js/custom.js"></script>
+      <script src="/admin/assets/libs/jquery/dist/jquery.min.js"></script>
+      <!-- Bootstrap tether Core JavaScript -->
+      <script src="/admin/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="/admin/dist/js/app-style-switcher.js"></script>
+      <!--Wave Effects -->
+      <script src="/admin/dist/js/waves.js"></script>
+      <!--Menu sidebar -->
+      <script src="/admin/dist/js/sidebarmenu.js"></script>
+      <!--Custom JavaScript -->
+      <script src="/admin/dist/js/custom.js"></script>
 </body>
 
 </html>
