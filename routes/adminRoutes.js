@@ -1,8 +1,8 @@
 const express = require("express")
 const multer  = require('multer')
 const { getAllUsers, adminLogin, userBan, userUnBan, getAdminLogin, getAdminDash, adminLogout } = require("../controllers/adminController")
-const {createCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById} = require("../controllers/categoryController")
-const { createCoupon, getAllCoupon, updateCoupon, deleteCoupon } = require("../controllers/couponController")
+const {createCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById, unlistCategory, listCategory, getAddCategory} = require("../controllers/categoryController")
+const { createCoupon, getAllCoupon, updateCoupon, deleteCoupon, listCoupon, unlistCoupon, getAddCoupon, getEditCoupon } = require("../controllers/couponController")
 const { addOffer, updateOffer, deleteOffer } = require("../controllers/offferController")
 const { getOrders, editOrder, getOrderbyId, getOrder, updateOrder } = require("../controllers/orderController")
 const { getAllProduct, getProductById, updateProductById, deleteProductById, addProduct, getAddProductPage, getEditProduct, unlistProduct, listProduct } = require("../controllers/productController")
@@ -37,11 +37,14 @@ router.get("/unban/:id",verifyAdmin ,userUnBan)
 
 
 // @ category
+router.get('/addCategory',verifyAdmin, getAddCategory )
 router.post('/category',verifyAdmin, createCategory )
 router.get('/category', verifyAdmin,getAllCategory )
 router.get('/category/:id',verifyAdmin, getCategoryById )
 router.post('/category/:id',verifyAdmin ,updateCategoryById )
 router.delete('/category/:id',verifyAdmin,  deleteCategoryById)
+router.get('/unlistcategory/:id',verifyAdmin,  unlistCategory)
+router.get('/listcategory/:id',verifyAdmin, listCategory)
 
 // @product Routes
 
@@ -56,10 +59,14 @@ router.get('/editProduct/:id',verifyAdmin,getEditProduct)
 router.post('/product/:id',upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]),verifyAdmin, updateProductById)
 router.delete('/product/:id',verifyAdmin,deleteProductById)
 // coupon
-router.post("/coupon",verifyAdmin,createCoupon  )
 router.get("/coupon",verifyAdmin,getAllCoupon  )
-router.put("/coupon/:id",verifyAdmin, updateCoupon  )
+router.get("/addCoupon",verifyAdmin,getAddCoupon )
+router.post("/coupon",verifyAdmin,createCoupon  )
+router.get("/editCoupon/:id",verifyAdmin,getEditCoupon )
+router.post("/coupon/:id",verifyAdmin, updateCoupon  )
 router.delete("/coupon/:id",verifyAdmin, deleteCoupon  )
+router.get("/listCoupon/:id",verifyAdmin, listCoupon )
+router.get("/unlistCoupon/:id",verifyAdmin, unlistCoupon )
 // offer
 router.post("/offer",verifyAdmin, addOffer  )
 router.put("/offer/:id",verifyAdmin ,updateOffer  )

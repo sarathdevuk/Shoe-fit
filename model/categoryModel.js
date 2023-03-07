@@ -6,7 +6,7 @@ const categorySchema = mongoose.Schema({
       unique:true,
   },
   unlist:{
-    type:String,
+    type:Boolean,
     default:false
   }
 })

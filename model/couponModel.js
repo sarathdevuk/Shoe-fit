@@ -19,6 +19,10 @@ const couponSchema = mongoose.Schema({
     required: true,
       
   },
+  unlist:{
+    type:Boolean,
+    default:false,
+  }
   
 });
 

@@ -333,11 +333,11 @@ try {
     const id = req.user;
 
     try {
-      const validCoupon = await Coupon.findOne({ name: coupon })
-      console.log("1st");
+      const validCoupon = await Coupon.findOne({ name: coupon,unlist:false })
+      
       console.log(validCoupon);
       if (!validCoupon) {
-        res.status(404)
+        res.render("cartpage",{error:true,message:"Invalid Coupon"})
         throw new Error("invalid coupon")
       }
 
