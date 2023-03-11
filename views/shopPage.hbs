@@ -357,12 +357,13 @@
           <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
             All Products
           </button>
-        {{#each category}}
-          <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{this.name}}">
-            {{this.name}}
-          </button>
-        {{/each}}
-         
+          {{#each category}}
+          <a href="/shop/?category={{this.name}}"> <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5"
+              data-filter=".{{this.name}}">
+              {{this.name}}
+            </button></a>
+          {{/each}}
+
           <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
             Bag
           </button>
@@ -391,15 +392,20 @@
         </div>
 
         <!-- Search product -->
-        <div class="dis-none panel-search w-full p-t-10 p-b-15">
-          <div class="bor8 dis-flex p-l-15">
-            <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
-              <i class="zmdi zmdi-search"></i>
-            </button>
+        <section>
+          <form action="/search-product">
+            <div class="dis-none panel-search w-full p-t-10 p-b-15">
+              <div class="bor8 dis-flex p-l-15">
+                <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
+                  <i class="zmdi zmdi-search"></i>
+                </button>
 
-            <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-          </div>
-        </div>
+                <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product"
+                  placeholder="Search">
+              </div>
+            </div>
+          </form>
+        </section>
 
         <!-- Filter -->
         <div class="dis-none panel-filter w-full p-t-10">
@@ -411,11 +417,11 @@
 
               <ul>
                 <li class="p-b-6">
-                  <a href="#" class="filter-link stext-106 trans-04">
+                  <a href="/shop" class="filter-link stext-106 trans-04">
                     Default
                   </a>
                 </li>
-
+                {{!--
                 <li class="p-b-6">
                   <a href="/shop?price[gte]=700" class="filter-link stext-106 trans-04">
                     Popularity
@@ -426,24 +432,25 @@
                   <a href="#" class="filter-link stext-106 trans-04">
                     Average rating
                   </a>
-                </li>
+                </li> --}}
 
                 <li class="p-b-6">
-                  <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
+                  <span onclick="filterPage('sort', '-createdAt')"
+                    class="filter-link stext-106 trans-04 filter-link-active">
                     Newness
-                  </a>
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?sort=price" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('sort', 'price')" class="filter-link stext-106 trans-04">
                     Price: Low to High
-                  </a>
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?sort=-price" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('sort', '-price')" class="filter-link stext-106 trans-04">
                     Price: High to Low
-                  </a>
+                  </span>
                 </li>
               </ul>
             </div>
@@ -455,44 +462,48 @@
 
               <ul>
                 <li class="p-b-6">
-                  <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
+                  <a href="/shop" class="filter-link stext-106 trans-04 filter-link-active">
                     All
                   </a>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?price[lte]=500" class="filter-link stext-106 trans-04">
-                    ₹0.00 - ₹500 
-                  </a>
+                  <span onclick="filterPage('price[gt]', '0','price[lte]', '500')"
+                    class="filter-link stext-106 trans-04">
+                    ₹0.00 - ₹500
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?price[gt]=500&price[lte]=1000" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('price[gt]', '500', 'price[lte]', '1000')"
+                    class="filter-link stext-106 trans-04">
                     ₹500 - ₹1000
-                  </a>
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?price[gt]=1000&price[lte]=2000" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('price[gt]', '1000', 'price[lte]', '2000')"
+                    class="filter-link stext-106 trans-04">
                     ₹1000 - ₹2000
-                  </a>
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?price[gt]=2000&price[lte]=5000" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('price[gt]', '2000', 'price[lte]', '5000')"
+                    class="filter-link stext-106 trans-04">
                     ₹2000 - ₹5000
-                  </a>
+                  </span>
                 </li>
 
                 <li class="p-b-6">
-                  <a href="/shop?price[gte]=5000" class="filter-link stext-106 trans-04">
+                  <span onclick="filterPage('price[gt]', '5000')" class="filter-link stext-106 trans-04">
                     ₹5000.0+
-                  </a>
+                  </span>
                 </li>
               </ul>
             </div>
 
-            <div class="filter-col3 p-r-15 p-b-27">
+            {{!-- <div class="filter-col3 p-r-15 p-b-27">
               <div class="mtext-102 cl2 p-b-15">
                 Color
               </div>
@@ -558,9 +569,9 @@
                   </a>
                 </li>
               </ul>
-            </div>
+            </div> --}}
 
-            <div class="filter-col4 p-b-27">
+            {{!-- <div class="filter-col4 p-b-27">
               <div class="mtext-102 cl2 p-b-15">
                 Tags
               </div>
@@ -586,13 +597,13 @@
                   Crafts
                 </a>
               </div>
-            </div>
+            </div> --}}
           </div>
         </div>
       </div>
 
       <div class="row isotope-grid">
-          {{#each products}}
+        {{#each products}}
         <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{this.category}}">
           <!-- Block2 -->
           <div class="block2">
@@ -627,7 +638,7 @@
         </div>
         {{/each}}
 
-        
+
 
         {{!-- <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
           <!-- Block2 -->
@@ -665,10 +676,25 @@
 
       <!-- Load more -->
       <div class="flex-c-m flex-w w-full p-t-45">
-        <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-          Load More
-        </a>
+        <nav aria-label="...">
+          <ul class="pagination">
+            <li class="page-item active">
+              <a class="page-link" href="" tabindex="-1">Previous</a>
+            </li> {{#each pagination}}
+            <li class="page-item"><a class="page-link" href="/shop/?page={{inc @index}}">{{inc @index}}</a></li>
+            {{/each}}
+            {{!-- <li class="page-item active">
+              <a class="page-link" href="/shop?page=2">2 <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item"><a class="page-link" href="/shop?page=3">3</a></li> --}}
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
       </div>
+
+
     </div>
   </div>
 
@@ -1031,13 +1057,13 @@
       {
         !--₹('.gallery-lb').each(function () { // the containers for all your galleries
           ₹(this).magnificPopup({
-            delegate: 'a', // the selector for gallery item
-            type: 'image',
-            gallery: {
-              enabled: true
-            },
-            mainClass: 'mfp-fade'
-          });
+          delegate: 'a', // the selector for gallery item
+          type: 'image',
+          gallery: {
+            enabled: true
+          },
+          mainClass: 'mfp-fade'
+        });
         }); --}
     }
   </script>
@@ -1094,6 +1120,19 @@
   </script>
   <!--===============================================================================================-->
   <script src="/js/main.js"></script>
+  <script>
+    function filterPage(setter, value, setter2 = "", value2 = "") {
+      let mainUrl = new URL(window.location.href);
+      let mainSearchParams = mainUrl.searchParams
+      mainSearchParams.set(setter, value);
+      if (setter2 != "") {
+        mainSearchParams.set(setter2, value2);
+      }
+      mainUrl.search = mainSearchParams.toString();
+      newMainUrl = mainUrl.toString();
+      window.location.href = newMainUrl
+    }
+  </script>
 
 </body>
 

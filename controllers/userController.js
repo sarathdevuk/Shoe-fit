@@ -5,7 +5,8 @@ const Product = require("../model/productModel");
 const sentOTP = require("../services/otp");
 const otpGenerator = require("otp-generator");
 const Category = require("../model/categoryModel")
-const uniqid = require("uniqid")
+const uniqid = require("uniqid");
+const { query } = require("express");
 
 
 // let otp = Math.floor(Math.random() * 1000000)
@@ -34,13 +35,13 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("All fields are mandatory")
   }
   // // to find the same person with the email
-
+ 
   const userAvailable = await User.findOne({ email })
   if (userAvailable) {
     res.status(404);
     throw new Error("The user already registered! ")
   }
-  //  Hash password
+  //  check both password
   if (cfmPassword == password) {
     req.session.UserDetails = req.body
 
@@ -158,9 +159,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 })
 
-// desc Current user info
-//@routes GET/ api/admin/current
-//@access private
+
 const userLogout = asyncHandler(async (req, res) => {
   req.session.user = null
   res.redirect("/")
@@ -180,8 +179,9 @@ const shopPage = asyncHandler(async (req, res) => {
 
   try {
     // Filtering
-    const queryObj = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields"];
+
+    const queryObj = req.query;
+    const excludeFields = ["page", "sort", "limit", "fields","category"];
     excludeFields.forEach((el) => delete queryObj[el]);
     let queryStr = JSON.stringify(queryObj);
 
@@ -197,7 +197,7 @@ const shopPage = asyncHandler(async (req, res) => {
     } else {
       query = query.sort("-createdAt");
     }
-
+  
     // limiting the fields
 
     if (req.query.fields) {
@@ -210,18 +210,27 @@ const shopPage = asyncHandler(async (req, res) => {
     // pagination
 
     const page = req.query.page;
-    const limit = req.query.limit;
+    const limit = 12 ;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
+    const productCount = await Product.countDocuments();
+    const totalPage = productCount/limit;
+    let pagination=[];
+
+    for( let i=1; i<=totalPage;i++){
+        pagination.push(i)
+    }
+
+    console.log(pagination);
+
     if (req.query.page) {
-      const productCount = await Product.countDocuments();
       if (skip >= productCount) throw new Error("This Page does not exists");
     }
     const products = await query.lean()
-    const category = await Category.find().lean()
+    const category = await Category.find({unlist:false}).lean()
     console.log("category", category[0].name);
     // res.json(product);
-    res.render("shopPage", { products, category })
+    res.render("shopPage", { products, category ,pagination })
 
   } catch (error) {
     console.log(error);
@@ -285,7 +294,7 @@ const postAddress = asyncHandler(async (req, res) => {
       pincode,
       state,
       locality,
-      city
+      city,
     }
     user.address.push(object);
 

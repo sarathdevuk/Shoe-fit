@@ -2,273 +2,244 @@
 <html lang="en">
 
 <head>
-	<title>Home</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--===============================================================================================-->
-	<link rel="icon" type="/image/png" href="/images/icons/favicon.png" />
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/MagnificPopup/magnific-popup.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="/styles/main.css">
-	<link rel="stylesheet" type="text/css" href="/styles/util.css">
-	<!--===============================================================================================-->
-
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Dashboard - Admin </title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="assets/img/favicon.png" rel="icon">
+    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/admin/css/bootstrap-icons.css" rel="stylesheet">
+    <link href="/admin/css/boxicons.min.css" rel="stylesheet">
+    <link href="/admin/css/quill.snow.css" rel="stylesheet">
+    <link href="/admin/css/quill.bubble.css" rel="stylesheet">
+    <link href="/admin/css/remixicon.css" rel="stylesheet">
+    <link href="/admin/css/simple-datatables.css" rel="stylesheet">
+    <link href="/admin/css/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
 </head>
 
-<body class="animsition">
+<body>
 
-	<!-- Header -->
-	<header>
-		<!-- Header desktop -->
-		<div class="container-menu-desktop">
-			<!-- Topbar -->
-			<div class="top-bar">
-				<div class="content-topbar flex-sb-m h-full container">
-					<div class="left-top-bar">
-						Use coupon Holi offer 10% discount
-					</div>
+    <nav class="navbar">
+        <div class="navbar-container container">
+            <input type="checkbox" name="" id="" />
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <ul class="menu-items">
 
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Help & FAQs
-						</a>
+                <li><a href="/admin/category">Categories</a></li>
+                <li><a href="/admin/product">Products</a></li>
+                <li><a href="/admin/user">Users</a></li>
+                <li><a href="/admin/coupon">Coupons</a></li>
+                <li><a href="/admin/order">Orders</a></li>
+                <li><a href="/admin/salesReport">Sales Report</a></li>
+                <li><a href="/admin/logout">Logout</a></li>
+            </ul>
+            <h1 class="logo">Perfumio</h1>
+        </div>
+    </nav>
+    <main id="main" class="main" style="margin-left: 5rem; padding-top: 5rem;">
+        <section class="section dashboard">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-xxl-4 col-md-6" >
+                            <div class="card info-card sales-card" style="background-color: #FFFFFF;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sales <span></span></h5>
+                                    <div class="d-flex align-items-center" >
+                                        <div
+                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cart"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{salesCount}}</h6>
+                                            <span class="text-success small pt-1 fw-bold">12%</span> <span
+                                                class="text-muted small pt-2 ps-1">increase</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card" style="background-color: #FFFFFF;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Revenue</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6><i class="bi bi-currency-rupee"></i>{{salesSum}}</h6>
+                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                                class="text-muted small pt-2 ps-1">increase</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 col-xl-12">
+                            <div class="card info-card customers-card" style="background-color: #FFFFFF;">
+                                {{!-- <div class="filter">
+                                    <a class="icon" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                        <li class="dropdown-header text-start">
+                                            <h6>Filter</h6>
+                                        </li>
+                                        <li><a class="dropdown-item" href="#">Today</a></li>
+                                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                                    </ul>
+                                </div> --}}
+                                <div class="card-body">
+                                    <h5 class="card-title">Customers</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{userCount}}</h6>
+                                            <span class="text-danger small pt-1 fw-bold">12%</span> <span
+                                                class="text-muted small pt-2 ps-1">decrease</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-						<a href="/profile" class="flex-c-m trans-04 p-lr-25">
-							My Account
-						</a>
+                    </div>
+                </div>
+        </section>
+        <div class="mt-4">
+            <div class="input-group">
+                <form action="/admin/salesReport" method="get">
+                    From: <input class="form-control" type="date" name="start"> To: <input class="form-control"
+                        type="date" name="end">
 
-
-					</div>
-				</div>
-			</div>
-
-			<div class="wrap-menu-desktop">
-				<nav class="limiter-menu-desktop container">
-
-					<!-- Logo desktop -->
-					<a href="/" class="logo">
-						<img src="/images/icons/logo-01.png" alt="IMG-LOGO">
-					</a>
-
-					<!-- Menu desktop -->
-					<div class="menu-desktop">
-						<ul class="main-menu">
-							<li class="active-menu">
-								<a href="/">Home</a>
-								{{!-- <ul class="sub-menu">
-									<li><a href="index.html">Homepage 1</a></li>
-
-								</ul> --}}
-							</li>
-
-
-							<li>
-								<a href="/product">Shop</a>
-							</li>
-
-
-							<li>
-								<a href="contact.html">Contact</a>
-							</li>
-						</ul>
-					</div>
-
-					<!-- Icon header -->
-
-
-					<div class="wrap-icon-header flex-w flex-r-m">
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
-							<i class="zmdi zmdi-search"></i>
-						</div>
-						<a href="/cart">
-							<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart"
-								data-notify="2">
-								<i class="zmdi zmdi-shopping-cart"></i>
-							</div>
-						</a>
-
-						<a href="/wishlist" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti"
-							data-notify="0">
-							<i class="zmdi zmdi-favorite-outline"></i>
-						</a>
-
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 ">
-							{{#if Log}}
-
-							<div class="dropdown">
-								<button class="btn btn-outline-dark me-0 btn-xs dropdown-toggle" type="button" data-bs-toggle="dropdown"
-									aria-expanded="false">
-									<i class="bi bi-person-circle me-2"></i> {{Log.username}}
-								</button>
-								<ul class="dropdown-menu">
-									<li><a class="dropdown-item" href="/profile">Profile</a></li>
-									<li><a class="dropdown-item" href="/logout">Logout</a></li>
-								</ul>
-							</div>
-							{{else}}
-							<a href="/login">
-								<button class="btn btn-outline-dark">Login</button>
-							</a>
-							{{/if}}
-						</div>
-
-
-					</div>
-				</nav>
-			</div>
-		</div>
-
-		<!-- Header Mobile -->
-		<div class="wrap-header-mobile">
-			<!-- Logo moblie -->
-			<div class="logo-mobile">
-				<a href="index.html"><img src="images/icons/logo-01.png" alt="IMG-LOGO"></a>
-			</div>
-
-			<!-- Icon header -->
-			<div class="wrap-icon-header flex-w flex-r-m m-r-15">
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 js-show-modal-search">
-					<i class="zmdi zmdi-search"></i>
-				</div>
-
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="3">
-					<i class="zmdi zmdi-shopping-cart"></i>
-				</div>
-
-				<a href="#" class="dis-block icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti"
-					data-notify="0">
-					<i class="zmdi zmdi-favorite-outline"></i>
-				</a>
-
-			</div>
-
-			<!-- Button show menu -->
-			<div class="btn-show-menu-mobile hamburger hamburger--squeeze">
-				<span class="hamburger-box">
-					<span class="hamburger-inner"></span>
-				</span>
-			</div>
-		</div>
+                    <button type="submit" class="btn btn-sm btn-warning rounded mt-3" >Filter</button>
 
 
-		<!-- Menu Mobile -->
-		<div class="menu-mobile">
-			<ul class="topbar-mobile">
-				<li>
-					<div class="left-top-bar">
-						Free shipping for standard order over $100
-					</div>
-				</li>
+                </form>
 
-				<li>
-					<div class="right-top-bar flex-w h-full">
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							Help & FAQs
-						</a>
+            </div>
+            <div class="d-flex justify-content-end" style="margin-right: 5rem;">
+                <button onclick=" downloadPdf()" class="btn btn-sm btn-warning rounded">Download as PDF</button>
+                <button onclick=" downloadExcel()" class="ms-3 btn btn-sm btn-warning rounded">Download as
+                    Excel</button>
+            </div>
+            <h3 class="text-dark mt-4">Orders</h3>
+            <div class="card mt-3" style="margin-right: 5rem;">
+                <div class="card-body pt-2">
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							My Account
-						</a>
+                    <table class="table table-hover table-borderless mt-2 ">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">User</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Order Date</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Payment Status</th>
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							EN
-						</a>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each deliveredOrders}}
+                            <tr>
+                                <th scope="row">{{inc @index}}</th>
+                                <td>{{this.address.name}}</td>
+                                <td>{{this.products.name}}</td>
+                                <td>{{this.orderDate}}</td>
+                                <td>{{this.totalPrice}}</td>
+                                <td>{{this.quantity}}</td>
+                                <td> <span class="badge text-bg-success">{{this.orderStatus}}</span></td>
+                                <td>Paid</td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          
+        </div>
 
-						<a href="#" class="flex-c-m p-lr-10 trans-04">
-							USD
-						</a>
-					</div>
-				</li>
-			</ul>
 
-			<ul class="main-menu-m">
-				<li>
-					<a href="index.html">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="index.html">Homepage 1</a></li>
-						<li><a href="home-02.html">Homepage 2</a></li>
-						<li><a href="home-03.html">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
-				</li>
 
-				<li>
-					<a href="product.html">Shop</a>
-				</li>
+    </main>
 
-				<li>
-					<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
-				</li>
 
-				<li>
-					<a href="blog.html">Blog</a>
-				</li>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
 
-				<li>
-					<a href="about.html">About</a>
-				</li>
 
-				<li>
-					<a href="contact.html">Contact</a>
-				</li>
-			</ul>
-		</div>
+    <script>
+        let orders = []
+        {{#each deliveredOrders }}
+        orders.push(['{{this.address.name}}', '{{this.products.name}}', '{{this.orderDate}}', '{{this.quantity}}', '{{this.total}}'
+            , '{{this.orderStatus}}'])
+        {{/each}}
+                let totalRevenue = '{{salesSum}}'
+                let totalOrders = '{{salesCount}}'
+                let Customers = '{{userCount}}'
+                const { jsPDF } = window.jspdf;
+                function downloadPdf() {
+                    const doc = new jsPDF();
+                    doc.text(15, 20, "Perfumio Sales Report");
+                    doc.autoTable({
+                        head: [['Type', 'Details']],
+                        body: [
+                            ['Total Sales', totalOrders],
+                            ['Total Revenue', totalRevenue],
+                            ['Total Customers', Customers],
+                        ],
+                        startY: 40
+                    })
+                    doc.text(15, doc.lastAutoTable.finalY + 20, "order info");
+                    doc.autoTable({
+                        head: [['UserName', 'Product', 'Odrer Date', 'Quantity', 'Amount', "Status"]],
+                        body: orders,
+                        startY: doc.lastAutoTable.finalY + 30
+                    })
+                    doc.save('sales-report.pdf');
+                }
+                function downloadExcel() {
+                    let report = [
+                        { type: "Total Sales", value: totalOrders },
+                        { type: "Total Revenue", value: totalRevenue },
+                        { type: "Total Customers", value: Customers },
+                    ]
 
-		<!-- Modal Search -->
-		<div class="modal-search-header flex-c-m trans-04 js-hide-modal-search">
-			<div class="container-search-header">
-				<button class="flex-c-m btn-hide-modal-search trans-04 js-hide-modal-search">
-					<img src="images/icons/icon-close2.png" alt="CLOSE">
-				</button>
+                    var sheet1 = XLSX.utils.json_to_sheet(report);
+                    var wb = XLSX.utils.book_new();
+                    XLSX.utils.book_append_sheet(wb, sheet1, "Sales Report");
 
-				<form class="wrap-search-header flex-w p-l-15">
-					<button class="flex-c-m trans-04">
-						<i class="zmdi zmdi-search"></i>
-					</button>
-					<input class="plh3" type="text" name="search" placeholder="Search...">
-				</form>
-			</div>
-		</div>
-	</header>
 
-<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/vendor/animsition/js/animsition.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/vendor/bootstrap/js/popper.js"></script>
-	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
-	<script src="/vendor/select2/select2.min.js"></script>
-	<script src="/vendor/daterangepicker/moment.min.js"></script>
-	<script src="/vendor/daterangepicker/daterangepicker.js"></script>
-	<!--===============================================================================================-->
-	<script src="/vendor/slick/slick.min.js"></script>
-	<script src="/js/slick-custom.js"></script>
+                    XLSX.writeFile(wb, 'sales-report.xlsx');
+                }
 
-	<script src="/js/main.js"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

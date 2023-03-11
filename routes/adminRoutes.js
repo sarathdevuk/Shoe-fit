@@ -1,10 +1,10 @@
 const express = require("express")
 const multer  = require('multer')
-const { getAllUsers, adminLogin, userBan, userUnBan, getAdminLogin, getAdminDash, adminLogout } = require("../controllers/adminController")
+const { getAllUsers, adminLogin, userBan, userUnBan, getAdminLogin, getAdminDash, adminLogout, salesReport, getAdminSalesReport } = require("../controllers/adminController")
 const {createCategory, getAllCategory, getCategoryById, updateCategoryById, deleteCategoryById, unlistCategory, listCategory, getAddCategory} = require("../controllers/categoryController")
 const { createCoupon, getAllCoupon, updateCoupon, deleteCoupon, listCoupon, unlistCoupon, getAddCoupon, getEditCoupon } = require("../controllers/couponController")
 const { addOffer, updateOffer, deleteOffer } = require("../controllers/offferController")
-const { getOrders, editOrder, getOrderbyId, getOrder, updateOrder } = require("../controllers/orderController")
+const { getOrders, editOrder, getOrderbyId, getOrder, updateOrder, getAllOrders, getEditOrder, getOrderDetails,} = require("../controllers/orderController")
 const { getAllProduct, getProductById, updateProductById, deleteProductById, addProduct, getAddProductPage, getEditProduct, unlistProduct, listProduct } = require("../controllers/productController")
 const verifyAdmin = require("../middleware/verifyAdmin")
 const verifyUser = require("../middleware/veryfyuser")
@@ -76,9 +76,13 @@ router.delete("/offer/:id",verifyAdmin ,deleteOffer  )
 
 // @ order  management;
 
-// router.get("/order",getOrder)
-// router.get("/order/:id",getOrderbyId)
-router.put("/order/:id",updateOrder)
+router.get("/orders",  verifyAdmin, getAllOrders)
+router.get("/order/:id",verifyAdmin, getOrderDetails)
 
+router.get("/editOrder/:id",verifyAdmin, getEditOrder)
+
+router.post("/order/:id",verifyAdmin, updateOrder)
+
+router.get("/salesReport",verifyAdmin,getAdminSalesReport)
 
 module.exports= router;

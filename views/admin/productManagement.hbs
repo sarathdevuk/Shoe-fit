@@ -163,6 +163,9 @@
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
                 aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
                   Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/orders"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Order
+                  Management</span></a></li>
 
           </ul>
 
@@ -250,7 +253,7 @@
                   <tbody>
                     {{#each products}}
                     <tr>
-                      <td>1</td>
+                      <td>{{inc @index }}</td>
 
                       <td>
                         <div class="d-flex align-items-center">

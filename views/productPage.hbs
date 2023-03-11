@@ -35,6 +35,8 @@
 	<link rel="stylesheet" type="text/css" href="/styles/util.css">
 	<link rel="stylesheet" type="text/css" href="/styles/main.css">
 	<!--===============================================================================================-->
+      <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+
 </head>
 
 <body class="animsition">
@@ -713,7 +715,7 @@
 						<!-- Block2 -->
 
 						<div class="block2">
-							<div class="block2-pic hov-img0">
+							<div class="block2-pic hov-img0 img-container ">
 								<img src="/uploads/{{this.image.filename}}" alt="IMG-PRODUCT">
 
 								<a href="/productDetails/{{this._id}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
@@ -1321,7 +1323,17 @@
 	<!--===============================================================================================-->
 	
 	
-	
+	<script>
+  var options = {
+    width:400,
+    height:250,
+    zoomWidth:500,
+    offset:{vertical:0, horizontal:10},
+    scale:1.5
+  }
+  new ImageZoom(document.getElementById("img-container"),options)
+</script>
+
 
 	
 	

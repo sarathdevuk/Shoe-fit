@@ -13,13 +13,17 @@ const orderSchema = mongoose.Schema({
     },
   
   }],
-  paymentIntent:{
-    
+  paymentIntent:{ 
   },
   address:{
-    
   },
-
+  orderDate: {
+    type:Date,
+  },
+  dispatch:{
+    type:Date,
+    default: new Date(new Date().setDate(new Date().getDate() + 7))
+},
   orderStatus:{
     type:String,
     default:"Not processed",
@@ -28,6 +32,7 @@ const orderSchema = mongoose.Schema({
    "Cash on Delivery",
    "Processing",
     "dispatched",
+    "Out for delivery",
     "Cancelled",
     "Delivered",]
   },

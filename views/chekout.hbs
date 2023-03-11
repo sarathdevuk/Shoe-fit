@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="col-md-12 mb-3">
                         <label for="firstName">Full Name</label>
-                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required="">
+                        <input type="text" name="name" class="form-control" id="firstName" placeholder="" value="" required="">
                         <div class="invalid-feedback"> Valid first name is required. </div>
                     </div>
                     {{!-- <div class="col-md-6 mb-3">
@@ -208,9 +208,9 @@
             data: $('#checkout-form').serialize(),
             success: (response) => {
                 console.log("resp", response)
-                {{!-- alert(response) --}}
+                alert(response)
                 if (!response) {
-                    location.href = '/sample'
+                    location.href = '/orderPlaced'
                 } else {
                     razorpaypayment(response)
                 }

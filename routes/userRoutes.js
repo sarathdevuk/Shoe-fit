@@ -42,7 +42,7 @@ router.get("/cart", verifyUser , getUserCart  )
 router.get("/cart/:id", verifyUser , userCart  )
 router.get("/delete-cart/:id", verifyUser , deleteCartItem  )
 router.post("/change-product-quantity", verifyUser , changeQuantity  )
-router.delete("/cart", verifyUser , emptyCart  )
+// router.delete("/cart", verifyUser , emptyCart  )
 router.post("/applyCoupon" ,verifyUser, applyCoupon  )
 router.get("/checkout" ,verifyUser, getCheckoutPage  )
 // filter
@@ -62,7 +62,7 @@ router.get("/query" ,verifyUser, getCheckoutPage  )
 
 router.post("/cash-order",verifyUser ,createOrder);
 router.get("/orderPlaced",verifyUser ,orderPlaced);
-router.get("/order",verifyUser,getOrder)
+// router.get("/order",verifyUser,getOrder)
 router.get("/viewOrder",verifyUser,viewOrder)
 router.post("/verify-payment",verifyUser, verifyPayment)
 

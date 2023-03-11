@@ -163,6 +163,10 @@
             <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
                 aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
                   Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/orders"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Order
+                  Management</span></a></li>
+
 
           </ul>
 
@@ -235,7 +239,7 @@
                 <table class="table mb-0 table-hover align-middle text-nowrap">
                   <thead>
                     <tr>
-                      <th class="border-top-0">Coupon name</th>    
+                      <th class="border-top-0">Coupon name</th>
                       <th class="border-top-0">Discount</th>
                       <th class="border-top-0">Expiry</th>
                       <th class="border-top-0">Status</th>
@@ -286,32 +290,34 @@
                           </button></a> --}}
                       </td>
                       {{else}}
-              <td>
-                 <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal" data-bs-target="#{{this._id}}">
-                  Unlist
-                </button>
+                      <td>
+                        <button type="button" class="btn btn-danger text-white" data-bs-toggle="modal"
+                          data-bs-target="#{{this._id}}">
+                          Unlist
+                        </button>
 
-                <!-- Modal -->
-                <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                  aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Unlist Coupon</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <h4> Do you want to Unlist This Coupon ..?</h4>
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
-                        <a href="/admin/unlistCoupon/{{this._id}}"  class="btn btn-danger"> Confirm </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-              {{/if}}
+                        <!-- Modal -->
+                        <div class="modal fade" id="{{this._id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                          aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Unlist Coupon</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <h4> Do you want to Unlist This Coupon ..?</h4>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-info" data-bs-dismiss="modal">Close</button>
+                                <a href="/admin/unlistCoupon/{{this._id}}" class="btn btn-danger"> Confirm </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      {{/if}}
 
                       <td>
                         <a href="/admin/editCoupon/{{this._id}}"><button type="button" class="btn btn-primary">Edit

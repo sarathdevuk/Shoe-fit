@@ -7,10 +7,14 @@ const userRoutes = require("./routes/userRoutes")
 const adminRoutes = require("./routes/adminRoutes")
 const { engine } = require("express-handlebars")
 const path = require("path")
+const hbs = require('handlebars')
 
 const morgan = require('morgan')
 const dbconnect = require('./config/dbconnection')
-//remove
+//to increment indexing
+hbs.registerHelper('inc',function(value,options){
+  return parseInt(value)+1;
+});
 
 const app = express()
 dbconnect()//database
@@ -33,11 +37,15 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(morgan("dev"))
+
+
 // app.use()
 app.get('/sample', (req, res) => {
 
   // res.render("newChekout")
-  res.render("admin/categoryManagement")
+  // res.render("admin/categoryManagement")
+  res.render("admin/salesReport")
+  
   // res.render("editAddress")
 
 })
@@ -47,7 +55,10 @@ app.get('/sample', (req, res) => {
 app.use('/admin', adminRoutes)
 app.use('/', userRoutes)
 
-
+app.use("*", (req,res)=>{
+  res.status(404)
+  throw new Error("Page not found")
+})
 
 // app.use('/product',productRoutes)
 app.use(errorHandler)

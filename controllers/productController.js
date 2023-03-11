@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler")
 const Product = require("../model/productModel")
 const User = require("../model/userModel")
 const Category = require("../model/categoryModel")
-
+const sharp = require("sharp")
 
 // @get all product
 
@@ -16,16 +16,28 @@ const productController = {
 
     try {
 
-      if (!name) {
-        res.status(400)
-        throw new Error("All fields are mandatory")
-      }
+      await sharp(req.files.image[0].path)
+                .png()
+                .resize(540, 720, {
+                    kernel: sharp.kernel.nearest,
+                    fit: 'contain',
+                    position: 'center',
+                    background: { r: 255, g: 255, b: 255, alpha: 0 }
+                })
+                .toFile(req.files.image[0].path + ".png")
+            req.files.image[0].filename = req.files.image[0].filename + ".png"
+            req.files.image[0].path = req.files.image[0].path + ".png"
+
+      // if (!name) {
+      //   res.status(400)
+      //   throw new Error("All fields are mandatory")
+      // }
       const product = await Product.create({
         name, description, quantity, price, mrp, category,
         image: req.files.image[0],
         sideImage: req.files.sideImage
       })
-      // console.log(product);
+      console.log("success",product);
       res.status(200)
       res.redirect("/admin/product")
       // res.json(product)
@@ -91,6 +103,19 @@ const productController = {
     const { name, price, description, quantity, mrp, category } = req.body
     console.log("imgbhjbj", req.files.image );
     try {
+      await sharp(req.files.image[0].path)
+      .png()
+      .resize(540, 720, {
+          kernel: sharp.kernel.nearest,
+          fit: 'contain',
+          position: 'center',
+          background: { r: 255, g: 255, b: 255, alpha: 0 }
+      })
+      .toFile(req.files.image[0].path + ".png")
+  req.files.image[0].filename = req.files.image[0].filename + ".png"
+  req.files.image[0].path = req.files.image[0].path + ".png"
+
+
       const product = await Product.updateOne({ _id: _id }, {
         $set: {
           name, price, description, quantity, mrp, category,

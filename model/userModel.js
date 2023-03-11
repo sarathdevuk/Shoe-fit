@@ -23,10 +23,7 @@ const adminUserSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  cart:{
-    type:Array,
-    default: []
-  },
+  
   address:{
     type:Array,
     default: []
