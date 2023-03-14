@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("All fields are mandatory")
   }
   // // to find the same person with the email
- 
+
   const userAvailable = await User.findOne({ email })
   if (userAvailable) {
     res.status(404);
@@ -178,10 +178,10 @@ const getAllUsers = asyncHandler(async (req, res) => {
 const shopPage = asyncHandler(async (req, res) => {
 
   try {
-    // Filtering
+    // Filtering 
 
-    const queryObj = req.query;
-    const excludeFields = ["page", "sort", "limit", "fields","category"];
+    const queryObj = { ...req.query };
+    const excludeFields = ["page", "sort", "limit", "fields", "category"];
     excludeFields.forEach((el) => delete queryObj[el]);
     let queryStr = JSON.stringify(queryObj);
 
@@ -197,7 +197,7 @@ const shopPage = asyncHandler(async (req, res) => {
     } else {
       query = query.sort("-createdAt");
     }
-  
+
     // limiting the fields
 
     if (req.query.fields) {
@@ -210,15 +210,15 @@ const shopPage = asyncHandler(async (req, res) => {
     // pagination
 
     const page = req.query.page;
-    const limit = 12 ;
+    const limit = 12;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
     const productCount = await Product.countDocuments();
-    const totalPage = productCount/limit;
-    let pagination=[];
+    const totalPage = productCount / limit;
+    let pagination = [];
 
-    for( let i=1; i<=totalPage;i++){
-        pagination.push(i)
+    for (let i = 1; i <= totalPage; i++) {
+      pagination.push(i)
     }
 
     console.log(pagination);
@@ -227,10 +227,10 @@ const shopPage = asyncHandler(async (req, res) => {
       if (skip >= productCount) throw new Error("This Page does not exists");
     }
     const products = await query.lean()
-    const category = await Category.find({unlist:false}).lean()
+    const category = await Category.find({ unlist: false }).lean()
     console.log("category", category[0].name);
-    // res.json(product);
-    res.render("shopPage", { products, category ,pagination })
+
+    res.render("shopPage", { products, category, pagination })
 
   } catch (error) {
     console.log(error);
@@ -264,9 +264,7 @@ const profile = asyncHandler(async (req, res) => {
 
   try {
     const profile = await User.findById(id).lean()
-    console.log("userprofile", profile);
 
-    // res.json(userProfile)
     res.render("newProfile", { profile })
   } catch (error) {
     console.log(error);
@@ -280,7 +278,6 @@ const addAddress = (req, res) => {
 const postAddress = asyncHandler(async (req, res) => {
 
   const { firstname, lastname, phone, pincode, address, state, locality, city } = req.body
-  console.log(req.body);
   const id = req.user
   try {
     const user = await User.findById(id)
@@ -423,5 +420,5 @@ module.exports =
   getEditAddress,
   updateAddress,
   deleteAddress,
-  
+
 }

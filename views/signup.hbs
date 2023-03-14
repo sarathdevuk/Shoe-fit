@@ -626,7 +626,7 @@
     function submitForm(e) {
        // e.preventDefault()
       console.log("eror")
-{{!--        
+       
         let usercheck = /^[A-Za-z\.\-]{3,30}$/;
       if (username.value.match(usercheck)) {
         } else {
@@ -715,7 +715,7 @@
         if (cfmPassword.value === "") {
           showErrorMessage("Confirm Password field is empty");
           return false;
-        } --}}
+        }
 
         if (password.value !== cfmPassword.value) {
           showErrorMessage("Passwords are not same");

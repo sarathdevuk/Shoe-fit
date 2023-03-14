@@ -53,6 +53,7 @@ const productController = {
     const category = await Category.find().lean()
     res.render("admin/addProduct", { category })
   }),
+
   getEditProduct: (async (req, res) => {
     try {
       const product = await Product.findById(req.params.id).lean()
@@ -101,20 +102,22 @@ const productController = {
   updateProductById: async (req, res) => {
     const _id = req.params.id
     const { name, price, description, quantity, mrp, category } = req.body
-    console.log("imgbhjbj", req.files.image );
+    console.log("image", req.files.image );
     try {
-      await sharp(req.files.image[0].path)
-      .png()
-      .resize(540, 720, {
-          kernel: sharp.kernel.nearest,
-          fit: 'contain',
-          position: 'center',
-          background: { r: 255, g: 255, b: 255, alpha: 0 }
-      })
-      .toFile(req.files.image[0].path + ".png")
-  req.files.image[0].filename = req.files.image[0].filename + ".png"
-  req.files.image[0].path = req.files.image[0].path + ".png"
-
+   
+      if(req.files.image){
+        await sharp(req.files.image[0].path)
+        .png()
+        .resize(540, 720, {
+            kernel: sharp.kernel.nearest,
+            fit: 'contain',
+            position: 'center',
+            background: { r: 255, g: 255, b: 255, alpha: 0 }
+        })
+        .toFile(req.files.image[0].path + ".png")
+    req.files.image[0].filename = req.files.image[0].filename + ".png"
+    req.files.image[0].path = req.files.image[0].path + ".png"
+      }
 
       const product = await Product.updateOne({ _id: _id }, {
         $set: {
@@ -132,6 +135,30 @@ const productController = {
       // throw new Error("Cant update product")
     }
   },
+   
+  searchProducts: asyncHandler(async (req, res) => {
+    console.log("search rpdod",req.body);
+
+    try {
+
+
+      const products = await Product.find({
+        $or: [
+          { name: new RegExp(req.body.name, "i") },
+          { category: new RegExp(req.body.name, "i") },
+        ],
+        
+      },{unlist:false}).lean();
+   
+      res.render("shopPage", {products });
+
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("Page not found");
+    }
+  }),
+
 
   unlistProduct: asyncHandler(async (req, res) => {
     try {

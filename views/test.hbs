@@ -1,0 +1,364 @@
+<div class="navbar row text-white">
+  <div class="col-md-8">
+    <div class="row   ms-4">
+      <div class="col-md-6 logo"> <a href="/admin"> HomeKart</a> </div>
+      <div class="col-md-6 adminpanel mt-1">AdminPanel</div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="row logo">
+      <div class="col-md-6 adminlogo"><i class="ri-user-line"></i></div>
+      <div class="col-md-6 logout"><a href="/admin/logout"><i class="ri-logout-box-r-line"></i></a></div>
+    </div>
+  </div>
+</div>
+
+<div class="admin-section">
+    <div class="sidebar p-4 ps-0 text-center">
+   <a href="/admin/" style="color:#51624F">Dashboard</a>
+   <a href="/admin/category">Categories</a>
+    <a href="/admin/product/?page=1" style="color:black">Products</a>
+    <a href="/admin/user" style="color:black">Staffs</a>
+    <a href="/admin/banner" style="color:black">Banners</a>
+    <a href="/admin/orders" style="color:black">Orders</a>
+    <a href="/admin/coupons" style="color:black">Coupons</a>
+    <a href="/admin/salesReport" style="color:black">Sales Report</a>
+       
+</div>
+<div class="container dashbordAdmin">
+    <div class="orderCards">
+    <div class="cards dashboard">
+      <img src="/images/revenue.png" alt="">
+        <h4>Total Revenue</h4>
+        <h1 class="text-success">Rs {{totalRevenue}}</h1>
+    </div>
+    <div class="cards dashboard">
+      <img src="/images/discount.png" alt="">
+        <h4 class="text-center">Total Discount Given</h4>
+        <h1 class="text-warning">Rs {{totalDiscount}}</h1>
+    </div>
+    <div class="cards dashboard">
+      <img src="/images/user..png" alt="">
+        <h4>Total Users</h4>
+        <h1 class="text-secondary">{{userCount}}</h1>
+        </div>
+    <div class="cards dashboard">
+      <img src="/images/products.png" alt="">
+        <h4 >Total Products</h4>
+        <h1  class="text-secondary">{{productCount}}</h1>
+    </div>
+    <div class="cards dashboard">
+      <img src="/images/oeders.png" alt="">
+        <h4>Total Orders</h4>
+        <h1  class="text-secondary">{{orderCount}}</h1>
+    </div>
+    </div>
+<div class="tables row mt-5">
+<div class="userTable col-md-4">
+  <h4 class="text-center" style="color:#01e397">Recent Users</h4>
+   <table class="table">
+  <thead class="thead-dark bg-primary text-white">
+   <tr class="text-center">
+      <th scope="col">User</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each userData}}
+   <tr class="text-center">
+      <td>{{this.name}}</td>
+      <td>{{this.email}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
+<div class="userTable col-md-4">
+    <h4 class="text-center" style="color:#01e397">Recent Products</h4>
+     <table class="table">
+  <thead class="thead-dark bg-primary text-white">
+    <tr class="text-center">
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr class="text-center">
+      <td>{{this.name}}</td>
+      <td>{{this.quantity}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+<div class="userTable col-md-4">
+   <h4 class="text-center" style="color:#01e397">Recent Orders</h4>
+      <table class="table">
+  <thead class="thead-dark bg-primary
+   text-white">
+    <tr class="text-center">
+      <th scope="col">user</th>
+      <th scope="col">Total Price</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each orderData}}
+    <tr class="text-center">
+      <td>{{this.address.name}}</td>
+      <td>{{this.totalPrice}}</td>
+      <td>{{this.status}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+</div>
+
+<div class="revenueCharts d-flex">
+<div id="chart" class=" col-md-7 mt-3 d-flex flex-column">
+  <h4 class="text-primary"> Total Revenue</h4>
+</div>
+<div id="week" class=" col-md-5 mt-3 d-flex flex-column">
+  <h4 class="text-primary text-center">weekly Revenue</h4>
+</div>
+</div>
+
+<div class="charts-section w-100 mt-5">
+<div id="piechart" class="col-4 d-flex flex-column mt-3">
+   <h4 class="text-center text-primary">Payment Methord </h4>
+</div>
+<div id="donut" class="col-4 d-flex flex-column mt-3">
+   <h4 class="text-center text-primary">Category Wise Sales </h4>
+</div>
+</div>
+</div>
+ 
+
+<script>
+  console.log({{monthlyData}})
+  console.log({{monthlyReturn}})
+  console.log({{categoryCount}})
+  var userCount={{userCount}}
+  let categoryName=[]
+  {{#each categoryName}}
+  categoryName.push('{{this}}')
+  {{/each}}
+  console.log({{weeklyData}})
+  console.log(categoryName)
+  let online={{online}}
+  let cod={{cod}}
+        var options = {
+          series: [{
+          name: 'Revenue',
+          data: [{{monthlyData}}]
+        }, ],
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct' ,'Nov','Dec'],
+        },
+        yaxis: {
+          title: {
+            text: 'In Rupees.'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "Rs " + val + " thousands"
+            }
+          }
+        }
+        };
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+        var options = {
+          series: [online,cod],
+          chart: {
+          width: 380,
+          type: 'pie',
+        },
+        labels: ["Online","COD"],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+        };
+        var piechart = new ApexCharts(document.querySelector("#piechart"), options);
+        piechart.render();
+         var options = {
+          series: [{{categoryCount}}],
+          chart: {
+          width: 400,
+          type: 'donut',
+          dropShadow: {
+            enabled: true,
+            color: '#111',
+            top: -1,
+            left: 3,
+            blur: 3,
+            opacity: 0.2
+          }
+        },
+        stroke: {
+          width: 0,
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              labels: {
+                show: true,
+                total: {
+                  showAlways: true,
+                  show: true
+                }
+              }
+            }
+          }
+        },
+        labels: categoryName,
+        dataLabels: {
+          dropShadow: {
+            blur: 3,
+            opacity: 0.8
+          }
+        },
+        fill: {
+        type: 'gradient',
+          opacity: 1,
+        },
+        states: {
+          hover: {
+            filter: 'none'
+          }
+        },
+        
+        title: {
+          text: "Categories"
+        },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+        };
+		var doughnotchart = new ApexCharts(document.querySelector("#donut"), options);
+        doughnotchart.render();  
+         var options = {
+          series: [{
+          name: 'REVENUE',
+          data: [{{weeklyData}}]
+        }],
+          chart: {
+          height: 350,
+          type: 'bar',
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val) {
+            return "Rs "+val  ;
+          },
+          offsetY: -20,
+          style: {
+            fontSize: '12px',
+            colors: ["#304758"]
+          }
+        },
+        
+        xaxis: {
+          categories: ["sun","mon","tue","wed","thu","fri","sat"],
+          position: 'top',
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false
+          },
+          crosshairs: {
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: true,
+          }
+        },
+        yaxis: {
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          labels: {
+            show: false,
+            formatter: function (val) {
+              return "Rs"+val;
+            }
+          }
+        
+        },
+        title: {
+          text: 'weekly data sales revenue',
+          floating: true,
+          offsetY: 330,
+          align: 'center',
+          style: {
+            color: '#444'
+          }
+        }
+        };
+        var week = new ApexCharts(document.querySelector("#week"), options);
+        week.render();  
+	</script>

@@ -16,6 +16,11 @@ hbs.registerHelper('inc',function(value,options){
   return parseInt(value)+1;
 });
 
+hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
+
 const app = express()
 dbconnect()//database
 app.engine("hbs", engine({ extname: ".hbs" }))
@@ -44,7 +49,9 @@ app.get('/sample', (req, res) => {
 
   // res.render("newChekout")
   // res.render("admin/categoryManagement")
-  res.render("admin/salesReport")
+  // res.render("admin/salesReport")
+  res.render("admin/dashboard")
+  // res.render("test")
   
   // res.render("editAddress")
 

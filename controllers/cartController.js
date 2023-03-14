@@ -72,30 +72,23 @@ const cartController = {
 
     try {
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-      console.log("cart ", cart);
-      console.log(req.session.invalidCoupon);
+     
       if (req.session.invalidCoupon) {
+   
         res.render("cartpage", { error: true, message: "Invalid Coupon", cart })
-      } else
+        req.session.invalidCoupon=null
+      } else if(req.session.expired){
+       
+        res.render("cartpage", { error: true, message: "Coupon Expired", cart })
+        req.session.expired = null
+      }else
         res.render("cartpage", { cart })
     } catch (error) {
       res.send(error)
-      throw new Error(error)
+      throw new Error(error) 
     }
   }),
-  // emptyCart: asyncHandler(async (req, res) => {
-  //   const { id } = req.user;
-  //   try {
-  //     const cart = await Cart.findOne({ orderby: id })
-  //     await Cart.remove()
-  //     // await cart.remove()
 
-  //     res.json(cart)
-
-  //   } catch (error) {
-  //     throw new Error(error)
-  //   }
-  // }),
   deleteCartItem: asyncHandler(async (req, res) => {
     console.log("dlt cart Itm");
     const id = req.user
@@ -132,9 +125,7 @@ const cartController = {
       let cart = await Cart.findOne({ orderby: userId });
 
       if (count == -1 && quantity == 1) {
-        console.log("inside loop");
-        console.log("cartid", cart._id);
-        console.log("prodId", prodId);
+    
         const removeProduct = await Cart.findByIdAndUpdate(cart._id,
           {
             $pull: { products: { product: prodId } }
@@ -185,7 +176,7 @@ const cartController = {
 
     } catch (error) {
       console.log('Error:', error.message);
-      res.status(400).json({ error: error.message });
+      res.status(404).json({ error: error.message });
     }
 
 
@@ -202,13 +193,21 @@ const cartController = {
 
     try {
       const validCoupon = await Coupon.findOne({ name: coupon, unlist: false })
-
       console.log(validCoupon);
       if (!validCoupon) {
         req.session.invalidCoupon = true;
         res.redirect("/cart")
-        throw new Error("invalid coupon")
+        throw new Error("invalid")  
       }
+      const currentDate = new Date();
+      const expirationDate = new Date(validCoupon.expiry);
+      if (expirationDate < currentDate) {
+        console.log("coupon expired");
+        req.session.expired = true
+        res.redirect("/cart")  
+        throw new Error("expired")  
+      }
+
 
       const { cartTotal, products } = await Cart.findOne({
         orderby: id,
@@ -225,7 +224,7 @@ const cartController = {
       // res.json(newCart)
       res.redirect("/cart")
 
-      console.log(validCoupon);
+      
 
     } catch (error) {
       console.log(error);

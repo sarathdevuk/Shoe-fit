@@ -3,36 +3,86 @@ const Offer = require("../model/offerModel");
 
 const offerController = {
   addOffer: asyncHandler(async (req,res)=> {
-    // res.json({msg: "its working"})
-      const{name,description,discount,startDate,endDate} = req.body
+   console.log("added offer",  req.body);
+   console.log("adder",  req.files.image[0]);
 
+
+    try {
+      const{name,description} = req.body
+      
     const offer = new Offer({
       name,
       description,
-      discount,
-      startDate,
-      endDate,
+      image: req.files.image[0],
     });
   
-    try {
       const savedOffer = await offer.save();
-      res.status(201).json(savedOffer);
+      console.log(savedOffer);
+      console.log("saved");
+      res.redirect("/admin/offer")
+     
     } catch (err) {
-      res.status(400).json(err);
+      console.log(err);
+      res.status(404)
+      throw new Error("not found")
     }
   }),
 
+  getOffer: asyncHandler(async (req,res)=>{
+    try {
+
+      const offer = await Offer.find().lean()
+      console.log(offer);
+      res.render("admin/bannerManagement",{offer})
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("not found")
+    }
+
+  }),
+  getAddOffer: asyncHandler(async (req,res)=>{
+      res.render("admin/addBanner")
+
+  }),
+  getEditOffer: asyncHandler(async (req,res)=>{
+    try {
+      const offer = await Offer.findById(req.params.id).lean()
+
+      console.log(offer);
+      res.render("admin/editBanner",{offer})
+
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("not found")
+    } 
+
+  }),
+
+
   updateOffer: asyncHandler(async (req,res)=> {
-    // res.json({msg: "its working"})
-      // const{name,description,discount,startDate,endDate} = req.body
+
+  const{name,description,discount,startDate,endDate} = req.body
+      const id = req.params.id
 try {
+ 
+  const updatedOffer = await Offer.updateOne({_id:id},
+    {$set:
+      { name:name, description,
+        image: req.files?.image?.[0],
+      }
+    })
+
+  console.log(updatedOffer);
+  res.redirect("/admin/offer")
   
-  const offer = await Offer.findById(req.params.id)
-  console.log(offer);
-  const updatedOffer = await Offer.findByIdAndUpdate(offer._id,req.body,{new:true})
-  res.status(200).json(updatedOffer)
+  
 } catch (error) {
   console.log(error);
+  res.status(404)
+  throw new Error("not found");
+
 }
 
   }),
@@ -45,7 +95,40 @@ try {
       console.log(error);
     }
 
-  })
+  }),
+  listOffer: asyncHandler(async(req,res)=>{
+      
+    try {
+          
+    const offer = await Offer.findByIdAndUpdate(req.params.id,
+      {
+        $set:{unlist:false}
+      },{new:true})
+    
+      res.redirect("/admin/offer")
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("cant update")
+    }
+  
+  }),
+  unlistOffer: asyncHandler(async(req,res)=>{
+    try {        
+    const offer = await Offer.findByIdAndUpdate(req.params.id,
+      {
+        $set:{unlist:true}
+      },{new:true})
+
+      res.redirect("/admin/offer")
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("cant update")
+    }
+  }),
+
 }
+
 
 module.exports = offerController;

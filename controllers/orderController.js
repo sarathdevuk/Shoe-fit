@@ -23,8 +23,9 @@ const orderController = {
     const id = req.user
     try {
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-      console.log("userCArt", cart);
-      res.render("chekout", { cart })
+      const user = await User.findById(id).lean()
+      console.log("userCArt", cart,"hdfhbf",user);
+      res.render("chekout", { cart,user })
     } catch (error) {
       res.status(404)
       // throw new Error(error)
@@ -50,7 +51,7 @@ const orderController = {
     }
     let status = paymentMethod === 'COD' ? 'placed' : 'pending'
     try {
-      const user = await User.findById(id)
+      const user = await User.findById(id) 
       let userCart = await Cart.findOne({ orderby: id })
       console.log("quqntitryy", userCart);
 
@@ -113,35 +114,9 @@ const orderController = {
         }
         console.log("succuss");
 
-        // for (const carts of userCart.products) {
-
-        //   let prId = carts.productId
-
-        //   let count = carts.quantity * -1
-
-        //  updated=  await Product.findOneAndUpdate({productId:prId}, { $inc: { quantity: count } },{new:true})
-        //     console.log(updated);
-        // }
-
-
-        // Add some product with sold value schema
-        // const update = userCart.products.map((item) => {
-        //   console.log("item", item);
-        //   return {
-        //     updateOne: {
-        //       filter: { _id: item.product._id },
-        //       update: { $inc: { quantity: -item.count } },
-        //     },
-        //   };
-        // });
-        // console.log("ugsgsghthth", update);
-
-        // const updated = await Product.bulkWrite(update, {});
-        // console.log("updated", updated);
         await userCart.remove();
         res.json(status = false)
-        // res.json({message:"success"})
-        // console.log(updated); 
+        
       }
     } catch (error) {
       console.log(error);
@@ -189,7 +164,10 @@ const orderController = {
         newOrder.save();
 
         for (let i = 0; i < userCart.products.length; i++) {
-          await Product.updateOne({ _id: userCart.products[i].product._id }, { $inc: { quantity: -1 * userCart.products[i].quantity, sold: 1 * userCart.products[i].quantity } });
+          await Product.updateOne({ _id: userCart.products[i].product._id }, 
+            { 
+              $inc: { quantity: -1 * userCart.products[i].quantity,
+                 sold: 1 * userCart.products[i].quantity } });
         }
 
         await userCart.remove()
@@ -206,13 +184,13 @@ const orderController = {
     const id = req.user;
 
     try {
-      const order = await Order.findOne({ orderby: id }).populate('products.product').lean().exec()
+      const order = await Order.find({ orderby: id }).populate('products.product').lean().exec()
       console.log("order", order);
       res.render("viewOrder", { order })
     } catch (error) {
+      console.log(error);
       res.status(404)
       throw new Error("not found")
-      console.log(error);
     }
   }),
 
@@ -236,17 +214,6 @@ const orderController = {
       }
       res.render("admin/orderManagement", { order })
 
-      // console.log("order Status", order.orderStatus);
-      // if(order.orderStatus="Delivered"){
-      //   res.render("admin/orderManagement", { order, delivered:true } )  
-      // }
-
-      // if(order.orderStatus="dispatched"){
-      //   res.render("admin/orderManagement", { order, dispatched:true } )  
-      // }
-      // if(order.orderStatus="cancelled"){
-      //   res.render("admin/orderManagement", { order, cancelled:true } )  
-      // }
 
     } catch (error) {
       res.status(404)
@@ -274,7 +241,7 @@ const orderController = {
 
   }),
   updateOrder: asyncHandler(async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     try {
       const { status } = req.body
       const { id } = req.params

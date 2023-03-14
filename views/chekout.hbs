@@ -72,8 +72,34 @@
                         <button type="submit" class="btn btn-secondary">Redeem</button>
                     </div>
                 </div>
+                
             </form>
+             {{!-- <div class="col-md-12">
+            <div class="card mb-0 mb-md-0">
+              <a href="/address"> <button class=" btn btn-dark ">Add address </button></a>
+                {{#each user.address}}
+              <div class="card-body pt-2 pb-2">
+
+                <div class="col-sm-8 mb-4">
+                  <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
+                  <p class="mb-0"> </p>
+                  <p class="mb-0">{{this.phone}}</p>
+                  <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
+                  <p class="mb-2">{{this.city}},{{this.pincode}}</p>
+                </div>
+                <a href="/editAddress/{{this.id}}" class=" btn btn-sm btn-primary">Edit</a>
+                <a href="/deleteAddress/{{this.id}}" onclick="return confirm('Are you sure to delete this address')"
+                  class=" btn btn-sm btn-danger">Delete</a>
+              </div>
+                {{/each}}
+            </div>
+          </div> --}}
         </div>
+
+
+
+
+        
         <div class="col-md-8 order-md-1">
             <h4 class="mb-3">Billing address</h4>
             <form id="checkout-form" class="needs-validation">

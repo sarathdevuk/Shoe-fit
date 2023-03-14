@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const User = require("../model/userModel");
 const Admin = require("../model/adminModel");
 const Order = require("../model/orderModel");
+const Product = require("../model/productModel");
 
 
 
@@ -11,7 +12,7 @@ const adminController = {
   getAdminDash: (req, res) => {
     console.log("GEt admin dash", req.session.admin)
     if (req.session.admin) {
-      res.render("admin/dash")
+      res.render("admin/dashboard")
     } else {
       res.redirect("/admin/login")
 
@@ -80,6 +81,47 @@ const adminController = {
     res.redirect("/admin/users")
 
   }),
+  searchUser: asyncHandler(async (req, res) => {
+    try {
+
+      const user = await User.find({
+        $or: [
+          { username: new RegExp(req.body.username, "i") },
+          { email: new RegExp(req.body.username, "i") },
+        ],
+        
+      }).lean();
+      console.log(user);
+      res.render("admin/userManagement", { user });
+
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("Page not found");
+    }
+  }),
+  searchProduct: asyncHandler(async (req, res) => {
+    console.log(req.body);
+    try {
+
+
+      const products = await Product.find({
+        $or: [
+          { name: new RegExp(req.body.name, "i") },
+          { category: new RegExp(req.body.name, "i") },
+        ],
+        
+      }).lean();
+   
+      res.render("admin/productManagement", {products });
+
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("Page not found");
+    }
+  }),
+
   salesReport: asyncHandler(async (req, res) => {
     try {
 
@@ -90,23 +132,59 @@ const adminController = {
       throw new Error("Page not found");
     }
   }),
-  getAdminSalesReport:asyncHandler( async (req, res) => {
+  getAdminSalesReport: asyncHandler(async (req, res) => {
+
+    console.log("dfaf", req.query);
     try {
-      const start = req.query.start
-      const end = req.query.end
-      let orders
+      let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
+      let endDate = new Date();
+      let filter = req.query.filter ?? "";
+
+      if (req.query.startDate) startDate = new Date(req.query.startDate);
+      if (req.query.endDate) endDate = new Date(req.query.endDate);
+
+      const currentDate = new Date();
+      switch (req.query.filter) {
+        case 'thisYear':
+          startDate = new Date(currentDate.getFullYear(), 0, 1);
+          endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+          break;
+        case 'lastYear':
+          startDate = new Date(currentDate.getFullYear() - 1, 0, 1);
+          endDate = new Date(currentDate.getFullYear() - 1, 11, 31);
+          break;
+        case 'thisMonth':
+          startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+          endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+          break;
+        case 'lastMonth':
+          startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+          endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+          break;
+        default:
+          if (!req.query.filter && !req.query.startDate) filter = "lastWeek";
+      }
+
+      startDate.setHours(0, 0, 0, 0);
+      endDate.setHours(24, 0, 0, 0);
+
+
+      let salesCount = 0;
+      
 
       let deliveredOrders
-      let salesCount
       let salesSum
       let result
-      if (start) {
-        orders = await Order.find({ paymentIntent: { created: { $gte: start, $lt: end } } }).lean()
+      if (req.query.startDate) {
+        console.log("inisde query");
+
+        const orders = await Order.find({ createdAt: { $gt: startDate, $lt: endDate } }).sort({ createdAt: -1 }).lean();
         console.log("orders", orders);
+        salesCount = orders.length
 
         deliveredOrders = orders.filter(order => order.orderStatus === "Delivered")
-        salesCount = await Order.countDocuments({ paymentIntent: { created: { $gte: start, $lt: end } } }, { orderStatus: "Delivered" })
-        salesSum = deliveredOrders.reduce((acc, order) => acc + order.totalPrice, 0)
+        console.log("delivered", deliveredOrders);
+        salesSum = deliveredOrders.reduce((acc, order) => acc + order.paymentIntent.amount, 0)
 
       } else {
 
@@ -138,11 +216,256 @@ const adminController = {
     } catch (error) {
       console.log(error);
       res.status(404)
-      throw new Error("cant get")
+      throw new Error("cant get") 
     }
   }),
 
- 
+  getSalesReport: async (req, res) => {
+    let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
+    let endDate = new Date();
+    let filter = req.query.filter ?? "";
+
+    if (req.query.startDate) startDate = new Date(req.query.startDate);
+    if (req.query.endDate) endDate = new Date(req.query.endDate);
+
+    const currentDate = new Date();
+    switch (req.query.filter) {
+      case 'thisYear':
+        startDate = new Date(currentDate.getFullYear(), 0, 1);
+        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+        break;
+      case 'lastYear':
+        startDate = new Date(currentDate.getFullYear() - 1, 0, 1);
+        endDate = new Date(currentDate.getFullYear() - 1, 11, 31);
+        break;
+      case 'thisMonth':
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+        break;
+      case 'lastMonth':
+        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        break;
+      default:
+        if (!req.query.filter && !req.query.startDate) filter = "lastWeek";
+    }
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(24, 0, 0, 0);
+
+    const orders = await orderModel.find({ createdAt: { $gt: startDate, $lt: endDate } }).sort({ createdAt: -1 }).lean();
+    let totalOrders = orders.length;
+    let totalRevenue = 0;
+    let totalPending = 0;
+    let deliveredOrders = orders.filter((item) => {
+      if (item.orderStatus == "pending" || item.orderStatus == 'outForDelivery') totalPending++;
+      totalRevenue = totalRevenue + item.product.price;
+      return item.paid;
+    });
+    let totalDispatch = deliveredOrders.length;
+
+    let orderTable = orders.map(item => [item.product.name, item.total, item.orderStatus, item.quantity, item.createdAt.toLocaleDateString()]);
+    // let byCategory = await orderModel.aggregate([{ $match: { createdAt: { $gt: startDate, $lt: endDate } } }, { $group: { _id: "$product.categoryId", count: { $sum: 1 }, price: { $sum: "$product.price" } } }]);
+    // let categoryIds = byCategory.map(item => item._id);
+    // let categories = await categoryModel.find({ _id: { $in: categoryIds } }, { category: 1 }).lean();
+    // categories.forEach((item, index) => {
+    //   let category = byCategory.find(c => c._id == item._id);
+    //   categories[index].count = category.count;
+    //   categories[index].profit = category.price;
+    // });
+    // let byBrand = await orderModel.aggregate([{ $match: { createdAt: { $gt: startDate, $lt: endDate } } }, { $group: { _id: "$product.brand", count: { $sum: 1 }, profit: { $sum: "$product.price" } } }]);
+
+    res.render("admin/salesReport", {
+      orders,
+      totalDispatch,
+      totalOrders,
+      totalPending,
+      totalRevenue,
+      startDate: moment(new Date(startDate).setDate(new Date(startDate).getDate() + 1)).utc().format('YYYY-MM-DD'),
+      endDate: moment(endDate),
+    })
+  },
+
+   getAdminHome : async (req, res) => {
+  //   try{
+  //     if (req.session.admin) {
+  //         const orders = await Order.find().lean()
+  //         const deliveredOrder = await Order.find({ orderStatus: "Delivered" }).lean()
+  //         let totalRevenue = 0;
+  //         let totalDiscount = 0;
+  //         let Orders = deliveredOrder.filter(item => {
+  //             totalRevenue = totalRevenue + item.paymentIntent.amount;
+              
+  //         })
+  //         const monthlyDataArray = await Order.aggregate([{ $match: { Orderstatus: "Delivered" } }, { $group: { _id: { $month: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }])
+  //         // const monthlyReturnArray = await Order.aggregate([{ $match: { status: "Returned" } }, { $group: { _id: { $month: '$dateOrdered' }, sum: { $sum: '$totalPrice' } } }])
+         
+  //         let monthlyDataObject = {}
+  //         // let monthlyReturnObject = {}
+  //         monthlyDataArray.map(item => {
+  //             monthlyDataObject[item._id] = item.sum
+  //         })
+  //         // monthlyReturnArray.map(item => {
+  //         //     monthlyReturnObject[item._id] = item.sum
+  //         // })
+  //         // let monthlyReturn = []
+  //         // for (let i = 1; i <= 12; i++) {
+  //         //     monthlyReturn[i - 1] = monthlyReturnObject[i] ?? 0
+  //         // }
+  //         let monthlyData = []
+  //         for (let i = 1; i <= 12; i++) {
+  //             monthlyData[i - 1] = monthlyDataObject[i] ?? 0
+  //         }
+  //         console.log("Hiiii")
+  //         console.log(monthlyData)
+  //         const online=await Order.find({paymentIntent:{method:"ONLINE PAYMENT"}}).lean().countDocuments()
+  //         const cod=await Order.find({paymentIntent:{method:"COD"}}).lean().countDocuments()
+  //         const userCount = await User.find().lean().countDocuments()
+  //         const productCount = await Product.find().lean().countDocuments()
+  //         const orderCount = await Order.find().lean().countDocuments()
+  //         const avgRevenue = parseInt(totalRevenue / orderCount)
+  //         const userData = await User.find({ $and: [{ staff: false }, { admin: false }] }).sort({ _id: -1 }).limit(5).lean()
+  //         const orderData = await Order.find().sort({ _id: -1 }).limit(5).lean()
+  //         const products = await Product.find().sort({ _id: -1 }).limit(5).lean()
+  //         let byCategory = await Order.aggregate([{ $group: { _id: "$or.category", count: { $sum: 1 }, price: { $sum: "$orderItems.price" } } }])
+  //         const categoryName=byCategory.map(item=>{
+  //             return item._id
+  //         })
+  //         const categoryCount=byCategory.map(item=>{
+  //             return item.count
+  //         })
+  //         const sd=new Date()
+  //         const ed=new Date(new Date().setDate(new Date().getDate() - 7))
+  //         const weeklyDataArray = await Order.aggregate([{ $match:{$and:[{createdAt:{$gt:ed,$lt:sd}},{status:"Delivered"}]}}, { $group: { _id: { $dayOfWeek: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }])
+  //         let weeklyDataObject={}
+  //         weeklyDataArray.map(item => {
+  //             weeklyDataObject[item._id] = item.sum
+  //         })
+  //         let weeklyData = []
+  //         for (let i = 1; i <= 7; i++) {
+  //             weeklyData[i - 1] = weeklyDataObject[i] ?? 0
+  //         }
+  //         console.log( "weekly Data",weeklyData)
+  //         console.log( "total revanue",totalRevenue)
+  //         console.log( "categoryName",categoryName)
+  //         console.log("catderf count",categoryCount)
+  //         console.log( "monthly data",monthlyData)
+  //         res.render("admin/dashboard", {weeklyData,totalRevenue,categoryName,categoryCount,userCount,byCategory, productCount, orderCount, userData, orderData, products, totalDiscount, monthlyData,online,cod})
+  //         // res.render("admin/dashboard", {weeklyData,totalRevenue,categoryName,categoryCount,userCount,byCategory, productCount, orderCount, userData, orderData, products, totalDiscount, monthlyData, monthlyReturn,online,cod})
+  //     }
+  //     else {
+  //         res.redirect('/admin/login')
+  //     }
+  //    }
+  //    catch(error){
+  //    console.log(error);
+  //    res.status(404)
+  //    throw new Error("page not found");
+
+  //  }
+  // }
+
+
+  try {
+    if (!req.session.admin) {
+      return res.redirect('/admin/login');
+    }
+  
+    const orders = await Order.find().lean();
+    const deliveredOrders = await Order.find({ orderStatus: "Delivered" }).lean();
+  
+    let totalRevenue = 0;
+    deliveredOrders.forEach(item => {
+      totalRevenue += item.paymentIntent.amount;
+    });
+  
+    const monthlyDataArray = await Order.aggregate([
+      { $match: { orderStatus: "Delivered" } },
+      { $group: { _id: { $month: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
+    ]);
+  
+    let monthlyDataObject = {};
+    monthlyDataArray.forEach(item => {
+      monthlyDataObject[item._id] = item.sum;
+    });
+  
+    let monthlyData = [];
+    for (let i = 1; i <= 12; i++) {
+      monthlyData[i - 1] = monthlyDataObject[i] || 0;
+    }
+  
+    const onlineOrdersCount = await Order.countDocuments({ "paymentIntent.method": "ONLINE PAYMENT" });
+    const codOrdersCount = await Order.countDocuments({ "paymentIntent.method": "COD" });
+    const userCount = await User.countDocuments({ staff: false, admin: false });
+    const productCount = await Product.countDocuments();
+    const orderCount = await Order.countDocuments();
+  
+    const avgRevenue = parseInt(totalRevenue / orderCount);
+  
+    const orderData = await Order.find().sort({ _id: -1 }).limit(5).lean()
+  
+    const byCategory = await Order.aggregate([
+      { $group: { _id: "$or.category", count: { $sum: 1 }, price: { $sum: "$orderItems.price" } } }
+    ]);
+  
+    const categoryName = byCategory.map(item => item._id);
+    const categoryCount = byCategory.map(item => item.count);
+  
+    const startDate = new Date();
+    const endDate = new Date(new Date().setDate(new Date().getDate() - 7));
+  
+    const weeklyDataArray = await Order.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gt: endDate,
+            $lt: startDate
+          },
+          orderStatus: "Delivered"
+        }
+      },
+      { $group: { _id: { $dayOfWeek: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
+    ]);
+  
+    let weeklyDataObject = {};
+    weeklyDataArray.forEach(item => {
+      weeklyDataObject[item._id] = item.sum;
+    });
+  
+    let weeklyData = [];
+    for (let i = 1; i <= 7; i++) {
+      weeklyData[i - 1] = weeklyDataObject[i] || 0;
+    }
+    console.log( "weekly Data",weeklyData)
+            console.log( "total revanue",totalRevenue)
+            console.log( "categoryName",categoryName)
+            console.log("catderf count",categoryCount)
+            console.log( "monthly data",monthlyData)
+  
+    res.render("admin/dashboard", {
+      weeklyData,
+      totalRevenue,
+      categoryName,
+      categoryCount,
+      userCount,
+      byCategory,
+      productCount,
+      orderCount,
+     
+      orderData,
+     
+     
+      monthlyData,
+      onlineOrdersCount,
+      codOrdersCount
+    });
+  
+  } catch (error) {
+    console.log(error);
+    res.status(404);
+    throw new Error("page not found");
+  }
+   }  
+
 }
 
 

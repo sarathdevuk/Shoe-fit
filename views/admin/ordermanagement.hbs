@@ -144,27 +144,32 @@
       <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
-          <ul id="sidebarnav">
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
-                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
-            </li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
-                aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">User
-                  Managment</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/product"
-                aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">Product
-                  Management</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
-                  class="hide-menu">Category Management</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/coupon"
-                aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">Couponon Management</span></a>
-            </li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
-                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
-                  Management</span></a></li>
-
-          </ul>
+           <ul id="sidebarnav">
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
+                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
+                                    class="hide-menu">Dashboard</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/users" aria-expanded="false"><i class="mdi mdi-account-network"></i><span
+                                    class="hide-menu">User Managment</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-shopping"></i><span
+                                    class="hide-menu">Product Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-server"></i><span
+                                    class="hide-menu">Category Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-gift"></i><span
+                                    class="hide-menu">Coupon Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/offer" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                    class="hide-menu">Banner Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/orders" aria-expanded="false"><i class="mdi mdi-truck-delivery"></i><span
+                                    class="hide-menu">Orders Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-file"></i><span
+                                    class="hide-menu">Sales Report</span></a></li>
+                    </ul>
 
         </nav>
         <!-- End Sidebar navigation -->
@@ -235,8 +240,8 @@
                       <th class="border-top-0 fw-bold">Products</th>
                       <th class="border-top-0 ">Ordered BY</th>
                       <th class="border-top-0  fw-bold">Payment Status</th>
+                      <th class="border-top-0  fw-bold">Order Date</th>
                       <th class="border-top-0  fw-bold">Order Status</th>
-                      <th class="border-top-0  fw-bold">Quantity</th>
                       <th class="border-top-0  fw-bold">Total</th>
                       <th class="border-top-0  fw-bold">Action</th>
 
@@ -252,13 +257,31 @@
                       <td class="">{{this.orderby.username}}</td>
 
                       <td class="">{{this.paymentIntent.status}}</td>
-                      {{#if delivered}}
-                      <td class="">{{this.orderStatus}}</td>
-                      {{/if}}
+
                       <td class="">{{this.createdAt}}</td>
+                     {{#ifEquals this.orderStatus "Processing"}}
+                      <td class="badge text-bg-warning mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
+                     {{#ifEquals this.orderStatus "dispatched"}}
+                      <td class="badge text-bg-primary mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
+                     {{#ifEquals this.orderStatus "Out for delivery"}}
+                      <td class="badge text-bg-primary mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
+                     {{#ifEquals this.orderStatus "Delivered"}}
+                      <td  class="badge text-bg-success mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
+                     {{#ifEquals this.orderStatus "Cancelled"}}
+                      <td class="badge text-bg-danger mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
                       <td class="">{{this.paymentIntent.amount }}</td>
+                      {{#ifEquals this.orderStatus "Delivered"}}
+                        {{!-- <td><i class="mdi mdi-checkbox-marked-circle"></i></td> --}}
+                        <td><i class="mdi  mdi-verified"></i></td>
+                      {{else}}
                       <td> <a href="/admin/editOrder/{{this._id}}">
                         <button type="button" class="btn btn-md btn-primary">Edit</button> </a>  </td>
+                        {{/ifEquals}}
                      
                     </tr>
                     {{/each}}

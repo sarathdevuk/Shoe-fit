@@ -4,23 +4,32 @@ const Schema = mongoose.Schema;
 const offerSchema = new Schema({
   name: {
     type: String,
-    required: true
+    
   },
   description: {
     type: String,
-    required: true
+    
+  },
+  image:{
+    type :Object,
+
   },
   discount: {
     type: Number,
-    required: true
+    
   },
   startDate: {
     type: Date,
-    required: true
+    
   },
   endDate: {
     type: Date,
-    required: true
+    
+  },
+  unlist :{
+    type:Boolean,
+    default:false,
+    
   }
 });
 

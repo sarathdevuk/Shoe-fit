@@ -30,7 +30,11 @@ getAddCoupon: asyncHandler(async(req,res)=>{
   try {
     const coupon = await Coupon.find().lean()
     for (const i of coupon) {
-      i.expiry=new Date(i.expiry).toLocaleDateString()
+      i.expiry=new Date(i.expiry).toLocaleDateString() 
+    }
+    console.log(coupon);
+    if(coupon.expiry>= Date.now){
+      console.log("coupon not expired");
     }
 
     res.render("admin/couponManagement",{coupon})

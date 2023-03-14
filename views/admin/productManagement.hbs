@@ -99,8 +99,8 @@
             <!-- ============================================================== -->
             <li class="nav-item search-box"> <a class="nav-link waves-effect waves-dark" href="javascript:void(0)"><i
                   class="mdi mdi-magnify me-1"></i> <span class="font-16">Search</span></a>
-              <form class="app-search position-absolute">
-                <input type="text" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i
+              <form class="app-search position-absolute" action="/admin/searchProduct" method="post">
+                <input type="text" name="name" class="form-control" placeholder="Search &amp; enter"> <a class="srh-btn"><i
                     class="mdi mdi-window-close"></i></a>
               </form>
             </li>
@@ -144,30 +144,32 @@
       <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
-          <ul id="sidebarnav">
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
-                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
-            </li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
-                aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">User
-                  Managment</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/product"
-                aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">Product
-                  Management</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
-                  class="hide-menu">Category Management</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/coupon"
-                aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">Coupon Management</span></a>
-            </li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
-                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
-                  Management</span></a></li>
-            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/orders"
-                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Order
-                  Management</span></a></li>
-
-          </ul>
+         <ul id="sidebarnav">
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
+                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
+                                    class="hide-menu">Dashboard</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/users" aria-expanded="false"><i class="mdi mdi-account-network"></i><span
+                                    class="hide-menu">User Managment</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
+                                    class="hide-menu">Product Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
+                                    class="hide-menu">Category Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-file"></i><span
+                                    class="hide-menu">Coupon Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/offer" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                    class="hide-menu">Banner Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/orders" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                    class="hide-menu">Orders Management</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                    class="hide-menu">Sales Report</span></a></li>
+                    </ul>
 
         </nav>
         <!-- End Sidebar navigation -->
