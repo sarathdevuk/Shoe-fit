@@ -206,31 +206,31 @@
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
           <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
-                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
-                                    class="hide-menu">Dashboard</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/users" aria-expanded="false"><i class="mdi mdi-account-network"></i><span
-                                    class="hide-menu">User Managment</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
-                                    class="hide-menu">Product Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
-                                    class="hide-menu">Category Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-file"></i><span
-                                    class="hide-menu">Coupon Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/offer" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
-                                    class="hide-menu">Banner Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/orders" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
-                                    class="hide-menu">Orders Management</span></a></li>
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
-                                    class="hide-menu">Sales Report</span></a></li>
-                    </ul>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
+                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">Dashboard</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/users"
+                aria-expanded="false"><i class="mdi mdi-account-network"></i><span class="hide-menu">User
+                  Managment</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/product"
+                aria-expanded="false"><i class="mdi mdi-border-all"></i><span class="hide-menu">Product
+                  Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
+                  class="hide-menu">Category Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/coupon"
+                aria-expanded="false"><i class="mdi mdi-file"></i><span class="hide-menu">Coupon Management</span></a>
+            </li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/offer"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Banner
+                  Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin/orders"
+                aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span class="hide-menu">Orders
+                  Management</span></a></li>
+            <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                  class="hide-menu">Sales Report</span></a></li>
+          </ul>
 
         </nav>
         <!-- End Sidebar navigation -->
@@ -248,195 +248,189 @@
         <div class=" text-center mt-5 ">
           <h1>Sales Report</h1>
         </div>
-          <main id="main" class="main" style="margin-left: 5rem; padding-top: 5rem;">
-        <section class="section dashboard">
+        <main id="main" class="main" style="margin-left: 5rem; padding-top: 5rem;">
+          <section class="section dashboard">
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="row">
-                        <div class="col-xxl-4 col-md-6" >
-                            <div class="card info-card sales-card" style="background-color: #FFFFFF;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Sales <span></span></h5>
-                                    <div class="d-flex align-items-center" >
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-cart"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{salesCount}}</h6>
-                                            <span class="text-success small pt-1 fw-bold">12%</span> <span
-                                                class="text-muted small pt-2 ps-1">increase</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+              <div class="col-lg-8">
+                <div class="row">
+                  <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card sales-card" style="background-color: #FFFFFF;">
+                      <div class="card-body">
+                        <h5 class="card-title">Sales <span></span></h5>
+                        <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart"></i>
+                          </div>
+                          <div class="ps-3">
+                            <h6>{{salesCount}}</h6>
+                            <span class="text-success small pt-1 fw-bold">12%</span> <span
+                              class="text-muted small pt-2 ps-1">increase</span>
+                          </div>
                         </div>
-                        <div class="col-xxl-4 col-md-6">
-                            <div class="card info-card revenue-card" style="background-color: #FFFFFF;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Revenue</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-dollar"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6><i class="bi bi-currency-rupee"></i>{{salesSum}}</h6>
-                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
-                                                class="text-muted small pt-2 ps-1">increase</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-4 col-xl-12">
-                            <div class="card info-card customers-card" style="background-color: #FFFFFF;">
-                                {{!-- <div class="filter">
-                                    <a class="icon" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                        <li class="dropdown-header text-start">
-                                            <h6>Filter</h6>
-                                        </li>
-                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                    </ul>
-                                </div> --}}
-                                <div class="card-body">
-                                    <h5 class="card-title">Customers</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-people"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{userCount}}</h6>
-                                            <span class="text-danger small pt-1 fw-bold">12%</span> <span
-                                                class="text-muted small pt-2 ps-1">decrease</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                      </div>
                     </div>
+                  </div>
+                  <div class="col-xxl-4 col-md-6">
+                    <div class="card info-card revenue-card" style="background-color: #FFFFFF;">
+                      <div class="card-body">
+                        <h5 class="card-title">Revenue</h5>
+                        <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-currency-dollar"></i>
+                          </div>
+                          <div class="ps-3">
+                            <h6><i class="bi bi-currency-rupee"></i>{{salesSum}}</h6>
+                            <span class="text-success small pt-1 fw-bold">8%</span> <span
+                              class="text-muted small pt-2 ps-1">increase</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-xxl-4 col-xl-12">
+                    <div class="card info-card customers-card" style="background-color: #FFFFFF;">
+
+                      <div class="card-body">
+                        <h5 class="card-title">Customers</h5>
+                        <div class="d-flex align-items-center">
+                          <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-people"></i>
+                          </div>
+                          <div class="ps-3">
+                            <h6>{{userCount}}</h6>
+                            <span class="text-danger small pt-1 fw-bold">12%</span> <span
+                              class="text-muted small pt-2 ps-1">decrease</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
-        </section>
-        <div class="mt-4">
+              </div>
+          </section>
+          <div class="mt-4">
             <div class="input-group">
-                <form action="/admin/salesReport" method="get">
-                    From: <input class="form-control" type="date" name="startDate"> To: <input class="form-control"
-                        type="date" name="endDate">
+              <form action="/admin/salesReport" method="get">
+                From: <input class="form-control" type="date" name="startDate"> To: <input class="form-control"
+                  type="date" name="endDate">
 
-                    <button type="submit" class="btn btn-sm btn-warning rounded mt-3" >Filter</button>
+                <button type="submit" class="btn btn-sm btn-warning rounded mt-3">Filter</button>
 
 
-                </form>
+              </form>
+            </div>
 
+              <div class=" mt-4" >
+                  <a href="/admin/salesReport?filter=thisMonth" class="btn btn-sm btn-light" type="button" > This Month </a>
+                  <a href="/admin/salesReport?filter=lastMonth" class="btn btn-sm btn-light" type="button" > Last Month </a>
+                  <a href="/admin/salesReport?filter=thisYear" class="btn btn-sm btn-light" type="button" > This Year </a>
+                  <a href="/admin/salesReport?filter=lastYear" class="btn btn-sm btn-light" type="button" > Last Year </a>
             </div>
             <div class="d-flex justify-content-end" style="margin-right: 5rem;">
-                <button onclick=" downloadPdf()" class="btn btn-sm btn-warning rounded">Download as PDF</button>
-                <button onclick=" downloadExcel()" class="ms-3 btn btn-sm btn-warning rounded">Download as
-                    Excel</button>
+              <button onclick=" downloadPdf()" class="btn btn-sm btn-warning rounded">Download as PDF</button>
+              <button onclick=" downloadExcel()" class="ms-3 btn btn-sm btn-warning rounded">Download as
+                Excel</button>
             </div>
             <h3 class="text-dark mt-4">Orders</h3>
             <div class="card mt-3" style="margin-right: 5rem;">
-                <div class="card-body pt-2">
+              <div class="card-body pt-2">
 
-                    <table class="table table-hover table-borderless mt-2 ">
-                        <thead>
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Order Date</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Payment Status</th>
+                <table class="table table-hover table-borderless mt-2 ">
+                  <thead>
+                    <tr>
+                      <th scope="col">Id</th>
+                      <th scope="col">User</th>
+                      <th scope="col">Product</th>
+                      <th scope="col">Order Date</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Quantity</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Payment Status</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each deliveredOrders}}
-                            <tr>
-                                <th scope="row">{{inc @index}}</th>
-                                <td>{{this.address.name}}</td>
-                                <td>{{this.products.[0].product.name}}</td>
-                              
-                                <td>{{this.createdAt}}</td>
-                                <td>{{this.paymentIntent.amount}}</td>
-                                <td>{{this.products.[0].quantity}}</td>
-                                <td> <span class="badge text-bg-success">{{this.orderStatus}}</span></td>
-                                <td>Paid</td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
-                </div>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each deliveredOrders}}
+                    <tr>
+                      <th scope="row">{{inc @index}}</th>
+                      <td>{{this.address.name}}</td>
+                      <td>{{this.products.[0].product.name}}</td>
+
+                      <td>{{this.createdAt}}</td>
+                      <td>{{this.paymentIntent.amount}}</td>
+                      <td>{{this.products.[0].quantity}}</td>
+                      <td> <span class="badge text-bg-success">{{this.orderStatus}}</span></td>
+                      <td>Paid</td>
+                    </tr>
+                    {{/each}}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          
-        </div>
+
+          </div>
 
 
-    </main>
- 
+        </main>
+
 
       </div>
 
-      
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
 
-      
-    <script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+      <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+
+
+      <script>
         let orders = []
-        {{#each deliveredOrders }}
-        orders.push(['{{this.address.name}}', '{{this.products.name}}', '{{this.paymentIntent.created}}', '{{this.paymentIntent.amount}}', '{{this.products.[0].quantity}}'
-            , '{{this.orderStatus}}'])
+        {{#each deliveredOrders}}
+        orders.push(['{{this.address.name}}', '{{this.products.[0].product.name}}', '{{this.createdAt}}', '{{this.paymentIntent.amount}}', '{{this.products.[0].quantity}}'
+          , '{{this.orderStatus}}'])
         {{/each}}
-                let totalRevenue = '{{salesSum}}'
-                let totalOrders = '{{salesCount}}'
-                let Customers = '{{userCount}}'
-                const { jsPDF } = window.jspdf;
-                function downloadPdf() {
-                    const doc = new jsPDF();
-                    doc.text(15, 20, "croza store");
-                    doc.autoTable({
-                        head: [['Type', 'Details']],
-                        body: [
-                            ['Total Sales', totalOrders],
-                            ['Total Revenue', totalRevenue],
-                            ['Total Customers', Customers],
-                        ],
-                        startY: 40
-                    })
-                    doc.text(15, doc.lastAutoTable.finalY + 20, "order info");
-                    doc.autoTable({
-                        head: [['UserName', 'Product', 'Odrer Date', 'Amount' , 'Quantity', "Status"]],
-                        body: orders,
-                        startY: doc.lastAutoTable.finalY + 30
-                    })
-                    doc.save('sales-report.pdf');
-                }
-                function downloadExcel() {
-                    let report = [
-                        { type: "Total Sales", value: totalOrders },
-                        { type: "Total Revenue", value: totalRevenue },
-                        { type: "Total Customers", value: Customers },
-                    ]
+            let totalRevenue = '{{salesSum}}'
+            let totalOrders = '{{salesCount}}'
+            let Customers = '{{userCount}}'
+            const { jsPDF } = window.jspdf;
+            function downloadPdf() {
+              const doc = new jsPDF();
+              doc.text(15, 20, "croza store");
+              doc.autoTable({
+                head: [['Type', 'Details']],
+                body: [
+                  ['Total Sales', totalOrders],
+                  ['Total Revenue', totalRevenue],
+                  ['Total Customers', Customers],
+                ],
+                startY: 40
+              })
+              doc.text(15, doc.lastAutoTable.finalY + 20, "order info");
+              doc.autoTable({
+                head: [['UserName', 'Product', 'Odrer Date', 'Amount', 'Quantity', "Status"]],
+                body: orders,
+                startY: doc.lastAutoTable.finalY + 30
+              })
+              doc.save('sales-report.pdf');
+            }
+            function downloadExcel() {
+              let report = [
+                { type: "Total Sales", value: totalOrders },
+                { type: "Total Revenue", value: totalRevenue },
+                { type: "Total Customers", value: Customers },
+              ]
 
-                    var sheet1 = XLSX.utils.json_to_sheet(report);
-                    var wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, sheet1, "Sales Report");
+              var sheet1 = XLSX.utils.json_to_sheet(report);
+              var wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, sheet1, "Sales Report");
 
 
-                    XLSX.writeFile(wb, 'sales-report.xlsx');
-                }
+              XLSX.writeFile(wb, 'sales-report.xlsx');
+            }
 
-    </script>
+      </script>
       <!-- ============================================================== -->
       <!-- End Wrapper -->
       <!-- ============================================================== -->

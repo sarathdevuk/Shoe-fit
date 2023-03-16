@@ -21,46 +21,56 @@ const orderController = {
 
   getCheckoutPage: asyncHandler(async (req, res) => {
     const id = req.user
+    req.session.checkoutAddress= true
     try {
-      const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-      const user = await User.findById(id).lean()
-      console.log("userCArt", cart,"hdfhbf",user);
-      res.render("chekout", { cart,user })
+      
+      const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean();
+      const user = await User.findById(id).lean();
+
+      const outOfStockProducts = cart.products.filter(p => (p.product.quantity - p.quantity) < 1);
+    
+      if (outOfStockProducts.length > 0) {
+        req.session.outOfStock = true;
+        req.session.outOfStockProducts = outOfStockProducts.map(p => p.product.name);
+
+        return res.redirect('/cart');
+      }
+      res.render('checkout', { cart, user });
+
     } catch (error) {
-      res.status(404)
-      // throw new Error(error)
       console.log(error);
-
+      res.status(404)
+      throw new Error("not found")
     }
-
   }),
 
 
 
 
   createOrder: asyncHandler(async (req, res) => {
-    console.log("chekout body", req.body);
+    
+    const { paymentMethod } = req.body
+   
+    let { address } = await User.findOne(
+      { "address.id": req.body.addressId},
+      { _id: 0, address: { $elemMatch: { id: req.body.addressId } } }
+    );
 
-
-    const { paymentMethod, name, email, phone, address, country, state, zip, area } = req.body
-    console.log(req.body);
     const id = req.user;
-    if (!paymentMethod) {
+  
+    if (!paymentMethod || !address) {
       res.status(404)
-      throw new Error("Create Cash order failed")
+      throw new Error("Address Is mandatory")
     }
     let status = paymentMethod === 'COD' ? 'placed' : 'pending'
     try {
-      const user = await User.findById(id) 
+      const user = await User.findById(id)
       let userCart = await Cart.findOne({ orderby: id })
-      console.log("quqntitryy", userCart);
-
 
       let finalAmount = userCart.totalAfterDiscount ? userCart.totalAfterDiscount : userCart.cartTotal;
-      console.log("final amount", finalAmount);
 
       if (paymentMethod == "ONLINE") {
-        req.session.orderBody = req.body
+        req.session.orderBody = address;
         req.session.amount = finalAmount
 
         var options = {
@@ -79,25 +89,15 @@ const orderController = {
         });
       } else {
 
-        
+
         let newOrder = await new Order({
           products: userCart.products,
-          address: {
-            name: name,
-            email: email,
-            phone: phone,
-            address: address,
-            country: country,
-            state: state,
-            area: area,
-            zip: zip,
-
-          },
+          address: address[0],
           paymentIntent: {
             id: uniqid(),
             method: "COD",
             amount: finalAmount,
-            status: "Cash on Delivery",       
+            status: "Cash on Delivery",
             currency: "Rupees",
           },
           orderDate: Date.now(),
@@ -107,7 +107,7 @@ const orderController = {
         })
         newOrder.save();
 
-
+        console.log("new Order",newOrder);
         for (let i = 0; i < userCart.products.length; i++) {
 
           await Product.updateOne({ _id: userCart.products[i].product._id }, { $inc: { quantity: -1 * userCart.products[i].quantity, sold: 1 * userCart.products[i].quantity } });
@@ -116,10 +116,13 @@ const orderController = {
 
         await userCart.remove();
         res.json(status = false)
-        
+
       }
     } catch (error) {
       console.log(error);
+      res.status(404)
+      throw new Error("not found")
+
     }
 
   }),
@@ -133,22 +136,13 @@ const orderController = {
       if (hmac == req.body.payment.razorpay_signature) {
         console.log("Your Order success");
         const id = req.user
-        const { name, email, phone, address, country, state, zip, area } = req.session.orderBody
+        console.log("sdfsae",req.session.orderBody);
+
         let userCart = await Cart.findOne({ orderby: id })
 
         let newOrder = await new Order({
           products: userCart.products,
-          address: {
-            name: name,
-            email: email,
-            phone: phone,
-            address: address,
-            country: country,
-            state: state,
-            area: area,
-            zip: zip,
-
-          },
+          address:req.session.orderBody[0],
           paymentIntent: {
             id: uniqid(),
             method: "ONLINE PAYMENT",
@@ -164,10 +158,13 @@ const orderController = {
         newOrder.save();
 
         for (let i = 0; i < userCart.products.length; i++) {
-          await Product.updateOne({ _id: userCart.products[i].product._id }, 
-            { 
-              $inc: { quantity: -1 * userCart.products[i].quantity,
-                 sold: 1 * userCart.products[i].quantity } });
+          await Product.updateOne({ _id: userCart.products[i].product._id },
+            {
+              $inc: {
+                quantity: -1 * userCart.products[i].quantity,
+                sold: 1 * userCart.products[i].quantity
+              }
+            });
         }
 
         await userCart.remove()

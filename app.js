@@ -15,6 +15,9 @@ const dbconnect = require('./config/dbconnection')
 hbs.registerHelper('inc',function(value,options){
   return parseInt(value)+1;
 });
+hbs.registerHelper('dic',function(value,options){
+  return parseInt(value)-1;
+});
 
 hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
   return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
@@ -50,10 +53,10 @@ app.get('/sample', (req, res) => {
   // res.render("newChekout")
   // res.render("admin/categoryManagement")
   // res.render("admin/salesReport")
-  res.render("admin/dashboard")
-  // res.render("test")
+  // res.render("admin/dashboard")
+  res.render("test")
   
-  // res.render("editAddress")
+
 
 })
 

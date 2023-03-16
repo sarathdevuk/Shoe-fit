@@ -82,15 +82,32 @@ const getForgotPass = async (req, res) => {
     res.render("forgotPass", { changePassword: true })
     req.session.changePassword = false
 
-  }
-  res.render("forgotPass", { mail: true })
+  } else if (req.session.invalidEmail) {
+    res.render("forgotPass", { mail: true, error: true })
+  } else
+    res.render("forgotPass", { mail: true })
 }
 const sendForgotOtp = async (req, res) => {
-  sentOTP(req.body.email, otp)
-  req.session.forgotOtp = otp
-  req.session.forgotBody = req.body
-  req.session.otpPage = true
-  res.redirect("/forgot")
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) {
+      req.session.invalidEmail = true
+      res.redirect("/forgot")
+    } else {
+      sentOTP(req.body.email, otp)
+      req.session.forgotOtp = otp
+      req.session.forgotBody = req.body
+      req.session.otpPage = true
+      res.redirect("/forgot")
+    }
+
+
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+    throw new Error("not found")
+  }
+
 
 }
 const verifyForgotOtp = async (req, res) => {
@@ -187,8 +204,8 @@ const shopPage = asyncHandler(async (req, res) => {
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
 
-    let query = Product.find(JSON.parse(queryStr));
-
+    let query = Product.find({ unlist: false }).select(JSON.parse(queryStr));
+ 
     // Sorting
 
     if (req.query.sort) {
@@ -297,7 +314,12 @@ const postAddress = asyncHandler(async (req, res) => {
 
 
     await user.save()
-    res.redirect("/profile")
+    if (req.session.checkoutAddress) {
+      res.redirect("/checkout")
+      req.session.checkoutAddress = null;
+    } else {
+      res.redirect("/profile")
+    }
 
   } catch (error) {
     console.log(error);
@@ -330,14 +352,14 @@ const updateProfile = asyncHandler(async (req, res) => {
 })
 const getEditAddress = asyncHandler(async (req, res) => {
   console.log("edit address Page");
-  // const id = req.user
+
   try {
 
     let { address } = await User.findOne(
       { "address.id": req.params.id },
       { _id: 0, address: { $elemMatch: { id: req.params.id } } }
     );
-    console.log("addresss", address);
+
     res.render("editAddress", { address: address[0] })
 
 
@@ -350,7 +372,7 @@ const getEditAddress = asyncHandler(async (req, res) => {
 })
 const updateAddress = asyncHandler(async (req, res) => {
   const id = req.user
-  console.log("req.body", req.body);
+
   try {
 
     await User.updateOne(
@@ -361,8 +383,13 @@ const updateAddress = asyncHandler(async (req, res) => {
         },
       }
     );
+if(req.session.checkoutAddress){
 
-    res.redirect("/profile")
+  res.redirect("/checkout")
+}else{
+
+  res.redirect("/profile")
+}
 
   } catch (error) {
     console.log(error);

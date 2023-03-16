@@ -72,50 +72,82 @@ const cartController = {
 
     try {
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-     
+
       if (req.session.invalidCoupon) {
-   
+
         res.render("cartpage", { error: true, message: "Invalid Coupon", cart })
-        req.session.invalidCoupon=null
-      } else if(req.session.expired){
-       
+        req.session.invalidCoupon = null
+      } else if (req.session.expired) {
+
         res.render("cartpage", { error: true, message: "Coupon Expired", cart })
         req.session.expired = null
-      }else
+      } else if (req.session.outOfStock) {
+        console.log(req.session.outOfStockProducts[0]);
+        res.render("cartpage",
+          {
+            err: true,
+            outOfStock: req.session.outOfStockProducts[0],
+            message: "Out Of stock", cart
+          })
+        req.session.outOfStock = null
+        req.session.outOfStockProducts = null
+      } else
         res.render("cartpage", { cart })
     } catch (error) {
-      res.send(error)
-      throw new Error(error) 
+      console.log(error);
+      res.status(404)
+      throw new Error("not found")
     }
   }),
 
   deleteCartItem: asyncHandler(async (req, res) => {
-    console.log("dlt cart Itm");
-    const id = req.user
-    const prodId = req.params.id
-    const cart = await Cart.findOne({ orderby: id })
-    console.log(cart);
+    
+    try {
+      const cart = await Cart.findOne({ orderby: req.user });
 
-    let deleteproduct = await Cart.updateOne(
-      { _id: id },
-      {
-        $pull: { products: { product: prodId } },
-      },
-      {
-        multi: true
-      }
+      const removedProduct = cart.products.find(product => product.product == req.params.id);
+      
+      let discount = cart.totalAfterDiscount ? 100*(cart.cartTotal - cart.totalAfterDiscount)/cart.cartTotal : 0
 
-    );
-    console.log("deleted  Product", deleteproduct);
-    res.redirect("/cart")
-    // res.json(deleteproduct)
+        console.log("Your answer is",discount);
 
+      const updatedCartTotal = cart.cartTotal - (removedProduct.price * removedProduct.quantity );
+
+      let updatedTotalAfterDiscount = cart.totalAfterDiscount ?  (updatedCartTotal - (updatedCartTotal * discount) / 100).toFixed(2) : cart.totalAfterDiscount
+
+      console.log(updatedCartTotal);
+      // const updatedTotalAfterDiscount = cart.totalAfterDiscount ? (cart.totalAfterDiscount - cart.cartTotal - ((removedProduct.price * removedProduct.quantity) )/100): cart.totalAfterDiscount;
+      
+      const updatedCart = await Cart.findByIdAndUpdate(
+        cart._id,
+        {
+          $set: {
+            cartTotal: updatedCartTotal,
+            totalAfterDiscount: updatedTotalAfterDiscount
+          },
+          $pull: {
+            products: { product: removedProduct.product }
+          }
+        },
+        { new: true }
+      );
+      
+      console.log(updatedCart);
+      
+      res.redirect("/cart")
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("not found")
+
+    }
 
   }),
   changeQuantity: asyncHandler(async (req, res) => {
     const userId = req.user;
     const { cartId, prodId, count, quantity } = req.body;
-    console.log("count", count);
+
+    console.log("count", prodId);
     console.log("quantity", quantity);
     try {
       const parsedCount = parseInt(count);
@@ -125,14 +157,8 @@ const cartController = {
       let cart = await Cart.findOne({ orderby: userId });
 
       if (count == -1 && quantity == 1) {
-    
-        const removeProduct = await Cart.findByIdAndUpdate(cart._id,
-          {
-            $pull: { products: { product: prodId } }
-          }, { new: true })
-        let notRemove = false
-        console.log('product removed');
-        console.log("rempovsdfdsf", removeProduct);
+
+        let notRemove = false         
         res.json(notRemove)
 
       } else {
@@ -151,9 +177,14 @@ const cartController = {
         }, 0);
         if (cart.totalAfterDiscount) {
           let price = cart.products[productIndex].price * parsedCount
-          cart.totalAfterDiscount += price;
+
+          let discount = 100*(cart.cartTotal - cart.totalAfterDiscount)/cart.cartTotal
+        
+          cart.totalAfterDiscount = (cartTotal - (cartTotal * discount) / 100).toFixed(2)
+       
+
           cart.totalAfterDiscount = Number(cart.totalAfterDiscount.toFixed(2));
-          console.log("price", cart.totalAfterDiscount);
+          console.log(" disc price", cart.totalAfterDiscount);
 
         }
 
@@ -197,37 +228,54 @@ const cartController = {
       if (!validCoupon) {
         req.session.invalidCoupon = true;
         res.redirect("/cart")
-        throw new Error("invalid")  
+        throw new Error("invalid")
       }
       const currentDate = new Date();
       const expirationDate = new Date(validCoupon.expiry);
       if (expirationDate < currentDate) {
         console.log("coupon expired");
         req.session.expired = true
-        res.redirect("/cart")  
-        throw new Error("expired")  
+        res.redirect("/cart")
+        throw new Error("expired")
       }
 
+      req.session.discount=validCoupon.discount;
 
       const { cartTotal, products } = await Cart.findOne({
         orderby: id,
       }).populate("products.product")
-      console.log("its total ", cartTotal);
 
+    
       let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2)
       console.log("total after disc", totalAfterDiscount)
+
+     let x = 100*(cartTotal - totalAfterDiscount)/cartTotal
+     console.log("The Discount is ",x);
 
       const newCart = await Cart.findOneAndUpdate({ orderby: id }, { totalAfterDiscount }, { new: true })
 
       console.log(newCart);
-      // res.json(totalAfterDiscount)
-      // res.json(newCart)
+     
       res.redirect("/cart")
 
-      
+
 
     } catch (error) {
       console.log(error);
+      res.status(404)
+      throw new Error("not found")
+    }
+  }),
+  emptyCart: asyncHandler(async(req,res)=>{
+    try {
+      const id = req.user
+      const cart =await Cart.findOne( {orderby:id} )
+      cart.remove()
+      res.redirect("/cart")
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("not found")
     }
   })
 

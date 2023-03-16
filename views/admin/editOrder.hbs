@@ -48,12 +48,21 @@
                               data-error="Please specify your need.">
                               <option value="" selected disabled>Select Category</option>
 
-                
+                            
                               <option>Processing</option>
-                              <option>dispatched</option>
+                              <option>dispatched</option>                         
                               <option>Out for delivery</option>
                               <option>Delivered</option>
-                        
+{{!--                           
+                             {{#ifEquals order.orderStatus "dispatched"}}  
+                             <option>dispatched</option>                       
+                              <option>Out for delivery</option>
+                              <option>Delivered</option>
+                            {{#ifEquals}} --}}
+                             {{!-- {{#ifEquals order.orderStatus "Out for delivery"}}                        
+                              <option>Out for delivery</option>
+                              <option>Delivered</option>
+                            {{#ifEquals}} --}}
                             </select>
 
                           </div>

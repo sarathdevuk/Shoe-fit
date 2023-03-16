@@ -9,18 +9,6 @@ const Product = require("../model/productModel");
 
 
 const adminController = {
-  getAdminDash: (req, res) => {
-    console.log("GEt admin dash", req.session.admin)
-    if (req.session.admin) {
-      res.render("admin/dashboard")
-    } else {
-      res.redirect("/admin/login")
-
-    }
-
-
-  },
-
   // @admin Login
   // routes admin/login
   getAdminLogin: (req, res) => {
@@ -89,7 +77,7 @@ const adminController = {
           { username: new RegExp(req.body.username, "i") },
           { email: new RegExp(req.body.username, "i") },
         ],
-        
+
       }).lean();
       console.log(user);
       res.render("admin/userManagement", { user });
@@ -110,10 +98,10 @@ const adminController = {
           { name: new RegExp(req.body.name, "i") },
           { category: new RegExp(req.body.name, "i") },
         ],
-        
+
       }).lean();
-   
-      res.render("admin/productManagement", {products });
+
+      res.render("admin/productManagement", { products });
 
     } catch (error) {
       console.log(error);
@@ -134,7 +122,7 @@ const adminController = {
   }),
   getAdminSalesReport: asyncHandler(async (req, res) => {
 
-    console.log("dfaf", req.query);
+    console.log("dfaf", req.query.filter);
     try {
       let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
       let endDate = new Date();
@@ -145,6 +133,7 @@ const adminController = {
 
       const currentDate = new Date();
       switch (req.query.filter) {
+      
         case 'thisYear':
           startDate = new Date(currentDate.getFullYear(), 0, 1);
           endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
@@ -170,12 +159,12 @@ const adminController = {
 
 
       let salesCount = 0;
-      
+
 
       let deliveredOrders
       let salesSum
       let result
-      if (req.query.startDate) {
+      if (req.query.startDate || req.query.endDate || req.query.filter ) {
         console.log("inisde query");
 
         const orders = await Order.find({ createdAt: { $gt: startDate, $lt: endDate } }).sort({ createdAt: -1 }).lean();
@@ -187,7 +176,7 @@ const adminController = {
         salesSum = deliveredOrders.reduce((acc, order) => acc + order.paymentIntent.amount, 0)
 
       } else {
-
+          console.log("else case");
         deliveredOrders = await Order.find({ orderStatus: "Delivered" }).populate("products.product").lean()
         for (const i of deliveredOrders) {
           i.createdAt = new Date(i.createdAt).toLocaleString();
@@ -216,9 +205,9 @@ const adminController = {
     } catch (error) {
       console.log(error);
       res.status(404)
-      throw new Error("cant get") 
+      throw new Error("cant get")
     }
-  }),
+  }), 
 
   getSalesReport: async (req, res) => {
     let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
@@ -285,186 +274,86 @@ const adminController = {
     })
   },
 
-   getAdminHome : async (req, res) => {
-  //   try{
-  //     if (req.session.admin) {
-  //         const orders = await Order.find().lean()
-  //         const deliveredOrder = await Order.find({ orderStatus: "Delivered" }).lean()
-  //         let totalRevenue = 0;
-  //         let totalDiscount = 0;
-  //         let Orders = deliveredOrder.filter(item => {
-  //             totalRevenue = totalRevenue + item.paymentIntent.amount;
-              
-  //         })
-  //         const monthlyDataArray = await Order.aggregate([{ $match: { Orderstatus: "Delivered" } }, { $group: { _id: { $month: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }])
-  //         // const monthlyReturnArray = await Order.aggregate([{ $match: { status: "Returned" } }, { $group: { _id: { $month: '$dateOrdered' }, sum: { $sum: '$totalPrice' } } }])
-         
-  //         let monthlyDataObject = {}
-  //         // let monthlyReturnObject = {}
-  //         monthlyDataArray.map(item => {
-  //             monthlyDataObject[item._id] = item.sum
-  //         })
-  //         // monthlyReturnArray.map(item => {
-  //         //     monthlyReturnObject[item._id] = item.sum
-  //         // })
-  //         // let monthlyReturn = []
-  //         // for (let i = 1; i <= 12; i++) {
-  //         //     monthlyReturn[i - 1] = monthlyReturnObject[i] ?? 0
-  //         // }
-  //         let monthlyData = []
-  //         for (let i = 1; i <= 12; i++) {
-  //             monthlyData[i - 1] = monthlyDataObject[i] ?? 0
-  //         }
-  //         console.log("Hiiii")
-  //         console.log(monthlyData)
-  //         const online=await Order.find({paymentIntent:{method:"ONLINE PAYMENT"}}).lean().countDocuments()
-  //         const cod=await Order.find({paymentIntent:{method:"COD"}}).lean().countDocuments()
-  //         const userCount = await User.find().lean().countDocuments()
-  //         const productCount = await Product.find().lean().countDocuments()
-  //         const orderCount = await Order.find().lean().countDocuments()
-  //         const avgRevenue = parseInt(totalRevenue / orderCount)
-  //         const userData = await User.find({ $and: [{ staff: false }, { admin: false }] }).sort({ _id: -1 }).limit(5).lean()
-  //         const orderData = await Order.find().sort({ _id: -1 }).limit(5).lean()
-  //         const products = await Product.find().sort({ _id: -1 }).limit(5).lean()
-  //         let byCategory = await Order.aggregate([{ $group: { _id: "$or.category", count: { $sum: 1 }, price: { $sum: "$orderItems.price" } } }])
-  //         const categoryName=byCategory.map(item=>{
-  //             return item._id
-  //         })
-  //         const categoryCount=byCategory.map(item=>{
-  //             return item.count
-  //         })
-  //         const sd=new Date()
-  //         const ed=new Date(new Date().setDate(new Date().getDate() - 7))
-  //         const weeklyDataArray = await Order.aggregate([{ $match:{$and:[{createdAt:{$gt:ed,$lt:sd}},{status:"Delivered"}]}}, { $group: { _id: { $dayOfWeek: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }])
-  //         let weeklyDataObject={}
-  //         weeklyDataArray.map(item => {
-  //             weeklyDataObject[item._id] = item.sum
-  //         })
-  //         let weeklyData = []
-  //         for (let i = 1; i <= 7; i++) {
-  //             weeklyData[i - 1] = weeklyDataObject[i] ?? 0
-  //         }
-  //         console.log( "weekly Data",weeklyData)
-  //         console.log( "total revanue",totalRevenue)
-  //         console.log( "categoryName",categoryName)
-  //         console.log("catderf count",categoryCount)
-  //         console.log( "monthly data",monthlyData)
-  //         res.render("admin/dashboard", {weeklyData,totalRevenue,categoryName,categoryCount,userCount,byCategory, productCount, orderCount, userData, orderData, products, totalDiscount, monthlyData,online,cod})
-  //         // res.render("admin/dashboard", {weeklyData,totalRevenue,categoryName,categoryCount,userCount,byCategory, productCount, orderCount, userData, orderData, products, totalDiscount, monthlyData, monthlyReturn,online,cod})
-  //     }
-  //     else {
-  //         res.redirect('/admin/login')
-  //     }
-  //    }
-  //    catch(error){
-  //    console.log(error);
-  //    res.status(404)
-  //    throw new Error("page not found");
+  getAdminHome: async (req, res) => {
+    try {
+      if (!req.session.admin) {
+        return res.redirect('/admin/login');
+      }
 
-  //  }
-  // }
+      
+      const deliveredOrders = await Order.find({ orderStatus: "Delivered" }).lean();
 
+      let totalRevenue = 0;
+      deliveredOrders.forEach(item => {
+        totalRevenue += item.paymentIntent.amount;
+      });
 
-  try {
-    if (!req.session.admin) {
-      return res.redirect('/admin/login');
+      const monthlyDataArray = await Order.aggregate([
+        { $match: { orderStatus: "Delivered" } },
+        { $group: { _id: { $month: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
+      ]);
+
+      let monthlyDataObject = {};
+      monthlyDataArray.forEach(item => {
+        monthlyDataObject[item._id] = item.sum;
+      });
+
+      let monthlyData = [];
+      for (let i = 1; i <= 12; i++) {
+        monthlyData[i - 1] = monthlyDataObject[i] || 0;
+      }
+
+      const onlineOrdersCount = await Order.countDocuments({ "paymentIntent.method": "ONLINE PAYMENT" });
+      const codOrdersCount = await Order.countDocuments({ "paymentIntent.method": "COD" });
+      const userCount = await User.countDocuments();
+      const productCount = await Product.countDocuments();
+      const orderCount = await Order.countDocuments();
+      const orderData = await Order.find().sort({ _id: -1 }).limit(5).lean()
+
+      const startDate = new Date();
+      const endDate = new Date(new Date().setDate(new Date().getDate() - 7));
+
+      const weeklyDataArray = await Order.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gt: endDate,
+              $lt: startDate
+            },
+            orderStatus: "Delivered"
+          }
+        },
+        { $group: { _id: { $dayOfWeek: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
+      ]);
+
+      let weeklyDataObject = {};
+      weeklyDataArray.forEach(item => {
+        weeklyDataObject[item._id] = item.sum;
+      });
+
+      let weeklyData = [];
+      for (let i = 1; i <= 7; i++) {
+        weeklyData[i - 1] = weeklyDataObject[i] || 0;
+      }
+
+      res.render("admin/dashboard", {
+        weeklyData,
+        totalRevenue,
+        userCount,
+        productCount,
+        orderCount,
+        orderData,
+        monthlyData,
+        onlineOrdersCount,
+        codOrdersCount
+      });
+
+    } catch (error) {
+      console.log(error);
+      res.status(404);
+      throw new Error("page not found");
     }
-  
-    const orders = await Order.find().lean();
-    const deliveredOrders = await Order.find({ orderStatus: "Delivered" }).lean();
-  
-    let totalRevenue = 0;
-    deliveredOrders.forEach(item => {
-      totalRevenue += item.paymentIntent.amount;
-    });
-  
-    const monthlyDataArray = await Order.aggregate([
-      { $match: { orderStatus: "Delivered" } },
-      { $group: { _id: { $month: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
-    ]);
-  
-    let monthlyDataObject = {};
-    monthlyDataArray.forEach(item => {
-      monthlyDataObject[item._id] = item.sum;
-    });
-  
-    let monthlyData = [];
-    for (let i = 1; i <= 12; i++) {
-      monthlyData[i - 1] = monthlyDataObject[i] || 0;
-    }
-  
-    const onlineOrdersCount = await Order.countDocuments({ "paymentIntent.method": "ONLINE PAYMENT" });
-    const codOrdersCount = await Order.countDocuments({ "paymentIntent.method": "COD" });
-    const userCount = await User.countDocuments({ staff: false, admin: false });
-    const productCount = await Product.countDocuments();
-    const orderCount = await Order.countDocuments();
-  
-    const avgRevenue = parseInt(totalRevenue / orderCount);
-  
-    const orderData = await Order.find().sort({ _id: -1 }).limit(5).lean()
-  
-    const byCategory = await Order.aggregate([
-      { $group: { _id: "$or.category", count: { $sum: 1 }, price: { $sum: "$orderItems.price" } } }
-    ]);
-  
-    const categoryName = byCategory.map(item => item._id);
-    const categoryCount = byCategory.map(item => item.count);
-  
-    const startDate = new Date();
-    const endDate = new Date(new Date().setDate(new Date().getDate() - 7));
-  
-    const weeklyDataArray = await Order.aggregate([
-      {
-        $match: {
-          createdAt: {
-            $gt: endDate,
-            $lt: startDate
-          },
-          orderStatus: "Delivered"
-        }
-      },
-      { $group: { _id: { $dayOfWeek: "$createdAt" }, sum: { $sum: "$paymentIntent.amount" } } }
-    ]);
-  
-    let weeklyDataObject = {};
-    weeklyDataArray.forEach(item => {
-      weeklyDataObject[item._id] = item.sum;
-    });
-  
-    let weeklyData = [];
-    for (let i = 1; i <= 7; i++) {
-      weeklyData[i - 1] = weeklyDataObject[i] || 0;
-    }
-    console.log( "weekly Data",weeklyData)
-            console.log( "total revanue",totalRevenue)
-            console.log( "categoryName",categoryName)
-            console.log("catderf count",categoryCount)
-            console.log( "monthly data",monthlyData)
-  
-    res.render("admin/dashboard", {
-      weeklyData,
-      totalRevenue,
-      categoryName,
-      categoryCount,
-      userCount,
-      byCategory,
-      productCount,
-      orderCount,
-     
-      orderData,
-     
-     
-      monthlyData,
-      onlineOrdersCount,
-      codOrdersCount
-    });
-  
-  } catch (error) {
-    console.log(error);
-    res.status(404);
-    throw new Error("page not found");
   }
-   }  
 
 }
 

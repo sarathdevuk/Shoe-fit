@@ -27,9 +27,9 @@
 
 	<div class="limiter">
 		<div class="container-login100">
-			<div class="wrap-login100">
+			<div class="wrap-login100 d-flex align-items-center justify-content-center">
 				{{#if mail}}
-				<section>
+				<section class="mb-">
 
 					<form action="/sendOtp" method="post">
 						<span class="login100-form-title">
@@ -40,7 +40,9 @@
 						<div>
 
 						</div>
-
+				 {{#if error}}
+            <p class="text-center fw-bold" style="color: rgb(190, 0, 0)">There is no user with this email </p>
+            {{/if}}
 						<div class="wrap-input100 validate-input " data-validate="Valid email is required: ex@abc.xyz">
 							<input class="input100" type="text" name="email" placeholder="Email" required>
 							<span class="focus-input100"></span>
@@ -85,7 +87,9 @@
 				<section>
 					<form action="/resetPassword" method="post">
 						<span class="login100-form-title">
+							<div>
 							Change password
+							</div>
 							<br>
 
 							<div class="wrap-input100 validate-input" data-validate="Password is required">

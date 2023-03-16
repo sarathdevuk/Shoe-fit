@@ -56,7 +56,7 @@ router.post("/search-product" ,verifyUser, getCheckoutPage  )
 //@cart Routes
 // router.post("/cart", addToCart);
 // router.get("/cart", getAllCart);
-// router.delete("/cart",deleteCart)
+router.get("/emptyCart",verifyUser, emptyCart)
 
 
 

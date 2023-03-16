@@ -15,7 +15,9 @@ const orderSchema = mongoose.Schema({
   }],
   paymentIntent:{ 
   },
-  address:{
+  address:{ 
+    type:Object,
+    required:true,
   },
   orderDate: {
     type:Date,

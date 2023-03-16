@@ -1,364 +1,370 @@
-<div class="navbar row text-white">
-  <div class="col-md-8">
-    <div class="row   ms-4">
-      <div class="col-md-6 logo"> <a href="/admin"> HomeKart</a> </div>
-      <div class="col-md-6 adminpanel mt-1">AdminPanel</div>
-    </div>
-  </div>
-  <div class="col-md-2">
-    <div class="row logo">
-      <div class="col-md-6 adminlogo"><i class="ri-user-line"></i></div>
-      <div class="col-md-6 logout"><a href="/admin/logout"><i class="ri-logout-box-r-line"></i></a></div>
-    </div>
-  </div>
-</div>
-
-<div class="admin-section">
-    <div class="sidebar p-4 ps-0 text-center">
-   <a href="/admin/" style="color:#51624F">Dashboard</a>
-   <a href="/admin/category">Categories</a>
-    <a href="/admin/product/?page=1" style="color:black">Products</a>
-    <a href="/admin/user" style="color:black">Staffs</a>
-    <a href="/admin/banner" style="color:black">Banners</a>
-    <a href="/admin/orders" style="color:black">Orders</a>
-    <a href="/admin/coupons" style="color:black">Coupons</a>
-    <a href="/admin/salesReport" style="color:black">Sales Report</a>
-       
-</div>
-<div class="container dashbordAdmin">
-    <div class="orderCards">
-    <div class="cards dashboard">
-      <img src="/images/revenue.png" alt="">
-        <h4>Total Revenue</h4>
-        <h1 class="text-success">Rs {{totalRevenue}}</h1>
-    </div>
-    <div class="cards dashboard">
-      <img src="/images/discount.png" alt="">
-        <h4 class="text-center">Total Discount Given</h4>
-        <h1 class="text-warning">Rs {{totalDiscount}}</h1>
-    </div>
-    <div class="cards dashboard">
-      <img src="/images/user..png" alt="">
-        <h4>Total Users</h4>
-        <h1 class="text-secondary">{{userCount}}</h1>
+ <section class="banner-area organic-breadcrumb">
+    <div class="container">
+      <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+        <div class="col-first">
+          <h1>Checkout</h1>
+          <nav class="d-flex align-items-center">
+            <a href="/">Home<span class="lnr lnr-arrow-right"></span></a>
+            <a href="/checkout">Checkout</a>
+          </nav>
         </div>
-    <div class="cards dashboard">
-      <img src="/images/products.png" alt="">
-        <h4 >Total Products</h4>
-        <h1  class="text-secondary">{{productCount}}</h1>
+      </div>
     </div>
-    <div class="cards dashboard">
-      <img src="/images/oeders.png" alt="">
-        <h4>Total Orders</h4>
-        <h1  class="text-secondary">{{orderCount}}</h1>
+  </section>
+  <!-- End Banner Area -->
+
+  <!--================Checkout Area =================-->
+  <section class="checkout_area section_gap">
+    <div class="container">
+
+      <div class="cupon_area">
+        <div class="check_title">
+          <h2><b>Offer Closes Soon!!!!</b> <a href="/couponPage">Click here to show coupons</a></h2>
+        </div>
+        <input type="text" id="coupon" placeholder="Enter coupon code">
+        <button class="tp_btn" id="couponBtn">Apply Coupon</button>
+        <div class="text-danger" id="flash"> </div>
+      </div>
+      <form class="row contact_form" id="form" novalidate="novalidate">
+        <div class="billing_details">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="d-flex justify-content-between addressPanel2">
+                <h3>Billing Details</h3>
+                <button type="button" class="primary-btn" style="border: none;border-radius: 0;height: 3rem;"
+                  data-toggle="modal" data-target="#exampleModalCenter">
+                  Add Address
+                </button>
+              </div>
+              <form class="row contact_form"  id="form">
+                <input type="text" value="<%=user.firstName%><%=user.lastName%>" name="name" id="name" hidden>
+                <input type="text" value="<%=user.email%>" name="email" hidden>
+                <input type="text" value="<%=user.mobile%>" name="mobile" hidden>
+
+                <%let number=1;let total=0; user.address.forEach(address=> { %>
+
+                  <div class="addressPanel ">
+                    <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line" id="confirm-radio"
+                      value="<%=address.house_name%>,<%=address.town%>,<%=address.district%>,<%=address.state%>,<%=address.country%>,<%=address.post_code%>,<%=user.mobile%>"
+                      required>
+
+                    <address class="mx-5" for="flexRadioDefault1">
+                      <label style="font-weight:bold;">address <%=number%> </label>
+                      <br>
+                      <%=user.firstName%>
+                        <%=user.lastName%><br>
+                          <%=address.house_name%>,
+                            <%=address.town%>,
+                              <%=address.district%><br>
+                                <%=address.state%><br>
+                                  <%=address.country%><br>
+                                    <%=address.post_code%><br>
+                                      <%=user.mobile%><br>
+
+                    </address>
+                  </div>
+                  <%number++});%>
+
+
+
+
+
+            </div>
+            <div class="col-lg-6 addressPanel2">
+              <div class="order_box" style="background: none;">
+                <h2>Your Order</h2>
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for( product of cartDetails){ %>
+                        <% for(products of product.products){ %>
+                          <tr id="<%= product.cart_item.productId %>">
+                            <td>
+                              <div class="media">
+
+                                <div class="media-body">
+                                  <p>
+                                    <%= products.product_name %>
+                                    <input type="text" name="productId" value="<%= product.cart_item.productId  %>" hidden>
+                                  </p>
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <h5>₹<%= products.finalPrice %>
+                              </h5>
+                            </td>
+                            <td>
+                              <div class="product_count">
+                                <input type="number" name="qty" id="sst" style="background: none; font-weight: bold;"
+                                  value="<%= product.cart_item.product_quantity %>" title="Quantity:"
+                                  class="input-text qty" readonly />
+
+                              </div>
+                            </td>
+                            <td>
+                              <h5 id="total"><%= product.cart_item.product_quantity * products.finalPrice %>
+                              </h5>
+                            </td>
+
+                          </tr>
+                          <% }} %>
+
+
+
+                    </tbody>
+                  </table>
+                </div>
+
+                <ul class="list list_2">
+                  <li><a href=""  style="pointer-events: none">Subtotal <span id="total"><%= price %> </span></a></li>
+                  <li><a href="" style="pointer-events: none">Shipping <span class="text-success">Free</span></a></li>
+                  <li><a href="" style="pointer-events: none"> Discount <span id="discount"></span></a></li>
+                  <li><a href="" style="pointer-events: none">Total <span id="subtotal"><%= price %></span></a></li>
+                  <input type="text" name="bill" id="subtotal2" value="<%= price %>" hidden>
+                </ul>
+                <div class="payment_item">
+                  <div class="radion_btn">
+                    <input type="radio" class="pixel-radio" id="f-option5" name="selector" value="cod" checked required>
+                    <label for="f-option5">Cash On Delivery</label>
+                    <div class="check"></div>
+                  </div>
+
+                </div>
+                <div class="payment_item active">
+                  <div class="radion_btn">
+                    <input type="radio" class="pixel-radio" id="f-option6" name="selector" value="online" required>
+                    <label for="f-option6">Razorpay </label>
+
+                    <div class="check"></div>
+                  </div>
+
+                </div>
+                <!-- <div class="creat_account">
+                            <input type="checkbox" id="f-option4" name="selector">
+                            <label for="f-option4">I’ve read and accept the </label>
+                            <a href="#">terms & conditions*</a>
+                        </div> -->
+                <button type="submit" class="primary-btn">Confirm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
+  </section>
+  <!--================End Checkout Area =================-->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">ADD ADDRESS</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-body-2">
+          <div class="login_form_inner">
+
+            <form class="row login_form" action="/addAddress?check=checkOut" method="post" id="contactForm">
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="house_name"
+                  placeholder="House Name/No" onfocus="this.placeholder = ''"
+                  onblur="this.placeholder = 'House Name/No'" required/>
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="town"
+                  placeholder="Town" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Town'" required/>
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="district"
+                  placeholder="District" onfocus="this.placeholder = ''" onblur="this.placeholder = 'District'" required/>
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="state"
+                  placeholder="State" onfocus="this.placeholder = ''" onblur="this.placeholder = 'State'" required/>
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="country"
+                  placeholder="Country" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Country'" required/>
+              </div>
+              <div class="col-md-12 form-group">
+                <input type="text" class="form-control" style="background-color: white" id="name" name="post_code" pattern="[0-9]{6,6}" title="Enter valid pincode"
+                  placeholder="Pincode" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Pincode'" required/>
+              </div>
+
+
+              <div class="col-md-12 form-group">
+                <button type="submit" value="submit" class="primary-btn">
+                  Add Address
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
     </div>
-<div class="tables row mt-5">
-<div class="userTable col-md-4">
-  <h4 class="text-center" style="color:#01e397">Recent Users</h4>
-   <table class="table">
-  <thead class="thead-dark bg-primary text-white">
-   <tr class="text-center">
-      <th scope="col">User</th>
-      <th scope="col">Email</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each userData}}
-   <tr class="text-center">
-      <td>{{this.name}}</td>
-      <td>{{this.email}}</td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
+  </div>
 
-</div>
-<div class="userTable col-md-4">
-    <h4 class="text-center" style="color:#01e397">Recent Products</h4>
-     <table class="table">
-  <thead class="thead-dark bg-primary text-white">
-    <tr class="text-center">
-      <th scope="col">Product</th>
-      <th scope="col">Quantity</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each products}}
-    <tr class="text-center">
-      <td>{{this.name}}</td>
-      <td>{{this.quantity}}</td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
-</div>
-<div class="userTable col-md-4">
-   <h4 class="text-center" style="color:#01e397">Recent Orders</h4>
-      <table class="table">
-  <thead class="thead-dark bg-primary
-   text-white">
-    <tr class="text-center">
-      <th scope="col">user</th>
-      <th scope="col">Total Price</th>
-      <th scope="col">Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    {{#each orderData}}
-    <tr class="text-center">
-      <td>{{this.address.name}}</td>
-      <td>{{this.totalPrice}}</td>
-      <td>{{this.status}}</td>
-    </tr>
-    {{/each}}
-  </tbody>
-</table>
-</div>
-</div>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-<div class="revenueCharts d-flex">
-<div id="chart" class=" col-md-7 mt-3 d-flex flex-column">
-  <h4 class="text-primary"> Total Revenue</h4>
-</div>
-<div id="week" class=" col-md-5 mt-3 d-flex flex-column">
-  <h4 class="text-primary text-center">weekly Revenue</h4>
-</div>
-</div>
+  <script>
+  document.getElementById('couponBtn').addEventListener('click',(e)=>{
+    const couponMain = document.getElementById('coupon')
+    const total = document.getElementById('total')
+   const subtotal = document.getElementById('subtotal')
+    let sub = total.innerHTML
+    console.log(sub)
+    const discountId = document.getElementById('discount')
+ //    console.log(object);
+    const  couponCode = couponMain.value
+    fetch('/admin/compare', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({couponCode})
+     }).then(res=> res.json()).then(data=>{
 
-<div class="charts-section w-100 mt-5">
-<div id="piechart" class="col-4 d-flex flex-column mt-3">
-   <h4 class="text-center text-primary">Payment Methord </h4>
-</div>
-<div id="donut" class="col-4 d-flex flex-column mt-3">
-   <h4 class="text-center text-primary">Category Wise Sales </h4>
-</div>
-</div>
-</div>
+       if(data.error == true)  {
+    sub =parseInt(sub)
  
+ let subTotal = ''
+ let totalA = (sub*data.dis)/100
+ let check =typeof(data.dis)
+ console.log('sas',check)
+   if(totalA> data.maximumLimit){
+       subTotal = data.maximumLimit
+   }
+   else{
+     subTotal = totalA
+   }
+ //    console.log(typeof(totalA)) 
+     
+    
+       let  discountValue= `<large>₹${subTotal}</large>`
+         
+      
+     const totalSub   =`<large>₹${sub-subTotal}</large>`   
+     const totalSub2   =`${sub-subTotal}`   
+ //       console.log(check)
+ //    console.log(subtotal)
+   
+     id = data.id
+     console.log(id)
+   console.log(check)
+     if(check=='number') {
+    discountId.innerHTML = discountValue
+    subtotal.innerHTML=totalSub 
+    document.getElementById("subtotal2").value = totalSub2
+     }
+     else {
+         console.log('error')
+     }
+    
+     
+     }else{
+      document.getElementById("flash").innerHTML="Coupon not found"
+     }
+    })
+ })</script>
 
-<script>
-  console.log({{monthlyData}})
-  console.log({{monthlyReturn}})
-  console.log({{categoryCount}})
-  var userCount={{userCount}}
-  let categoryName=[]
-  {{#each categoryName}}
-  categoryName.push('{{this}}')
-  {{/each}}
-  console.log({{weeklyData}})
-  console.log(categoryName)
-  let online={{online}}
-  let cod={{cod}}
-        var options = {
-          series: [{
-          name: 'Revenue',
-          data: [{{monthlyData}}]
-        }, ],
-          chart: {
-          type: 'bar',
-          height: 350
-        },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-            endingShape: 'rounded'
-          },
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ['transparent']
-        },
-        xaxis: {
-          categories: ['Jan','Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct' ,'Nov','Dec'],
-        },
-        yaxis: {
-          title: {
-            text: 'In Rupees.'
-          }
-        },
-        fill: {
-          opacity: 1
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return "Rs " + val + " thousands"
-            }
-          }
-        }
-        };
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-        var options = {
-          series: [online,cod],
-          chart: {
-          width: 380,
-          type: 'pie',
-        },
-        labels: ["Online","COD"],
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-        };
-        var piechart = new ApexCharts(document.querySelector("#piechart"), options);
-        piechart.render();
-         var options = {
-          series: [{{categoryCount}}],
-          chart: {
-          width: 400,
-          type: 'donut',
-          dropShadow: {
-            enabled: true,
-            color: '#111',
-            top: -1,
-            left: 3,
-            blur: 3,
-            opacity: 0.2
-          }
-        },
-        stroke: {
-          width: 0,
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              labels: {
-                show: true,
-                total: {
-                  showAlways: true,
-                  show: true
+  <script>
+     let form = document.querySelector('#form')
+    
+      form.addEventListener("submit", (e)=> {
+        e.preventDefault();
+          const selector =form.elements.selector.value;
+          const  name = form.elements.name.value;
+          const email = form.elements.email.value;
+          const mobile = form.elements.mobile.value;
+          const address_line =  form.elements.address_line.value;
+          
+          const bill = form.elements.bill.value;
+          ;
+            fetch('/confirm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({selector,name,email,mobile,address_line,bill})
+            }).then(res=> res.json()).then(data=>{
+                // console.log(data.cod)
+                if(data.cod == true){
+              
+                    window.location.href="/MyOrder?orderId="+data.insertId
                 }
-              }
-            }
-          }
-        },
-        labels: categoryName,
-        dataLabels: {
-          dropShadow: {
-            blur: 3,
-            opacity: 0.8
-          }
-        },
-        fill: {
-        type: 'gradient',
-          opacity: 1,
-        },
-        states: {
-          hover: {
-            filter: 'none'
-          }
-        },
+                else{
+                    razerpayFunction(data.options, data.userDetails, data.orderId)
+                }
+            })
+            // }).then(res => res.json()).then(data => {
+            //     let productDetails = data.product;
         
-        title: {
-          text: "Categories"
-        },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }]
-        };
-		var doughnotchart = new ApexCharts(document.querySelector("#donut"), options);
-        doughnotchart.render();  
-         var options = {
-          series: [{
-          name: 'REVENUE',
-          data: [{{weeklyData}}]
-        }],
-          chart: {
-          height: 350,
-          type: 'bar',
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 10,
-            dataLabels: {
-              position: 'top', // top, center, bottom
-            },
-          }
-        },
-        dataLabels: {
-          enabled: true,
-          formatter: function (val) {
-            return "Rs "+val  ;
-          },
-          offsetY: -20,
-          style: {
-            fontSize: '12px',
-            colors: ["#304758"]
-          }
-        },
-        
-        xaxis: {
-          categories: ["sun","mon","tue","wed","thu","fri","sat"],
-          position: 'top',
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false
-          },
-          crosshairs: {
-            fill: {
-              type: 'gradient',
-              gradient: {
-                colorFrom: '#D8E3F0',
-                colorTo: '#BED1E6',
-                stops: [0, 100],
-                opacityFrom: 0.4,
-                opacityTo: 0.5,
-              }
-            }
-          },
-          tooltip: {
-            enabled: true,
-          }
-        },
-        yaxis: {
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false,
-          },
-          labels: {
-            show: false,
-            formatter: function (val) {
-              return "Rs"+val;
-            }
-          }
-        
-        },
-        title: {
-          text: 'weekly data sales revenue',
-          floating: true,
-          offsetY: 330,
-          align: 'center',
-          style: {
-            color: '#444'
-          }
-        }
-        };
-        var week = new ApexCharts(document.querySelector("#week"), options);
-        week.render();  
-	</script>
+          
+        });
+        function razerpayFunction(payDetails, userDetails, orderId) {
+         
+         let options = {
+             "key": "rzp_test_yPil8RsGrn00dN",
+             "amount": payDetails.amount,
+             "currency": "INR",
+             "name": "RoyalMobiles",
+             "description": "MyStore Payment",
+             "image": "https://localhost:5000/img/logo.png",
+             "order_id": orderId,
+             "handler": function (response) {
+                 paymentSuccess(response, payDetails, userDetails, orderId);
+             },
+             "prefill": {
+                 "name": userDetails.fullName,
+                 "email": userDetails.email,
+                 "contact": userDetails.mobile
+             },
+             "notes": {
+                 "address": userDetails.address
+             },
+             "theme": {
+                 "color": "#3399cc"
+             }
+         };
+         let rzp1 = new Razorpay(options);
+         rzp1.on('payment.failed', function (response) {
+            //  window.location = '/checkout';
+          
+         });
+         rzp1.open();
+         e.preventDefault();
+     }
+
+     function paymentSuccess(response,payDetails,userDetails,orderId) {
+fetch('/payverify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ response,payDetails,userDetails,orderId })
+}).then(res => res.json()).then(data => {
+    if(data.paymentStatus == 'success') {
+      swal("Payment successs", "Payment success", "success").then(
+            // const myTimeout = setTimeout(myGreeting, 5000);
+             
+
+            function myGreeting() {
+              const orderId = data.successOrderId;
+
+                window.location = "/MyOrder?orderId="+data.successOrderId;
+            })
+    }else {
+        window.location = '/checkout';
+    }
+});
+}
+  </script>

@@ -28,10 +28,10 @@ const productController = {
             req.files.image[0].filename = req.files.image[0].filename + ".png"
             req.files.image[0].path = req.files.image[0].path + ".png"
 
-      // if (!name) {
-      //   res.status(400)
-      //   throw new Error("All fields are mandatory")
-      // }
+      if (!name) {
+        res.status(400)
+        throw new Error("All fields are mandatory")
+      }
       const product = await Product.create({
         name, description, quantity, price, mrp, category,
         image: req.files.image[0],
