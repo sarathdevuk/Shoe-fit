@@ -72,7 +72,7 @@ const cartController = {
 
     try {
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-   
+
       if (req.session.invalidCoupon) {
 
         res.render("cartpage", { error: true, message: "Invalid Coupon", cart })
@@ -101,23 +101,23 @@ const cartController = {
   }),
 
   deleteCartItem: asyncHandler(async (req, res) => {
-    
+
     try {
       const cart = await Cart.findOne({ orderby: req.user });
 
       const removedProduct = cart.products.find(product => product.product == req.params.id);
-      
-      let discount = cart.totalAfterDiscount ? 100*(cart.cartTotal - cart.totalAfterDiscount)/cart.cartTotal : 0
 
-        console.log("Your answer is",discount);
+      let discount = cart.totalAfterDiscount ? 100 * (cart.cartTotal - cart.totalAfterDiscount) / cart.cartTotal : 0
 
-      const updatedCartTotal = cart.cartTotal - (removedProduct.price * removedProduct.quantity );
+      console.log("Your answer is", discount);
 
-      let updatedTotalAfterDiscount = cart.totalAfterDiscount ?  (updatedCartTotal - (updatedCartTotal * discount) / 100).toFixed(2) : cart.totalAfterDiscount
+      const updatedCartTotal = cart.cartTotal - (removedProduct.price * removedProduct.quantity);
+
+      let updatedTotalAfterDiscount = cart.totalAfterDiscount ? (updatedCartTotal - (updatedCartTotal * discount) / 100).toFixed(2) : cart.totalAfterDiscount
 
       console.log(updatedCartTotal);
       // const updatedTotalAfterDiscount = cart.totalAfterDiscount ? (cart.totalAfterDiscount - cart.cartTotal - ((removedProduct.price * removedProduct.quantity) )/100): cart.totalAfterDiscount;
-      
+
       const updatedCart = await Cart.findByIdAndUpdate(
         cart._id,
         {
@@ -131,9 +131,9 @@ const cartController = {
         },
         { new: true }
       );
-      
+
       console.log(updatedCart);
-      
+
       res.redirect("/cart")
     } catch (error) {
       console.log(error);
@@ -158,7 +158,7 @@ const cartController = {
 
       if (count == -1 && quantity == 1) {
 
-        let notRemove = false         
+        let notRemove = false
         res.json(notRemove)
 
       } else {
@@ -178,10 +178,10 @@ const cartController = {
         if (cart.totalAfterDiscount) {
           let price = cart.products[productIndex].price * parsedCount
 
-          let discount = 100*(cart.cartTotal - cart.totalAfterDiscount)/cart.cartTotal
-        
+          let discount = 100 * (cart.cartTotal - cart.totalAfterDiscount) / cart.cartTotal
+
           cart.totalAfterDiscount = (cartTotal - (cartTotal * discount) / 100).toFixed(2)
-       
+
 
           cart.totalAfterDiscount = Number(cart.totalAfterDiscount.toFixed(2));
           console.log(" disc price", cart.totalAfterDiscount);
@@ -239,23 +239,23 @@ const cartController = {
         throw new Error("expired")
       }
 
-      req.session.discount=validCoupon.discount;
+      req.session.discount = validCoupon.discount;
 
       const { cartTotal, products } = await Cart.findOne({
         orderby: id,
       }).populate("products.product")
 
-    
-      let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2)
-      console.log("total after disc", totalAfterDiscount)
 
-     let x = 100*(cartTotal - totalAfterDiscount)/cartTotal
-     console.log("The Discount is ",x);
+      let totalAfterDiscount = (cartTotal - (cartTotal * validCoupon.discount) / 100).toFixed(2)
+
+
+      let x = 100 * (cartTotal - totalAfterDiscount) / cartTotal
+
 
       const newCart = await Cart.findOneAndUpdate({ orderby: id }, { totalAfterDiscount }, { new: true })
 
       console.log(newCart);
-     
+
       res.redirect("/cart")
 
 
@@ -266,10 +266,10 @@ const cartController = {
       throw new Error("not found")
     }
   }),
-  emptyCart: asyncHandler(async(req,res)=>{
+  emptyCart: asyncHandler(async (req, res) => {
     try {
       const id = req.user
-      const cart =await Cart.findOne( {orderby:id} )
+      const cart = await Cart.findOne({ orderby: id })
       cart.remove()
       res.redirect("/cart")
     } catch (error) {
@@ -277,7 +277,46 @@ const cartController = {
       res.status(404)
       throw new Error("not found")
     }
-  })
+  }),
+
+  applyWallet: asyncHandler(async (req, res) => {
+    try {
+      const userId = req.user;
+      const { wallet } = req.body;
+      
+      const [user, cart] = await Promise.all([
+        User.findById(userId, { wallet: 1 }),
+        Cart.findOne({ orderby: userId })
+      ]);
+    
+      const total = cart.totalAfterDiscount || cart.cartTotal;
+      const newCartTotal = total - wallet;
+    
+      if (wallet > user.wallet || wallet > newCartTotal) {
+        req.session.noWallet = wallet > user.wallet;
+        req.session.walletHigh = wallet > newCartTotal;
+        return res.redirect('/checkout');
+      }
+    
+      cart.totalAfterDiscount = newCartTotal;
+      cart.wallet = true;
+      
+      await Promise.all([
+        cart.save(),
+        User.findByIdAndUpdate(userId, { $inc: { wallet: -wallet } })
+      ]);
+    
+      res.redirect('back');
+    
+    }
+     catch(error) {
+    console.error(error)
+    res.status(404)
+    throw new Error("Error With Your Wallet")
+
+  }
+
+})
 
 }
 

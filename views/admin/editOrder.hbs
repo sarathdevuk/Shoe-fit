@@ -2,7 +2,7 @@
       <div class="container">
         <div class=" text-center mt-5 ">
 
-          <h1>Edit order status</h1>
+          <h1>Change order status</h1>
 
 
         </div>
@@ -49,20 +49,30 @@
                               <option value="" selected disabled>Select Category</option>
 
                             
-                              <option>Processing</option>
+                              {{!-- <option>Processing</option>
                               <option>dispatched</option>                         
                               <option>Out for delivery</option>
+                              <option>Delivered</option> --}}
+                          
+                             {{#ifEquals order.orderStatus "Processing"}}  
+                             <option>Processing</option>                       
+                             <option>dispatched</option>                       
+                              <option>Out for delivery</option>
                               <option>Delivered</option>
-{{!--                           
+                              <option class="text-danger fw-bold">Cancelled</option>
+                            {{/ifEquals}}
                              {{#ifEquals order.orderStatus "dispatched"}}  
                              <option>dispatched</option>                       
                               <option>Out for delivery</option>
                               <option>Delivered</option>
-                            {{#ifEquals}} --}}
-                             {{!-- {{#ifEquals order.orderStatus "Out for delivery"}}                        
+                              <option class="text-danger fw-bold">Cancelled</option>
+
+                            {{/ifEquals}}
+                             {{#ifEquals order.orderStatus "Out for delivery"}}                        
                               <option>Out for delivery</option>
                               <option>Delivered</option>
-                            {{#ifEquals}} --}}
+                              <option class="text-danger fw-bold">Cancelled</option>
+                            {{/ifEquals}}
                             </select>
 
                           </div>

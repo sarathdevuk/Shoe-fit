@@ -1,4 +1,3 @@
-
 <style>
   .gradient-custom {
     /* fallback for old browsers */
@@ -22,7 +21,7 @@
 
           <div class="card-header px-4 py-5">
             <h5 class="text-center fw-bold text-dark mb-0">Order history</h5>
-            {{!-- <h5 class="text-center text-success mb-0">Thanks for Shopping with us <span>  </span>!</h5> --}}
+            {{!-- <h5 class="text-center text-success mb-0">Thanks for Shopping with us <span> </span>!</h5> --}}
           </div>
         </div>
         {{#each order}}
@@ -53,28 +52,28 @@
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <p class="text-muted mb-0 small">{{this.product.price}}</p>
                   </div>
-                 {{#ifEquals ../orderStatus "Delivered"}}
+                  {{#ifEquals ../orderStatus "Delivered"}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
-                  </div>
-  
-               {{/ifEquals}}
-                 {{#ifEquals ../orderStatus "Cancelled"}}
-                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
-                  </div>
-               {{/ifEquals}}
-                 {{#ifEquals ../orderStatus "Returned"}}
-                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p class="text-danger fw-bold">Returned  </p>
-                  </div>
-          {{else}}
-          
-                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Cancel</a>
                   </div>
 
-               {{/ifEquals}}
+                  {{/ifEquals}}
+                  {{#ifEquals ../orderStatus "Cancelled"}}
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-danger fw-bold">Cancelled </p>
+                  </div>
+                  {{/ifEquals}}
+                  {{#ifEquals ../orderStatus "Returned"}}
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-danger fw-bold">Returned </p>
+                  </div>
+                  {{else}}
+
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <a href="/cancel-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Cancel</a>
+                  </div>
+
+                  {{/ifEquals}}
                 </div>
 
                 <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -117,7 +116,7 @@
                         style="width: 100%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                   
+
                     {{/ifEquals}}
                     <div class="d-flex justify-content-around mb-1">
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">processing</p>
@@ -137,7 +136,11 @@
             </div>
 
             <div class="d-flex justify-content-between pt-2">
-              <p class="text-muted mb-0">Invoice Number : 788152</p>
+              <p class="text-muted mb-0">Payment method : {{this.paymentIntent.method}}</p>
+              <p class="text-muted text-success mb-0"><span class="fw-bold me-4">Discount</span> 10</p>
+            </div>
+            <div class="d-flex justify-content-between pt-2">
+              <p class="text-muted mb-0">Expected delivery : {{this.dispatch}}</p>
               <p class="text-muted text-success mb-0"><span class="fw-bold me-4">Discount</span> 10</p>
             </div>
             {{!--

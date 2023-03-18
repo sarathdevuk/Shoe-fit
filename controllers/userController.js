@@ -27,8 +27,6 @@ const registerPage = (req, res) => {
 
 const registerUser = asyncHandler(async (req, res) => {
 
-  console.log(req.body);
-
   const { username, email, cfmPassword, password } = req.body
   if (!username || !email || !password || !cfmPassword) {
     res.status(400)
@@ -103,7 +101,7 @@ const sendForgotOtp = async (req, res) => {
 
 
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("not found")
   }
@@ -127,9 +125,9 @@ const resetPassword = async (req, res) => {
   const { email } = req.session.forgotBody
   const user = await User.findOne({ email })
   const hashedPassword = await bcrypt.hash(password, 10)
-  console.log(user._id);
+
   const updatePassword = await User.updateOne({ _id: user._id }, { $set: { password: hashedPassword } })
-  console.log(updatePassword);
+
   res.redirect("/login")
 
 
@@ -153,15 +151,10 @@ const getLogin = ((req, res) => {
 
 
 const loginUser = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
-  // if (!email || !password){
-  //   res.status(400);
-  //   throw new Error("All fields are mandatory")
-  // }
   const user = await User.findOne({ email });
-  console.log("user", user);
+
 
   if (user && (await bcrypt.compare(password, user.password))) {
     if (user.ban) {
@@ -182,37 +175,29 @@ const userLogout = asyncHandler(async (req, res) => {
   res.redirect("/")
 })
 
-const getAllUsers = asyncHandler(async (req, res) => {
 
-  console.log("this is user id", req.user);
-  const user = await User.findById(req.user.id);
-  console.log(user);
-  // res.status(200).json(user)
-
-
-});
 
 const shopPage = asyncHandler(async (req, res) => {
-console.log(req.query.search);
+
   try {
     // Filtering 
     const queryObj = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields","search"];
+    const excludeFields = ["page", "sort", "limit", "fields", "search"];
     excludeFields.forEach((el) => delete queryObj[el]);
 
-    
+
     let queryStr = JSON.stringify(queryObj);
-    
+
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    
-    let query = Product.find({...JSON.parse(queryStr), unlist: false}).lean();
- // Searching
- if (req.query.search) {
-  console.log("inside seaer");
-  const searchRegex = new RegExp(req.query.search, "i");
-  query = query.find({ $or: [{ name: searchRegex }, { description: searchRegex }] });
-}
-console.log("afterr");
+
+    let query = Product.find({ ...JSON.parse(queryStr), unlist: false }).lean();
+    // Searching
+    if (req.query.search) {
+
+      const searchRegex = new RegExp(req.query.search, "i");
+      query = query.find({ $or: [{ name: searchRegex }, { description: searchRegex }] });
+    }
+
 
     // Sorting
     if (req.query.sort) {
@@ -221,7 +206,7 @@ console.log("afterr");
     } else {
       query = query.sort("-createdAt");
     }
-    
+
     // limiting the fields
     if (req.query.fields) {
       const fields = req.query.fields.split(",").join(" ");
@@ -229,33 +214,33 @@ console.log("afterr");
     } else {
       query = query.select("-__v");
     }
-    
+
     // pagination
     const page = req.query.page;
     const limit = 4;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
-    
+
     const productCount = await Product.countDocuments({ unlist: false });
     const totalPage = Math.ceil(productCount / limit);
     let pagination = [];
-    
+
     for (let i = 1; i <= totalPage; i++) {
       pagination.push(i)
     }
-    
+
     if (req.query.page) {
       if (skip >= productCount) throw new Error("This Page does not exists");
     }
-    
+
     const products = await query.lean();
     const category = await Category.find({ unlist: false }).lean();
-    console.log("products",products);
-    
+
+
     res.render("shopPage", { products, category, pagination })
 
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("not found");
 
@@ -274,7 +259,8 @@ const getHomePage = asyncHandler(async (req, res) => {
     res.render("homepage.hbs", { products })
 
   } catch (error) {
-    console.log(error);
+    res.status(404)
+    throw new Error("Not found")
   }
 
 
@@ -290,6 +276,8 @@ const profile = asyncHandler(async (req, res) => {
     res.render("newProfile", { profile })
   } catch (error) {
     console.log(error);
+    res.status(404)
+    throw new Error("Not found")
   }
 
 })
@@ -327,7 +315,8 @@ const postAddress = asyncHandler(async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error);
+    res.status(404)
+    throw new Error("Not found")
   }
 
 })
@@ -349,14 +338,14 @@ const updateProfile = asyncHandler(async (req, res) => {
     res.redirect("/profile")
 
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("Not Found")
   }
 
 })
 const getEditAddress = asyncHandler(async (req, res) => {
-  console.log("edit address Page");
+
 
   try {
 
@@ -369,7 +358,7 @@ const getEditAddress = asyncHandler(async (req, res) => {
 
 
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("Page not found")
   }
@@ -388,16 +377,16 @@ const updateAddress = asyncHandler(async (req, res) => {
         },
       }
     );
-if(req.session.checkoutAddress){
+    if (req.session.checkoutAddress) {
 
-  res.redirect("/checkout")
-}else{
+      res.redirect("/checkout")
+    } else {
 
-  res.redirect("/profile")
-}
+      res.redirect("/profile")
+    }
 
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("Not found")
   }
@@ -422,7 +411,7 @@ const deleteAddress = asyncHandler(async (req, res) => {
     );
     res.redirect("/profile");
   } catch (error) {
-    console.log(error);
+
     res.status(404)
     throw new Error("Not Found");
   }
@@ -435,7 +424,6 @@ module.exports =
   registerUser,
   loginUser,
   userLogout,
-  getAllUsers,
   addAddress,
   postAddress,
   getLogin,

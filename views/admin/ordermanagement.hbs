@@ -274,6 +274,9 @@
                      {{#ifEquals this.orderStatus "Cancelled"}}
                       <td class="badge text-bg-danger mx-2 my-2">{{this.orderStatus}}</td>
                       {{/ifEquals}}                  
+                     {{#ifEquals this.orderStatus "Returned"}}
+                      <td class="badge text-bg-danger mx-2 my-2">{{this.orderStatus}}</td>
+                      {{/ifEquals}}                  
                       <td class="">{{this.paymentIntent.amount }}</td>
                       {{#ifEquals this.orderStatus "Delivered"}}
                         {{!-- <td><i class="mdi mdi-checkbox-marked-circle"></i></td> --}}

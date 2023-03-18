@@ -28,7 +28,7 @@
 	{{!--
 	<link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css"> --}}
 	<!--===============================================================================================-->
-
+ <link rel="stylesheet" type="text/css" href="/styles/zoom-styles.css">
 	<link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
 	<!--===============================================================================================-->
 	{{!--
@@ -236,40 +236,30 @@
 
 				<div class="col-md-6 col-lg-7 p-b-30">
 					<div class="p-l-25 p-r-30 p-lr-0-lg">
-						<div class="wrap-slick3 flex-sb flex-w">
-							<div class="wrap-slick3-dots"></div>
-							<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
-							<div class="slick3 gallery-lb">
-								<div class="item-slick3" data-thumb="/uploads/{{product.image.filename}}">
-									<div class="wrap-pic-w pos-relative ">
-										<img src="/uploads/{{product.image.filename}}" alt="IMG-PRODUCT">
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-											href="/uploads/{{product.image.filename}}">
-											<i class="fa fa-expand"></i>
-										</a>
+						{{!-- <div class="wrap-slick3 flex-sb flex-w"> --}}
+							{{!-- <div class="wrap-slick3-dots"></div> --}}
+							{{!-- <div class="wrap-slick3-arrows flex-sb-m flex-w"></div> --}}
+							{{!-- <div class="slick3 gallery-lb"> --}}
+								 <div class="item-slick3" data-thumb="/uploads/{{product.image.filename}}">
+									<div class="show" href="/uploads/{{product.image.filename}}">
+										<img src="/uploads/{{product.image.filename}}" id="show-img">
 									</div>
 								</div>
 
-
-
-
-
-								{{#each product.sideImage}}
-
-								<div class="item-slick3" data-thumb="/uploads/{{this.filename}}">
-									<div class="wrap-pic-w pos-relative">
-										<img src="/uploads/{{this.filename}}" alt="IMG-PRODUCT">
-
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
-											href="/uploads/{{this.filename}}">
-											<i class="fa fa-expand"></i>
-										</a>
+								<div class="small-img">
+									<img src="/uploads/next-icon.png" class="icon-left" alt="" id="prev-img">
+									<div class="small-container">
+										<div id="small-img-roll">
+											<img src="/uploads/{{product.image.filename}}" class="show-small-img" alt="">
+											{{#each product.sideImage}}
+											<img src="/uploads/{{this.filename}}" class="show-small-img" alt="">
+											{{/each}}
+											
+										</div>
 									</div>
+									<img src="/uploads/next-icon.png" class="icon-right" alt="" id="next-img">
 								</div>
-								{{/each}}
-
-							</div>
-						</div>
+							
 					</div>
 				</div>
 
@@ -357,15 +347,15 @@
 
 						<!--  -->
 						<div class="flex-w flex-m p-l-100 p-t-40 respon7">
-								
-										<div class="flex-m bor9 p-r-10 m-r-11" id="wishListButton">
-											<a onclick="wishList('{{product._id}}')" class="btn-addwish-b2  pos-relative  ">
-												<img class="icon-heart2 trans-04 ab-t-l" style="opacity: 100%;"
-													src="/images/icons/icons8-heartlne.png" alt="ICON">
 
-											</a>
+							<div class="flex-m bor9 p-r-10 m-r-11" id="wishListButton">
+								<a onclick="wishList('{{product._id}}')" class="btn-addwish-b2  pos-relative  ">
+									<img class="icon-heart2 trans-04 ab-t-l" style="opacity: 100%;"
+										src="/images/icons/icons8-heartlne.png" alt="ICON">
 
-										</div>
+								</a>
+
+							</div>
 
 						</div>
 					</div>
@@ -620,7 +610,7 @@
 					</div>
 					{{/each}}
 
-					
+
 				</div>
 			</div>
 		</div>
@@ -936,7 +926,11 @@
 			</div>
 		</div>
 	</div> --}}
-
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT"
+        crossorigin="anonymous"></script>
+     <script src="/script/zoom-image.js"></script>
+     <script src="/script/main.js"></script>
 	<!--===============================================================================================-->
 	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<!--===============================================================================================-->
@@ -1050,7 +1044,7 @@
 
 	</script>
 	<!--===============================================================================================-->
-	
+
 	<!--===============================================================================================-->
 	<script src="/js/main.js"></script>
 

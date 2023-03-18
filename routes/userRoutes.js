@@ -1,7 +1,7 @@
 const express = require("express");
 const { searchProduct } = require("../controllers/adminController");
-const { addToCart, getAllCart, deleteCart, userCart, getUserCart, emptyCart, applyCoupon, deleteCartItem, changeQuantity } = require("../controllers/cartController");
-const { addOrder, createOrder, getOrder, getCheckoutPage, verifyPayment, viewOrder, orderPlaced, returnOrder } = require("../controllers/orderController");
+const { addToCart, getAllCart, deleteCart, userCart, getUserCart, emptyCart, applyCoupon, deleteCartItem, changeQuantity, applyWallet } = require("../controllers/cartController");
+const { addOrder, createOrder, getOrder, getCheckoutPage, verifyPayment, viewOrder, orderPlaced, returnOrder, cancelOrder } = require("../controllers/orderController");
 const { addToWishlist, getWishlist, getProductById, deleteWishlist, searchProducts } = require("../controllers/productController");
 const { registerUser, loginUser, getAllUsers, userLogout, saveAddress, getLogin, getHomePage, registerPage, profile, getLandingPage, verifyOtp, getforgotPass, getForgotPass, sendForgotOtp, verifyForgotOtp, changePassword, resetPassword, updateProfile, addAddress, postAddress, getEditAddress, updateAddress, shopPage, deleteAddress } = require("../controllers/userController");
 const verifyUser = require("../middleware/veryfyuser");
@@ -23,7 +23,7 @@ router.get("/logout",userLogout)
 
 router.get("/shop",shopPage )
 router.get("/", getHomePage  )
-router.get("/users",verifyUser, getAllUsers  )
+
 // router.post("/address",verifyUser ,saveAddress)
 router.get("/profile",verifyUser ,profile)
 router.get("/address",verifyUser ,addAddress)
@@ -37,13 +37,14 @@ router.get("/deleteAddress/:id",verifyUser ,deleteAddress)
 router.get("/wishlist/:id",verifyUser,addToWishlist  )
 router.get("/wishlist",verifyUser,getWishlist  )
 router.get("/wishlist-remove/:id",verifyUser,deleteWishlist   )
-router.get("/productDetails/:id",verifyUser,getProductById  )
+router.get("/productDetails/:id",getProductById  )
 router.get("/cart", verifyUser , getUserCart  )
 router.get("/cart/:id", verifyUser , userCart  )
 router.get("/delete-cart/:id", verifyUser , deleteCartItem  )
 router.post("/change-product-quantity", verifyUser , changeQuantity  )
 // router.delete("/cart", verifyUser , emptyCart  )
 router.post("/applyCoupon" ,verifyUser, applyCoupon  )
+router.post("/applyWallet" ,verifyUser, applyWallet  )
 router.get("/checkout" ,verifyUser, getCheckoutPage  )
 // filter
 
@@ -66,6 +67,7 @@ router.get("/orderPlaced",verifyUser ,orderPlaced);
 router.get("/viewOrder",verifyUser,viewOrder)
 router.post("/verify-payment",verifyUser, verifyPayment)
 router.get("/return-order/:id",verifyUser, returnOrder)
+router.get("/cancel-order/:id",verifyUser, cancelOrder)
 
 
 

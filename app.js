@@ -47,11 +47,11 @@ app.use(morgan("dev"))
 // app.use()
 app.get('/sample', (req, res) => {
 
-  // res.render("newChekout")
+  res.render("newChekout")
   // res.render("admin/categoryManagement")
   // res.render("admin/salesReport")
   // res.render("admin/dashboard")
-  res.render("test")
+  // res.render("test")
   
 
 

@@ -29,6 +29,10 @@ const adminUserSchema = mongoose.Schema({
     default: []
 
   }, 
+  wallet:{
+    type:Number,
+    default:0
+  },
   wishlist:[{type:mongoose.Schema.Types.ObjectId, ref:"Wishlist"}],
 
 },

@@ -1,17 +1,23 @@
 <style>
     .container {
-        max-width: 960px;
+        max-width: 1200px;
+        height: 100%;
     }
 
     .lh-condensed {
-        line-height: 1.25;
+        line-height: 2.25;
+    }
+
+    body {
+        height: 100%;
     }
 </style>
+
 <div class="container">
     <div class="py-5 text-center">
 
         <h2>Checkout form</h2>
-      
+
     </div>
     <div class="row">
         <div class="col-md-4 order-md-2 mb-4">
@@ -24,7 +30,7 @@
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
                         <h6 class="my-0">{{this.product.name}}</h6>
-                        <small class="text-muted">{{this.product.description}}</small>
+                        {{!-- <small class="text-muted">{{this.product.description}}</small> --}}
                     </div>
                     <span class="text-muted">{{this.product.price}}</span>
                 </li>
@@ -36,7 +42,7 @@
                     </div>
                     <span class="text-muted">$8</span>
                 </li>
-                
+
                 <li class="list-group-item d-flex justify-content-between bg-light">
                     <div class="text-success">
                         <h6 class="my-0">Promo code</h6>
@@ -56,28 +62,44 @@
                 </li>
                 {{/if}}
             </ul>
-            {{#unless cart.totalAfterDiscount}}
-            <form class="card p-2">
+            <div class="col-md-12">
+                <div class="card mb-0 mb-md-0">
+                    <p class="text-center text-dark" style="font-weight:bold;"> Wallet : Rs {{wallet}} </p>
+                </div>
+            </div>
+
+            {{#if cart.wallet}}
+            <div class="card">
+                <p class=" text-success "> Wallet Applied  </p>
+            </div>
+
+            {{else}}
+            <form class="card p-2" action="/applyWallet" method="post">
+                {{#if err}}
+                <p class="text-center fw-bold" style="color: rgb(190, 0, 0)">{{message}}</p>
+                {{/if}}
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Promo code">
+
+                   <input type="number" name="wallet" class="form-control" placeholder="Wallet Amount" min="0">
+
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">Redeem</button>
+                        <button type="submit" class="btn btn-secondary">Apply</button>
                     </div>
                 </div>
 
             </form>
-            {{/unless}}
+
+            {{/if}}
+
             <div class="col-md-12">
                 <div class="card mb-0 mb-md-0">
-                    <a href="/address"> <button class=" btn btn-dark ">Add address </button></a>
+
                     {{!-- {{#each user.address}}
                     <div class="card-body pt-2 pb-2">
 
                         <div class="col-sm-8 mb-4">
-                             <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line"
-                            id="confirm-radio"
-                            value=" {{th}}"
-                            required>
+                            <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line"
+                                id="confirm-radio" value=" {{th}}" required>
 
                             <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
                             <p class="mb-0"> </p>
@@ -91,19 +113,17 @@
                     {{/each}} --}}
                     {{!-- <div class="addressPanel ">
                         <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line"
-                            id="confirm-radio"
-                            value="{{this.firstname}} {{this.lastname}}"
-                            required>
+                            id="confirm-radio" value="{{this.firstname}} {{this.lastname}}" required>
 
                         <address class="mx-5" for="flexRadioDefault1">
                             <label style="font-weight:bold;">address </label>
                             <br>
-                           {{this.firstname}} {{this.lastname}}<br>
-                                    {{this.address}},
-                                {{this.phone}},
-                                {{this.city}},
-                                {{this.pincode}}
-                                           
+                            {{this.firstname}} {{this.lastname}}<br>
+                            {{this.address}},
+                            {{this.phone}},
+                            {{this.city}},
+                            {{this.pincode}}
+
 
                         </address>
                     </div> --}}
@@ -116,53 +136,62 @@
 
 
 
-        <div class="col-md-8 order-md-1">
-            <h4 class="mb-3">Billing address</h4>
+        <div class="col-md-8 order-md-1 mr-2 ">
+            <h4 class="text-capitalize mb-3" style=";">Select an Address <span><a href="/address"> <button
+                            class=" btn btn-dark ">Add address </button></a></span></h4>
+
             <form id="checkout-form" class="needs-validation">
                 <div class="row">
-                     {{#each user.address}}
+
+                    {{#each user.address}}
+
                     <div class="card-body pt-2 pb-2">
+                        <div class="col-sm-6 mb-4">
 
-                        <div class="col-sm-8 mb-4">
-                             <input class="float-left mt-2 pixel-radio" type="radio" checked name="addressId"
-                            id="confirm-radio"
-                            value="{{this.id}}"
-                            required>
+                            <div class="address-box border rounded p-3">
 
-                            <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
-                            <p class="mb-0"> </p>
-                            <p class="mb-0">{{this.phone}}</p>
-                            <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
-                            <p class="mb-2">{{this.city}},{{this.pincode}}</p>
+                                <span style="padding-left: 90%;"><a href="/editAddress/{{this.id}}"
+                                        class=" btn btn-sm btn-dark">Edit</a></span>
+
+                                <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
+                                <p class="mb-0"> </p>
+                                <p class="mb-0">{{this.phone}}</p>
+                                <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
+                                <p class="mb-2">{{this.city}},{{this.pincode}}</p>
+                                <input class="float-left mt-2 pixel-radio" type="radio" checked name="addressId"
+                                    id="confirm-radio" value="{{this.id}}" required>
+                                <label class="form-check-label" for="address-radio">Select this address</label>
+                            </div>
+
                         </div>
-                        <a href="/editAddress/{{this.id}}" class=" btn btn-sm btn-primary">Edit</a>
-
                     </div>
+
                     {{/each}}
-                <hr class="mb-4">
-                <h4 class="mb-3">Payment</h4>
-                <div class="d-block my-3">
-                    <div class="custom-control custom-radio">
-                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" value="COD"
-                            checked="" required="">
-                        <label class="custom-control-label" for="credit">Cash on delivery</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" value="ONLINE"
-                            checked="" required="">
-                        <label class="custom-control-label" for="credit">Online Payments</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""
-                            required="">
-                        <label class="custom-control-label" for="credit">Wallet</label>
+                    <hr class="mb-4">
+                    <h4 class="mb-3">Payment</h4>
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"
+                                value="COD" checked="" required="">
+                            <label class="custom-control-label" for="credit">Cash on delivery</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"
+                                value="ONLINE" checked="" required="">
+                            <label class="custom-control-label" for="credit">Online Payments</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""
+                                required="">
+                            <label class="custom-control-label" for="credit">Wallet</label>
+                        </div>
+
                     </div>
 
+
+                    <hr class="mb-4">
+                    <button class="btn btn-primary btn-md btn-block" type="submit">Place Order</button>
                 </div>
-
-
-                <hr class="mb-4">
-                <button class="btn btn-primary btn-md btn-block" type="submit">Place Order</button>
             </form>
         </div>
     </div>
@@ -178,7 +207,7 @@
             method: 'post',
             data: $('#checkout-form').serialize(),
             success: (response) => {
-          
+
                 if (!response) {
                     location.href = '/orderPlaced'
                 } else {
@@ -219,7 +248,7 @@
 
     })
     function verifyPayment(payment, order) {
-      
+
         $.ajax({
             url: '/verify-payment',
             data: {

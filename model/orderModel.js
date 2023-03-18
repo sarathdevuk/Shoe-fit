@@ -35,8 +35,8 @@ const orderSchema = mongoose.Schema({
       "Processing",
       "dispatched",
       "Out for delivery",
-      "Cancelled",
       "Delivered",
+      "Cancelled",
       "Returned",
     ]
   },
