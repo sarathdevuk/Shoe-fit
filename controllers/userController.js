@@ -193,60 +193,65 @@ const getAllUsers = asyncHandler(async (req, res) => {
 });
 
 const shopPage = asyncHandler(async (req, res) => {
-
+console.log(req.query.search);
   try {
     // Filtering 
-
     const queryObj = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "fields", "category"];
+    const excludeFields = ["page", "sort", "limit", "fields","search"];
     excludeFields.forEach((el) => delete queryObj[el]);
+
+    
     let queryStr = JSON.stringify(queryObj);
-
+    
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    
+    let query = Product.find({...JSON.parse(queryStr), unlist: false}).lean();
+ // Searching
+ if (req.query.search) {
+  console.log("inside seaer");
+  const searchRegex = new RegExp(req.query.search, "i");
+  query = query.find({ $or: [{ name: searchRegex }, { description: searchRegex }] });
+}
+console.log("afterr");
 
-    let query = Product.find({ unlist: false }).select(JSON.parse(queryStr));
- 
     // Sorting
-
     if (req.query.sort) {
       const sortBy = req.query.sort.split(",").join(" ");
       query = query.sort(sortBy);
     } else {
       query = query.sort("-createdAt");
     }
-
+    
     // limiting the fields
-
     if (req.query.fields) {
       const fields = req.query.fields.split(",").join(" ");
       query = query.select(fields);
     } else {
       query = query.select("-__v");
     }
-
+    
     // pagination
-
     const page = req.query.page;
-    const limit = 12;
+    const limit = 4;
     const skip = (page - 1) * limit;
     query = query.skip(skip).limit(limit);
-    const productCount = await Product.countDocuments();
-    const totalPage = productCount / limit;
+    
+    const productCount = await Product.countDocuments({ unlist: false });
+    const totalPage = Math.ceil(productCount / limit);
     let pagination = [];
-
+    
     for (let i = 1; i <= totalPage; i++) {
       pagination.push(i)
     }
-
-    console.log(pagination);
-
+    
     if (req.query.page) {
       if (skip >= productCount) throw new Error("This Page does not exists");
     }
-    const products = await query.lean()
-    const category = await Category.find({ unlist: false }).lean()
-    console.log("category", category[0].name);
-
+    
+    const products = await query.lean();
+    const category = await Category.find({ unlist: false }).lean();
+    console.log("products",products);
+    
     res.render("shopPage", { products, category, pagination })
 
   } catch (error) {

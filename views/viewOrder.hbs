@@ -53,6 +53,28 @@
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <p class="text-muted mb-0 small">{{this.product.price}}</p>
                   </div>
+                 {{#ifEquals ../orderStatus "Delivered"}}
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
+                  </div>
+  
+               {{/ifEquals}}
+                 {{#ifEquals ../orderStatus "Cancelled"}}
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
+                  </div>
+               {{/ifEquals}}
+                 {{#ifEquals ../orderStatus "Returned"}}
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-danger fw-bold">Returned  </p>
+                  </div>
+          {{else}}
+          
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Cancel</a>
+                  </div>
+
+               {{/ifEquals}}
                 </div>
 
                 <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -88,6 +110,14 @@
                         style="width: 100%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+                    {{/ifEquals}}
+                    {{#ifEquals ../orderStatus "Returned"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 100%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                   
                     {{/ifEquals}}
                     <div class="d-flex justify-content-around mb-1">
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">processing</p>

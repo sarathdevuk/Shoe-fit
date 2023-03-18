@@ -28,10 +28,7 @@ const productController = {
             req.files.image[0].filename = req.files.image[0].filename + ".png"
             req.files.image[0].path = req.files.image[0].path + ".png"
 
-      if (!name) {
-        res.status(400)
-        throw new Error("All fields are mandatory")
-      }
+    
       const product = await Product.create({
         name, description, quantity, price, mrp, category,
         image: req.files.image[0],
@@ -137,20 +134,20 @@ const productController = {
   },
    
   searchProducts: asyncHandler(async (req, res) => {
-    console.log("search rpdod",req.body);
+    console.log("search rpdod",req.query);
 
     try {
-
-
       const products = await Product.find({
         $or: [
-          { name: new RegExp(req.body.name, "i") },
-          { category: new RegExp(req.body.name, "i") },
+          { name: new RegExp(req.query.search, "i") },
+          { category: new RegExp(req.query.search, "i") },
         ],
         
       },{unlist:false}).lean();
+
+      const category = await Category.find({unlist:false}).lean()
    
-      res.render("shopPage", {products });
+      res.render("shopPage", {products ,category });
 
     } catch (error) {
       console.log(error);
@@ -201,7 +198,7 @@ const productController = {
   addToWishlist: asyncHandler(async (req, res) => {
     const id = req.user;
     const prodId = req.params.id
-
+    console.log("wishlist");
     try {
       const user = await User.findById(id);
       const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
@@ -217,8 +214,10 @@ const productController = {
           }
         );
         let status = false
+    console.log("w",status);
+
         res.json(status)
-        // res.redirect('bac'k)
+        // res.redirect('back)
 
       } else {
         let user = await User.findByIdAndUpdate(
@@ -231,12 +230,14 @@ const productController = {
           }
         );
         const status = true
+        console.log("w",status);
         res.json(status)
         // res.redirect('back')
       }
     } catch (error) {
+      console.log(error);
       res.status(404)
-      throw new Error(error)
+      throw new Error("not Found")
     }
 
 

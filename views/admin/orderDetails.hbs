@@ -1,122 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-      <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
-</head>
-<body>
-  
 
-<div class="product-main">
-  <div class="container">
+<style>
+  .gradient-custom {
+    /* fallback for old browsers */
+    background: #fffeff;
 
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <div class="car-container">
-          <div id="carouselExampleIndicators" class="carousel slide w-100">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to top left, rgb(0, 0, 0), rgb(6, 6, 6));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to top left, rgb(0, 0, 0), rgb(255, 255, 255))
+  }
+</style>
 
 
 
-                <div id="img-container" style="width:500px" class="easyzoom">
-                  
-                    <img src="/uploads/image-1676287460622-126203287" alt="" />
-                
+<section class="h-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-10 col-xl-8">
+        <div class="card mb-2" style="border-radius: 10px;">
+
+          <div class="card-header px-4 py-5">
+            <h5 class="text-center fw-bold text-dark mb-0">Order history</h5>
+            {{!-- <h5 class="text-center text-success mb-0">Thanks for Shopping with us <span>  </span>!</h5> --}}
+          </div>
+        </div>
+       
+        {{#each order.products}}
+        <div class="card mt-4" style="border-radius: 10px;">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
+              <p class="small text-muted mb-0">Receipt Voucher : 1KAU9-84UIL</p>
+            </div>
+
+            <div class="card shadow-0 border mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-2">
+                    <img src="/uploads/{{this.product.image.filename}}" class="img-fluid" alt="Phone">
+                  </div>
+                  <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                    <p class="text mb-0">{{this.product.name}}</p>
+                  </div>
+                  {{!-- <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">White</p>
+                  </div> --}}
+
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">Qty: {{this.quantity}}</p>
+                  </div>
+                  <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                    <p class="text-muted mb-0 small">{{this.product.price}}</p>
+                  </div>
                 </div>
 
-
-
-               
-                <img src="/uploads/image-1677246099784-752570280" class="d-flex w-50" alt="..." />
-             
+                <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                <div class="row d-flex align-items-center">
+                  <div class="col-md-2">
+                    <p class="text-muted mb-0 small">Track Order </p>
+                  </div>
+                  <div class="col-md-10">
+                    {{#ifEquals ../order.orderStatus "Processing"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 25%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/ifEquals}}
+                    {{#ifEquals ../order.orderStatus "dispatched"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 40%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/ifEquals}}
+                    {{#ifEquals ../order.orderStatus "Out for delivery"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 65%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/ifEquals}}
+                    {{#ifEquals ../order.orderStatus "Delivered"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 100%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/ifEquals}}
+                    <div class="d-flex justify-content-around mb-1">
+                      <p class="text-muted mt-1 mb-0 small ms-xl-5">processing</p>
+                      <p class="text-muted mt-1 mb-0 small ms-xl-5">Dispatched</p>
+                      <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                      <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6">
-        <div class="product-container">
-          <div class="product-head mt-5">
+            {{/each}}
 
-            <h3>
-            
-            </h3>
-          </div>
-          <div class="product-price mt-3">
-            <h3 class="me-2">₹ <%=order.product.price %>
-            </h3>
-            <strike>₹ <%=order.product.MRP %> </strike>
-          </div>
-          <h5 class="mt-4">Amount Payable </h5>
-          <div class="quantity-box mt-3">
-            <b>₹ <%= order.amountPayable %> </b>
+            <div class="d-flex justify-content-between pt-2">
+              <p class="fw-bold mb-0">Order Details</p>
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Total:</span>₹ {{order.paymentIntent.amount}}</p>
+            </div>
 
-          </div>
-          <h5 class="mt-4">Address</h5>
-          <div class="mt-3 d-flex flex-column">
-            <span>
-              <%=order.address.name %>
-            </span>
-            <span>
-              <%=order.address.mobile %>
-            </span>
-            <span>
-              <%=order.address.address %>
-            </span>
-            <span>PIN: <%=order.address.pincode %> </span>
-          </div>
-          <h5 class="mt-4">Status</h5>
-          <div class="status-box mt-3">
-            <div class="order-status justify-content-start">
-              <div class="<%= order.orderStatus  %> ">
-                <%= order.orderStatus %>
-              </div>
+            <div class="d-flex justify-content-between pt-2">
+              <p class="text-muted mb-0"></p>
+              <p class="text-muted text-success mb-0"><span class="fw-bold me-4">Discount</span> 10</p>
+            </div>
+            {{!--
+            <div class="d-flex justify-content-between">
+              <p class="text-muted mb-0">Invoice Date : 22 Dec,2019</p>
+              <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
+            </div> --}}
+
+            <div class="d-flex justify-content-between mb-5">
+              <p class="text-muted mb-0">Recepits Voucher :{{order._id}}</p>
+              <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+            </div>
+            <div>
+              <p class="fw-bold mb-0">Address</p>
+               <p class="text-dark fw-italic mb-0">{{order.address.firstname}}{{order.address.lastname}},
+                {{order.address.phone}},<br> {{order.address.address}} <br> {{order.address.locality}},{{order.address.city}},<br>{{order.address.state}},{{order.address.pincode}} 
+              </p>
             </div>
           </div>
-          <h5 class="mt-4">Quantity</h5>
-          <div class="quantity-box mt-3">
-            <span>Quantity: </span>
-            <input type="number" value="<%-order.quantity%>" id="quantity" disabled />
+          <div class="card-footer border-0 px-4 py-5"
+            style="background-color: #000000; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+            <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+              <span class="h2 mb-0 ms-2">{{order.paymentIntent.amount}}</span>
+            </h5>
           </div>
-          <h5 class="mt-4">Payment Status</h5>
-          <div class="quantity-box mt-3">
-            <%= order.paymentType %>
-          </div>
-          <h5 class="mt-4">Expected delivery date</h5>
-          <div class="quantity-box mt-3">
-            <%= order.dispatch.toLocaleString() %>
-          </div>
-          <% if(order.coupon.applied){ %>
-            <h5 class="mt-4">Coupon Applied</h5>
-            <div class="quantity-box mt-3">
-              Coupon Name : <%= order.coupon.coupon.name %> <br>
-                Coupon Code : <%= order.coupon.coupon.code %> <br>
-                  Discount : <%= order.coupon.price %>
-            </div>
-            <% } %>
         </div>
+        {{!-- {{/each}} --}}
       </div>
     </div>
   </div>
-</div>
-<script>
-  var options = {
-    width:400,
-    height:250,
-    zoomWidth:500,
-    offset:{vertical:0, horizontal:10},
-    scale:1.5
-  }
-  new ImageZoom(document.getElementById("img-container"),options)
-</script>
-
-
-</body>
-</html>
-
-
-
+</section>

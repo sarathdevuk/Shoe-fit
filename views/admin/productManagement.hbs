@@ -144,32 +144,33 @@
       <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
-         <ul id="sidebarnav">
-                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
+          <ul id="sidebarnav">
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/admin"
                                 aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
                                     class="hide-menu">Dashboard</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/admin/users" aria-expanded="false"><i class="mdi mdi-account-network"></i><span
                                     class="hide-menu">User Managment</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-border-all"></i><span
+                                href="/admin/product" aria-expanded="false"><i class="mdi mdi-shopping"></i><span
                                     class="hide-menu">Product Management</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-face"></i><span
+                                href="/admin/category" aria-expanded="false"><i class="mdi mdi-server"></i><span
                                     class="hide-menu">Category Management</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-file"></i><span
+                                href="/admin/coupon" aria-expanded="false"><i class="mdi mdi-gift"></i><span
                                     class="hide-menu">Coupon Management</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
                                 href="/admin/offer" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
                                     class="hide-menu">Banner Management</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/orders" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                href="/admin/orders" aria-expanded="false"><i class="mdi mdi-truck-delivery"></i><span
                                     class="hide-menu">Orders Management</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link"
-                                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-alert-outline"></i><span
+                                href="/admin/salesReport" aria-expanded="false"><i class="mdi mdi-file"></i><span
                                     class="hide-menu">Sales Report</span></a></li>
                     </ul>
+
 
         </nav>
         <!-- End Sidebar navigation -->
@@ -243,7 +244,7 @@
                       <th class="border-top-0">ID</th>
                       <th class="border-top-0">Image</th>
                       <th class="border-top-0">Name </th>
-                      <th class="border-top-0">Description</th>
+                      
                       <th class="border-top-0">Price</th>
                       <th class="border-top-0">MRP</th>
                       <th class="border-top-0">Quantity</th>
@@ -254,7 +255,7 @@
                   </thead>
                   <tbody>
                     {{#each products}}
-                    <tr>
+                    <tr >
                       <td>{{inc @index }}</td>
 
                       <td>
@@ -271,7 +272,7 @@
                         </div>
                       </td>
                       <td>{{this.name}}</td>
-                      <td>{{this.description}}</td>
+                      {{!-- <td style="width: 5; background-color: aquamarine; ">{{this.description}}</td> --}}
                       <td>
                         <label class="badge bg-danger">{{this.price}}</label>
                       </td>

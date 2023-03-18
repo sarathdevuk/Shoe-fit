@@ -1,6 +1,5 @@
 
 const asyncHandler = require("express-async-handler");
-const { findById } = require("../model/orderModel");
 const uniqid = require("uniqid")
 const Order = require('../model/orderModel')
 const User = require('../model/userModel')
@@ -8,7 +7,7 @@ const Cart = require('../model/cartModel')
 const Product = require('../model/productModel')
 const Razorpay = require('razorpay');
 const crypto = require("crypto");
-const { userCart } = require("./cartController");
+
 
 var instance = new Razorpay({
   key_id: 'rzp_test_9dkcXL2B2Z4Ctj',
@@ -21,14 +20,14 @@ const orderController = {
 
   getCheckoutPage: asyncHandler(async (req, res) => {
     const id = req.user
-    req.session.checkoutAddress= true
+    req.session.checkoutAddress = true
     try {
-      
+
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean();
       const user = await User.findById(id).lean();
 
       const outOfStockProducts = cart.products.filter(p => (p.product.quantity - p.quantity) < 1);
-    
+
       if (outOfStockProducts.length > 0) {
         req.session.outOfStock = true;
         req.session.outOfStockProducts = outOfStockProducts.map(p => p.product.name);
@@ -48,16 +47,16 @@ const orderController = {
 
 
   createOrder: asyncHandler(async (req, res) => {
-    
+
     const { paymentMethod } = req.body
-   
+
     let { address } = await User.findOne(
-      { "address.id": req.body.addressId},
+      { "address.id": req.body.addressId },
       { _id: 0, address: { $elemMatch: { id: req.body.addressId } } }
     );
 
     const id = req.user;
-  
+
     if (!paymentMethod || !address) {
       res.status(404)
       throw new Error("Address Is mandatory")
@@ -101,13 +100,13 @@ const orderController = {
             currency: "Rupees",
           },
           orderDate: Date.now(),
-          orderStatus: "Cash on Delivery",
+          orderStatus: "Processing",
           orderby: user._id
 
         })
         newOrder.save();
 
-        console.log("new Order",newOrder);
+        console.log("new Order", newOrder);
         for (let i = 0; i < userCart.products.length; i++) {
 
           await Product.updateOne({ _id: userCart.products[i].product._id }, { $inc: { quantity: -1 * userCart.products[i].quantity, sold: 1 * userCart.products[i].quantity } });
@@ -136,13 +135,13 @@ const orderController = {
       if (hmac == req.body.payment.razorpay_signature) {
         console.log("Your Order success");
         const id = req.user
-        console.log("sdfsae",req.session.orderBody);
+        console.log("sdfsae", req.session.orderBody);
 
         let userCart = await Cart.findOne({ orderby: id })
 
         let newOrder = await new Order({
           products: userCart.products,
-          address:req.session.orderBody[0],
+          address: req.session.orderBody[0],
           paymentIntent: {
             id: uniqid(),
             method: "ONLINE PAYMENT",
@@ -203,6 +202,7 @@ const orderController = {
       const order = await Order.find()
         .populate('products.product')
         .populate('orderby', 'username email')
+        .sort("-createdAt")
         .lean()
         .exec();
 
@@ -264,7 +264,7 @@ const orderController = {
         .populate('orderby', 'username email')
         .lean()
         .exec();
-      console.log(order.products[0].product.name);
+      console.log(order);
       res.render("admin/orderDetails", { order })
 
     } catch (error) {
@@ -274,8 +274,24 @@ const orderController = {
     }
 
   }),
+  returnOrder: asyncHandler(async (req, res) => {
+    console.log("retun", req.params)
+  
+    try {
+
+      const updatedOrder = await Order.findByIdAndUpdate(req.params.id, {
+          $set: { orderStatus:"Returned" }
+        }, { new: true })
+        console.log(updatedOrder);
+      res.redirect("back")
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("Not found")
+    }
 
 
+  })
 
 
 }

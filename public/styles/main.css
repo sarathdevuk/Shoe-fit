@@ -1768,6 +1768,10 @@ button.mfp-close {
   .filter-col2,
   .filter-col3,
   .filter-col4 {width: 50%;}
+  .col-sm-6 {
+    flex-basis: 50%;
+    max-width: 50%;
+  }
 }
 
 @media (max-width: 575px) {

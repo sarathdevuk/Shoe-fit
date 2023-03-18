@@ -72,7 +72,7 @@ const cartController = {
 
     try {
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean()
-
+   
       if (req.session.invalidCoupon) {
 
         res.render("cartpage", { error: true, message: "Invalid Coupon", cart })
