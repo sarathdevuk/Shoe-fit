@@ -3,6 +3,7 @@ const Product = require("../model/productModel")
 const User = require("../model/userModel")
 const Category = require("../model/categoryModel")
 const sharp = require("sharp")
+const cloudinary = require("../config/cloudinary")
 
 // @get all product
 
@@ -16,6 +17,7 @@ const productController = {
 
     try {
 
+
       await sharp(req.files.image[0].path)
                 .png()
                 .resize(540, 720, {
@@ -28,11 +30,27 @@ const productController = {
             req.files.image[0].filename = req.files.image[0].filename + ".png"
             req.files.image[0].path = req.files.image[0].path + ".png"
 
+
+
+      let image = req.files.image[0]
+      let sideImage = req.files.sideImage
+
+
+      let imageFile=await cloudinary.uploader.upload(image.path,{folder:'Shopfit'})
+            image=imageFile;
+
+        
+
+            for (let i in sideImage) {
+                let imageFile=await cloudinary.uploader.upload(sideImage[i].path,{folder:'Shopfit'})
+                sideImage[i]=imageFile
+            }
+
     
       const product = await Product.create({
         name, description, quantity, price, mrp, category,
-        image: req.files.image[0],
-        sideImage: req.files.sideImage
+         image,
+        sideImage
       })
       console.log("success",product);
       res.status(200)
@@ -101,7 +119,7 @@ const productController = {
     const { name, price, description, quantity, mrp, category } = req.body
     console.log("image", req.files.image );
     try {
-   
+  //  Image Crop using sharp
       if(req.files.image){
         await sharp(req.files.image[0].path)
         .png()
@@ -116,6 +134,10 @@ const productController = {
     req.files.image[0].path = req.files.image[0].path + ".png"
       }
 
+
+
+
+// edit Product
       const product = await Product.updateOne({ _id: _id }, {
         $set: {
           name, price, description, quantity, mrp, category,

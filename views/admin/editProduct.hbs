@@ -332,7 +332,7 @@
                         <div class="row">
 
                           <div class="col-md-6 productlist d-flex">
-                            <img id="imageView" src="/uploads/{{product.image.filename}}" alt="Product_IMG">
+                            <img id="imageView" src="/uploads/{{product.image.url}}" alt="Product_IMG">
                           </div>
 
                           <div class="mb-8 mt-2">
@@ -342,7 +342,7 @@
 
                           <div class="col-md-6 productlist d-flex">
                             {{#each product.sideImage}}
-                            <img class="sideImageView" src="/uploads/{{this.filename}}" alt="Product_IMG">
+                            <img class="sideImageView" src="/uploads/{{this.url}}" alt="Product_IMG">
                             {{/each}}
                           </div>
 

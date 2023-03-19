@@ -240,9 +240,9 @@
 							{{!-- <div class="wrap-slick3-dots"></div> --}}
 							{{!-- <div class="wrap-slick3-arrows flex-sb-m flex-w"></div> --}}
 							{{!-- <div class="slick3 gallery-lb"> --}}
-								 <div class="item-slick3" data-thumb="/uploads/{{product.image.filename}}">
-									<div class="show" href="/uploads/{{product.image.filename}}">
-										<img src="/uploads/{{product.image.filename}}" id="show-img">
+								 <div class="item-slick3" data-thumb="{{product.image.url}}">
+									<div class="show" href="{{product.image.url}}">
+										<img src="{{product.image.url}}" id="show-img">
 									</div>
 								</div>
 
@@ -250,9 +250,9 @@
 									<img src="/uploads/next-icon.png" class="icon-left" alt="" id="prev-img">
 									<div class="small-container">
 										<div id="small-img-roll">
-											<img src="/uploads/{{product.image.filename}}" class="show-small-img" alt="">
+											<img src="{{product.image.url}}" class="show-small-img" alt="img">
 											{{#each product.sideImage}}
-											<img src="/uploads/{{this.filename}}" class="show-small-img" alt="">
+											<img src="{{this.url}}" class="show-small-img" alt="">
 											{{/each}}
 											
 										</div>
@@ -575,7 +575,7 @@
 
 						<div class="block2">
 							<div class="block2-pic hov-img0 img-container ">
-								<img src="/uploads/{{this.image.filename}}" alt="IMG-PRODUCT">
+								<img src="{{this.image.url}}" alt="IMG-PRODUCT">
 
 								<a href="/productDetails/{{this._id}}"
 									class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">

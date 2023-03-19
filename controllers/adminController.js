@@ -4,6 +4,7 @@ const Admin = require("../model/adminModel");
 const Order = require("../model/orderModel");
 const Product = require("../model/productModel");
 
+const cloudinary = require("../config/cloudinary")
 
 
 
