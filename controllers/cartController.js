@@ -233,13 +233,13 @@ const cartController = {
       const currentDate = new Date();
       const expirationDate = new Date(validCoupon.expiry);
       if (expirationDate < currentDate) {
-        console.log("coupon expired");
+       
         req.session.expired = true
         res.redirect("/cart")
         throw new Error("expired")
       }
-
-      req.session.discount = validCoupon.discount;
+     
+      req.session.discount=validCoupon.discount;
 
       const { cartTotal, products } = await Cart.findOne({
         orderby: id,
@@ -303,7 +303,7 @@ const cartController = {
       }
     
       cart.totalAfterDiscount = newCartTotal;
-      cart.wallet = true;
+      cart.walletAmount = wallet ;
       await cart.save();
     
       user.wallet -= wallet;

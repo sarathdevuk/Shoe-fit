@@ -19,14 +19,11 @@ const cartSchema = mongoose.Schema({
   }],
   cartTotal:Number,
   totalAfterDiscount: Number,
+  walletAmount:Number,
   
   orderby :{
     type: mongoose.Schema.Types.ObjectId,
     ref:"User",
-  },
-  wallet:{
-   type: Boolean,
-   default:false,
   },
   
   },{

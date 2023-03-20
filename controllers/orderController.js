@@ -19,16 +19,17 @@ var instance = new Razorpay({
 const orderController = {
 
   getCheckoutPage: asyncHandler(async (req, res) => {
-    console.log("get chkout");
+    
     const id = req.user
     req.session.checkoutAddress = true
+      discount = req.session.discount
     try {
 
 
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean();
       const user = await User.findById(id).lean();
       const wallet = user?.wallet.toFixed(0)
-    
+    console.log(cart);
 
       const outOfStockProducts = cart.products.filter(p => (p.product.quantity - p.quantity) < 1);
 
@@ -41,13 +42,13 @@ const orderController = {
 
       if (req.session.noWallet) {
 
-        res.render('checkout', { cart, user, err: true, message: "insufficient Balance ..!" });
+        res.render('checkout', { cart, user,discount,wallet, err: true, message: "insufficient Balance ..!" });
         req.session.noWallet=null;
       } else if(req.session.walletHigh){
-        res.render('checkout', { cart, user, err: true, message: "Wallet amount can't be higher than Total.! " });
+        res.render('checkout', { cart, user,discount,wallet,  err: true, message: "Wallet amount can't be higher than Total.! " });
         req.session.walletHigh=null
       }else{
-        res.render('test', { cart, user, wallet });
+        res.render('checkout', { cart, user,discount,wallet });
       }
 
 
@@ -193,7 +194,7 @@ const orderController = {
     const id = req.user;
 
     try {
-      const order = await Order.find({ orderby: id }).populate('products.product').lean().exec()
+      const order = await Order.find({ orderby: id }).populate('products.product').sort("-createdAt").lean().exec()
       for (const i of order) {
         i.dispatch = new Date(i.dispatch).toLocaleString();
       }
@@ -278,6 +279,7 @@ const orderController = {
       const _id = req.params.id
       const order = await Order.findOne({ _id: _id }).populate('products.product')
         .populate('orderby', 'username email')
+        .sort("-createdAt")
         .lean()
         .exec();
      
