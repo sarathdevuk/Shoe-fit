@@ -286,7 +286,8 @@ const addAddress = (req, res) => {
   res.render("addAddress")
 }
 const postAddress = asyncHandler(async (req, res) => {
-
+  console.log(req.body);
+  
   const { firstname, lastname, phone, pincode, address, state, locality, city } = req.body
   const id = req.user
   try {
@@ -315,6 +316,7 @@ const postAddress = asyncHandler(async (req, res) => {
     }
 
   } catch (error) {
+    console.log(error);
     res.status(404)
     throw new Error("Not found")
   }
@@ -358,7 +360,7 @@ const getEditAddress = asyncHandler(async (req, res) => {
 
 
   } catch (error) {
-
+    console.log(error);
     res.status(404)
     throw new Error("Page not found")
   }
@@ -395,23 +397,17 @@ const updateAddress = asyncHandler(async (req, res) => {
 const deleteAddress = asyncHandler(async (req, res) => {
   const id = req.user;
 
+
   try {
-    await User.updateOne(
-      {
-        _id: id,
-        address: { $elemMatch: { id: req.params.id } },
-      },
-      {
-        $pull: {
-          address: {
-            id: req.params.id,
-          },
-        },
-      }
+    const result = await User.updateOne(
+      { _id: id },
+      { $pull: { address: { id: req.params.id } } }
     );
+    console.log(result);
+
     res.redirect("/profile");
   } catch (error) {
-
+    console.log(error);
     res.status(404)
     throw new Error("Not Found");
   }

@@ -37,7 +37,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-2">
-                    <img src="/uploads/{{this.product.image.url}}" class="img-fluid" alt="Phone">
+                    <img src="{{this.product.image.url}}" class="img-fluid" alt="Phone">
                   </div>
                   <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
                     <p class="text mb-0">{{this.product.name}}</p>
@@ -56,24 +56,20 @@
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
                   </div>
-
-                  {{/ifEquals}}
-                  {{#ifEquals ../orderStatus "Cancelled"}}
+                  {{else ifEquals ../orderStatus "Cancelled"}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <p class="text-danger fw-bold">Cancelled </p>
                   </div>
-                  {{/ifEquals}}
-                  {{#ifEquals ../orderStatus "Returned"}}
+                  {{else ifEquals ../orderStatus "Returned"}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <p class="text-danger fw-bold">Returned </p>
                   </div>
                   {{else}}
-
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <a href="/cancel-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Cancel</a>
                   </div>
-
                   {{/ifEquals}}
+
                 </div>
 
                 <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -85,39 +81,42 @@
                     {{#ifEquals ../orderStatus "Processing"}}
                     <div class="progress" style="height: 6px; border-radius: 16px;">
                       <div class="progress-bar" role="progressbar"
-                        style="width: 25%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        style="width: 25%; border-radius: 16px; background-color: #078937;" aria-valuenow="25"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    {{/ifEquals}}
-                    {{#ifEquals ../orderStatus "dispatched"}}
+                    {{else ifEquals ../orderStatus "dispatched"}}
                     <div class="progress" style="height: 6px; border-radius: 16px;">
                       <div class="progress-bar" role="progressbar"
-                        style="width: 40%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        style="width: 40%; border-radius: 16px; background-color: #078937;" aria-valuenow="40"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    {{/ifEquals}}
-                    {{#ifEquals ../orderStatus "Out for delivery"}}
+                    {{else ifEquals ../orderStatus "Out for delivery"}}
                     <div class="progress" style="height: 6px; border-radius: 16px;">
                       <div class="progress-bar" role="progressbar"
                         style="width: 65%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    {{/ifEquals}}
-                    {{#ifEquals ../orderStatus "Delivered"}}
+                    {{else ifEquals ../orderStatus "Delivered"}}
                     <div class="progress" style="height: 6px; border-radius: 16px;">
                       <div class="progress-bar" role="progressbar"
-                        style="width: 100%; border-radius: 16px; background-color: #078937;" aria-valuenow="65"
+                        style="width: 100%; border-radius: 16px; background-color: #078937;" aria-valuenow="100"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                        
+                    </div>
+                    {{else ifEquals ../orderStatus "Returned"}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 100%; border-radius: 16px; background-color: #800000;" aria-valuenow="100"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{else}}
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 10%; border-radius: 16px; background-color: #bc1a2a;" aria-valuenow="10"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                     {{/ifEquals}}
-                    {{#ifEquals ../orderStatus "Returned"}}
-                    <div class="progress" style="height: 6px; border-radius: 16px;">
-                      <div class="progress-bar" role="progressbar"
-                        style="width: 100%; border-radius: 16px; background-color: #800000;" aria-valuenow="65"
-                        aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
 
-                    {{/ifEquals}}
                     <div class="d-flex justify-content-around mb-1">
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">processing</p>
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">Dispatched</p>

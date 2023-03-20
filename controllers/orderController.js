@@ -19,6 +19,7 @@ var instance = new Razorpay({
 const orderController = {
 
   getCheckoutPage: asyncHandler(async (req, res) => {
+    console.log("get chkout");
     const id = req.user
     req.session.checkoutAddress = true
     try {
@@ -26,7 +27,7 @@ const orderController = {
 
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean();
       const user = await User.findById(id).lean();
-      const wallet = user.wallet.toFixed(0)
+      const wallet = user?.wallet.toFixed(0)
     
 
       const outOfStockProducts = cart.products.filter(p => (p.product.quantity - p.quantity) < 1);
@@ -51,7 +52,7 @@ const orderController = {
 
 
     } catch (error) {
-      
+     console.log(error);
       res.status(404)
       throw new Error("not found")
     }

@@ -23,6 +23,11 @@ const adminUserSchema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  address:{
+    type:Array,
+    default:[],
+    
+  },
    
   wallet:{
     type:Number,

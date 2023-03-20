@@ -67,8 +67,8 @@ app.use("*", (req,res)=>{
   throw new Error("Page not found")
 })
 
-// app.use('/product',productRoutes)
 app.use(errorHandler)
+// app.use('/product',productRoutes)
 
 app.listen(3000, () => {
   console.log("server running on http://localhost:3000")
