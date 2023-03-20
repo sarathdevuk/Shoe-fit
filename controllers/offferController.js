@@ -1,26 +1,33 @@
 const asyncHandler = require("express-async-handler");
+const { image } = require("../config/cloudinary");
 const Offer = require("../model/offerModel");
+const cloudinary = require("../config/cloudinary")
 
 const offerController = {
-  addOffer: asyncHandler(async (req,res)=> {
-   console.log("added offer",  req.body);
-   console.log("adder",  req.files.image[0]);
+  addOffer: asyncHandler(async (req, res) => {
+    console.log("added offer", req.body);
+    console.log("adder", req.files.image[0]);
 
 
     try {
-      const{name,description} = req.body
-      
-    const offer = new Offer({
-      name,
-      description,
-      image: req.files.image[0],
-    });
-  
+      const { name, description } = req.body
+
+     let image = req.files.image[0]
+
+      let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' })
+      image = imageFile;
+
+      const offer = new Offer({
+        name,
+        description,
+        image,
+      });
+
       const savedOffer = await offer.save();
       console.log(savedOffer);
       console.log("saved");
       res.redirect("/admin/offer")
-     
+
     } catch (err) {
       console.log(err);
       res.status(404)
@@ -28,12 +35,12 @@ const offerController = {
     }
   }),
 
-  getOffer: asyncHandler(async (req,res)=>{
+  getOffer: asyncHandler(async (req, res) => {
     try {
 
       const offer = await Offer.find().lean()
       console.log(offer);
-      res.render("admin/bannerManagement",{offer})
+      res.render("admin/bannerManagement", { offer })
     } catch (error) {
       console.log(error);
       res.status(404)
@@ -41,52 +48,65 @@ const offerController = {
     }
 
   }),
-  getAddOffer: asyncHandler(async (req,res)=>{
-      res.render("admin/addBanner")
+  getAddOffer: asyncHandler(async (req, res) => {
+    res.render("admin/addBanner")
 
   }),
-  getEditOffer: asyncHandler(async (req,res)=>{
+  getEditOffer: asyncHandler(async (req, res) => {
     try {
       const offer = await Offer.findById(req.params.id).lean()
 
       console.log(offer);
-      res.render("admin/editBanner",{offer})
+      res.render("admin/editBanner", { offer })
 
     } catch (error) {
       console.log(error);
       res.status(404)
       throw new Error("not found")
-    } 
+    }
 
   }),
 
 
-  updateOffer: asyncHandler(async (req,res)=> {
+  updateOffer: asyncHandler(async (req, res) => {
 
-  const{name,description,discount,startDate,endDate} = req.body
-      const id = req.params.id
-try {
- 
-  const updatedOffer = await Offer.updateOne({_id:id},
-    {$set:
-      { name:name, description,
-        image: req.files?.image?.[0],
-      }
-    })
+    const { name, description, discount, startDate, endDate } = req.body
+    const id = req.params.id
+    try {
 
-  console.log(updatedOffer);
-  res.redirect("/admin/offer")
+      
+  let image = req.files?.image?.[0];
   
-  
-} catch (error) {
-  console.log(error);
-  res.status(404)
-  throw new Error("not found");
 
-}
+  if (image) {
+    let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' });
+    image = imageFile;
+  }
+
+
+
+      const updatedOffer = await Offer.updateOne({ _id: id },
+        {
+          $set:
+          {
+            name: name, description,
+            image: image?.image,
+          }
+        })
+
+      console.log(updatedOffer);
+      res.redirect("/admin/offer")
+
+
+    } catch (error) {
+      console.log(error);
+      res.status(404)
+      throw new Error("not found");
+
+    }
 
   }),
-  deleteOffer: asyncHandler(async(req,res)=>{
+  deleteOffer: asyncHandler(async (req, res) => {
     // res.json({mesf: "done"})
     try {
       const deletedOffer = await offer.remove(req.params.id)
@@ -96,29 +116,29 @@ try {
     }
 
   }),
-  listOffer: asyncHandler(async(req,res)=>{
-      
+  listOffer: asyncHandler(async (req, res) => {
+
     try {
-          
-    const offer = await Offer.findByIdAndUpdate(req.params.id,
-      {
-        $set:{unlist:false}
-      },{new:true})
-    
+
+      const offer = await Offer.findByIdAndUpdate(req.params.id,
+        {
+          $set: { unlist: false }
+        }, { new: true })
+
       res.redirect("/admin/offer")
     } catch (error) {
       console.log(error);
       res.status(404)
       throw new Error("cant update")
     }
-  
+
   }),
-  unlistOffer: asyncHandler(async(req,res)=>{
-    try {        
-    const offer = await Offer.findByIdAndUpdate(req.params.id,
-      {
-        $set:{unlist:true}
-      },{new:true})
+  unlistOffer: asyncHandler(async (req, res) => {
+    try {
+      const offer = await Offer.findByIdAndUpdate(req.params.id,
+        {
+          $set: { unlist: true }
+        }, { new: true })
 
       res.redirect("/admin/offer")
     } catch (error) {

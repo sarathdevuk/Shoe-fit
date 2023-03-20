@@ -234,14 +234,14 @@
                   <tbody>
                     {{#each offer}}
                     <tr>
-                      <td>1</td>
+                      <td>{{inc @index}}</td>
 
                       <td>{{this.name}}</td>
 
                      <td>
                         <div class="d-flex align-items-center">
                           <div class="productlist">
-                            <img src="/uploads/{{this.image.filename}}" class="rounded" alt="IMG-PRODUCT">
+                            <img src="{{this.image.url}}" class="rounded" alt="IMG-PRODUCT">
 
                           </div>
                           <div class="m-r-10">

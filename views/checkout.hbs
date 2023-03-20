@@ -1,266 +1,287 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 <style>
-    .container {
-        max-width: 1200px;
-        height: 100%;
-    }
+  .wallet-box {
+    width: 100%;
+    height: 50px;
+    background-color: #ffffffd4;
+    color: black;
+  }
 
-    .lh-condensed {
-        line-height: 2.25;
-    }
+  .wallet-box {
+    display: flex;
+    justify-content: space-around;
+    border-radius: 5px;
+    overflow: hidden;
+  }
 
-    body {
-        height: 100%;
-    }
+  .wallet-box input,
+  .wallet-box button {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: none;
+    padding-left: 10px;
+  }
+
+  .wallet-box button {
+    background-color: #dfda5a;
+    width: 100px;
+    font-weight: 600;
+  }
+
+  .radio-btn-label {
+    width: 100%;
+    height: 40px;
+    background-color: #ffffffda;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .radio-btn-label label {
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    font-weight: 600;
+    color: black;
+    height: 100%;
+    width: 100%;
+  }
+
+  .radio-btn-label input {
+    margin: 5px;
+  }
+
+  .radio-btn-label input[type="radio"]:checked+label {
+    background-color: #00ce64;
+    color: white;
+  }
 </style>
+<form id="checkout-form" class="h-100 h-custom" style="background-color: #eee;"></form>
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col">
+        <div class="card">
+          <div class="card-body p-4">
 
-<div class="container">
-    <div class="py-5 text-center">
+            <div class="row">
 
-        <h2>Checkout form</h2>
+              <div class="col-lg-7">
+                <div class="d-flex justify-content-between">
 
-    </div>
-    <div class="row">
-        <div class="col-md-4 order-md-2 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">Your cart</span>
-                <span class="badge badge-secondary badge-pill">3</span>
-            </h4>
-            <ul class="list-group mb-3 sticky-top">
-                {{#each cart.products}}
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0">{{this.product.name}}</h6>
-                        {{!-- <small class="text-muted">{{this.product.description}}</small> --}}
+                  <h5 class="mb-3"><i class="fas fa-long-arrow-alt-left me-2"></i>Choose an address</h5>
+                  <a href="/address" class="btn btn-dark">Add Address</a>
+                </div>
+                <hr>
+
+                {{#each user.address}}
+
+                <label for="id" class="card mb-3">
+                  <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                      <div class="d-flex flex-row align-items-center">
+
+                        <div class="ms-3">
+                          <h6>{{this.firstname}} {{this.lastname}}</h6>
+                          <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
+                          <p class="mb-0">{{this.phone}}</p>
+                          <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
+                          <p class="mb-2">{{this.city}},{{this.pincode}}</p>
+                        </div>
+                      </div>
+                      <div class="d-flex flex-row align-items-center">
+                        <div style="width: 50px;">
+                          {{!-- <h5 class="fw-normal mb-0">2</h5> --}}
+                        </div>
+                        <div style="width: 80px;">
+                          {{!-- <h5 class="mb-0">$900</h5> --}}
+                        </div>
+                        <span style="color: #cecece;">
+                          <input type="radio" form="checkout-form" name="addressId" value="{{this.id}}" id="id" required>
+                        </span>
+                      </div>
                     </div>
-                    <span class="text-muted">{{this.product.price}}</span>
-                </li>
+                  </div>
+                </label>
                 {{/each}}
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
-                    <div>
-                        <h6 class="my-0">Second product</h6>
-                        <small class="text-muted">Brief description</small>
-                    </div>
-                    <span class="text-muted">$8</span>
-                </li>
 
-                <li class="list-group-item d-flex justify-content-between bg-light">
-                    <div class="text-success">
-                        <h6 class="my-0">Promo code</h6>
-                        <small>HOLI</small>
-                    </div>
-                    <span class="text-success">-10%</span>
-                </li>
-                {{#if cart.totalAfterDiscount}}
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Total Price</span>
-                    <strong>{{cart.totalAfterDiscount}}</strong>
-                </li>
-                {{else}}
-                <li class="list-group-item d-flex justify-content-between">
-                    <span>Total Price</span>
-                    <strong>{{cart.cartTotal}}</strong>
-                </li>
-                {{/if}}
-            </ul>
-            <div class="col-md-12">
-                <div class="card mb-0 mb-md-0">
-                    <p class="text-center text-dark" style="font-weight:bold;"> Wallet : Rs {{wallet}} </p>
-                </div>
-            </div>
 
-            {{#if cart.wallet}}
-            <div class="card">
-                <p class=" text-success "> Wallet Applied  </p>
-            </div>
 
-            {{else}}
-            <form class="card p-2" action="/applyWallet" method="post">
-                {{#if err}}
-                <p class="text-center fw-bold" style="color: rgb(190, 0, 0)">{{message}}</p>
-                {{/if}}
-                <div class="input-group">
+              </div>
+              <div class="col-lg-5">
 
-                   <input type="number" name="wallet" class="form-control" placeholder="Wallet Amount" min="0">
+                <div class="card bg-dark text-white rounded-3">
+                  <div class="card-body">
 
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-secondary">Apply</button>
-                    </div>
-                </div>
 
-            </form>
+                    <h5 class=" mb-2">Payment Details</h5>
+                    <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-mastercard fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-visa fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-amex fa-2x me-2"></i></a>
+                    <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
 
-            {{/if}}
+                    <div class="mt-4">
+                      <section>
+                        <form id="wallet" action="/applyWallet" method="post" class="form-outline form-white mb-4"></form>
+                          <h6 class="form-label" for="typeName">Wallet</h6>
+                          <div class="wallet-box">
+                            <input form="wallet" type="number" min="0" name="wallet" placeholder="Available balance {{wallet}}" required>
+                            <button form="wallet" type="submit" >Apply</button>
+                          </div>
+                        
+                      </section>
 
-            <div class="col-md-12">
-                <div class="card mb-0 mb-md-0">
 
-                    {{!-- {{#each user.address}}
-                    <div class="card-body pt-2 pb-2">
+                      <h6 class="mt-3">Payment Method</h6>
 
-                        <div class="col-sm-8 mb-4">
-                            <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line"
-                                id="confirm-radio" value=" {{th}}" required>
-
-                            <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
-                            <p class="mb-0"> </p>
-                            <p class="mb-0">{{this.phone}}</p>
-                            <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
-                            <p class="mb-2">{{this.city}},{{this.pincode}}</p>
+                      <div class="form-outline form-white mb-4">
+                        <div class="form-outline form-white">
+                          <div class="radio-btn-label">
+                            <input type="radio" form="checkout-form" name="paymentMethod" id="cod" value="COD" required>
+                            <label for="cod">
+                              Cash on Delivery
+                            </label>
+                          </div>
                         </div>
-                        <a href="/editAddress/{{this.id}}" class=" btn btn-sm btn-primary">Edit</a>
-
-                    </div>
-                    {{/each}} --}}
-                    {{!-- <div class="addressPanel ">
-                        <input class="float-left mt-2 pixel-radio" type="radio" checked name="address_line"
-                            id="confirm-radio" value="{{this.firstname}} {{this.lastname}}" required>
-
-                        <address class="mx-5" for="flexRadioDefault1">
-                            <label style="font-weight:bold;">address </label>
-                            <br>
-                            {{this.firstname}} {{this.lastname}}<br>
-                            {{this.address}},
-                            {{this.phone}},
-                            {{this.city}},
-                            {{this.pincode}}
-
-
-                        </address>
-                    </div> --}}
-
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-        <div class="col-md-8 order-md-1 mr-2 ">
-            <h4 class="text-capitalize mb-3" style=";">Select an Address <span><a href="/address"> <button
-                            class=" btn btn-dark ">Add address </button></a></span></h4>
-
-            <form id="checkout-form" class="needs-validation">
-                <div class="row">
-
-                    {{#each user.address}}
-
-                    <div class="card-body pt-2 pb-2">
-                        <div class="col-sm-6 mb-4">
-
-                            <div class="address-box border rounded p-3">
-
-                                <span style="padding-left: 90%;"><a href="/editAddress/{{this.id}}"
-                                        class=" btn btn-sm btn-dark">Edit</a></span>
-
-                                <p class="mb-0">{{this.firstname}} {{this.lastname}} </p>
-                                <p class="mb-0"> </p>
-                                <p class="mb-0">{{this.phone}}</p>
-                                <p class="mb-0">{{this.address}},{{this.locality}},{{this.state}}</p>
-                                <p class="mb-2">{{this.city}},{{this.pincode}}</p>
-                                <input class="float-left mt-2 pixel-radio" type="radio" checked name="addressId"
-                                    id="confirm-radio" value="{{this.id}}" required>
-                                <label class="form-check-label" for="address-radio">Select this address</label>
+                        <div class="form-outline form-white mb-4">
+                          <div class="form-outline form-white">
+                            <div class="radio-btn-label">
+                              <input type="radio" form="checkout-form" name="paymentMethod" id="online" value="ONLINE" required />
+                              <label for="online">
+                                Online Payment
+                              </label>
                             </div>
+                          </div>
+
 
                         </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                          <p class="mb-2">Subtotal</p>
+                          <p class="mb-2">{{cart.cartTotal}}</p>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                          <p class="mb-2">Shipping</p>
+                          <p class="mb-2">Free</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <p class="mb-2 ">Wallet</p>
+                          <p class="mb-2 text-success">-100</p>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <p class="mb-2">Coupon</p>
+                          <p class="mb-2 text-success">-100</p>
+                        </div>
+                        {{#if cart.totalAfterDiscount}}
+                        <div class="d-flex justify-content-between mb-4">
+                          <p class="mb-2">Total(Incl. taxes)</p>
+                          <p class="mb-2">{{cart.totalAfterDiscount}}</p>
+                        </div>
+                        {{else}}
+                        <div class="d-flex justify-content-between mb-4">
+                          <p class="mb-2">Total(Incl. taxes)</p>
+                          <p class="mb-2">{{cart.cartTotal}}</p>
+                        </div>
+                        {{/if}}
+
+
+
+                        <button type="submit" form="checkout-form" class="btn  btn-block btn-lg w-100" style="background-color:  #dbd893;">
+                          <span style="font-weight: 600;">Checkout</span>
+                      </div>
+                      </button>
+
                     </div>
+                  </div>
 
-                    {{/each}}
-                    <hr class="mb-4">
-                    <h4 class="mb-3">Payment</h4>
-                    <div class="d-block my-3">
-                        <div class="custom-control custom-radio">
-                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"
-                                value="COD" checked="" required="">
-                            <label class="custom-control-label" for="credit">Cash on delivery</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input"
-                                value="ONLINE" checked="" required="">
-                            <label class="custom-control-label" for="credit">Online Payments</label>
-                        </div>
-              
-
-                    </div>
-
-
-                    <hr class="mb-4">
-                    <button class="btn btn-primary btn-md btn-block" type="submit">Place Order</button>
                 </div>
-            </form>
+
+              </div>
+
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 
 
 <script>
-    $("#checkout-form").submit((e) => {
-        e.preventDefault()
-        $.ajax({
-            url: '/cash-order',
-            method: 'post',
-            data: $('#checkout-form').serialize(),
-            success: (response) => {
+  $("#checkout-form").submit((e) => {
+    e.preventDefault()
+    $.ajax({
+      url: '/cash-order',
+      method: 'post',
+      data: $('#checkout-form').serialize(),
+      success: (response) => {
 
-                if (!response) {
-                    location.href = '/orderPlaced'
-                } else {
-                    razorpaypayment(response)
-                }
-            }
-
-        })
-
-        function razorpaypayment(order) {
-            var options = {
-                "key": "rzp_test_9dkcXL2B2Z4Ctj", // Enter the Key ID generated from the Dashboard
-                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Sarathdev",
-                "description": "Test Transaction",
-                "image": "https://example.com/your_logo",
-                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                "handler": function (response) {
-
-                    verifyPayment(response, order)
-                },
-                "prefill": {
-                    "name": "Sarathdev",
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9400154674"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.open();
+        if (!response) {
+          location.href = '/orderPlaced'
+        } else {
+          razorpaypayment(response)
         }
+      }
 
     })
-    function verifyPayment(payment, order) {
 
-        $.ajax({
-            url: '/verify-payment',
-            data: {
-                payment,
-                order
-            },
-            method: 'post',
-            success: (response) => {
-                console.log("resp", response)
-                if (response.status) {
-                    location.href = '/orderPlaced'
-                } else {
-                    alert("payment Failed")
-                }
-            }
+    function razorpaypayment(order) {
+      var options = {
+        "key": "rzp_test_9dkcXL2B2Z4Ctj", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Sarathdev",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response) {
 
-        })
-    } 
+          verifyPayment(response, order)
+        },
+        "prefill": {
+          "name": "Sarathdev",
+          "email": "gaurav.kumar@example.com",
+          "contact": "9400154674"
+        },
+        "notes": {
+          "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+          "color": "#3399cc"
+        }
+      };
+      var rzp1 = new Razorpay(options);
+      rzp1.open();
+    }
+
+  })
+  function verifyPayment(payment, order) {
+
+    $.ajax({
+      url: '/verify-payment',
+      data: {
+        payment,
+        order
+      },
+      method: 'post',
+      success: (response) => {
+        console.log("resp", response)
+        if (response.status) {
+          location.href = '/orderPlaced'
+        } else {
+          alert("payment Failed")
+        }
+      }
+
+    })
+  } 
 </script>

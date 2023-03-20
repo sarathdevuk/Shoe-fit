@@ -54,7 +54,7 @@
                   </div>
                   {{#ifEquals ../orderStatus "Delivered"}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Return</a>
+                    <a href="/return-order/{{../_id}}" type="button" class="btn btn-sm btn-outline-dark">Return</a>
                   </div>
                   {{else ifEquals ../orderStatus "Cancelled"}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
@@ -66,7 +66,7 @@
                   </div>
                   {{else}}
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <a href="/cancel-order/{{../_id}}" type="button" class="btn btn-sm btn-danger">Cancel</a>
+                    <a href="/cancel-order/{{../_id}}" type="button" class="btn btn-sm btn-outline-dark">Cancel</a>
                   </div>
                   {{/ifEquals}}
 
@@ -101,7 +101,7 @@
                       <div class="progress-bar" role="progressbar"
                         style="width: 100%; border-radius: 16px; background-color: #078937;" aria-valuenow="100"
                         aria-valuemin="0" aria-valuemax="100"></div>
-                        
+
                     </div>
                     {{else ifEquals ../orderStatus "Returned"}}
                     <div class="progress" style="height: 6px; border-radius: 16px;">

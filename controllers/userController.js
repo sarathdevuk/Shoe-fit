@@ -5,6 +5,7 @@ const Product = require("../model/productModel");
 const sentOTP = require("../services/otp");
 const otpGenerator = require("otp-generator");
 const Category = require("../model/categoryModel")
+const Offer = require("../model/offerModel")
 const uniqid = require("uniqid");
 const { query } = require("express");
 
@@ -252,11 +253,14 @@ const getHomePage = asyncHandler(async (req, res) => {
   try {
 
     const products = await Product.find({ unlist: false }).lean()
+    const offer = await Offer.find({unlist:false}).lean()
+    console.log(offer[0].image.filename);
+
     if (req.session.user) {
       Log = req.session.user;
-      res.render("homepage.hbs", { products, Log })
+      res.render("homepage.hbs", { products,offer, Log })
     }
-    res.render("homepage.hbs", { products })
+    res.render("homepage.hbs", { products,offer })
 
   } catch (error) {
     res.status(404)
@@ -287,7 +291,7 @@ const addAddress = (req, res) => {
 }
 const postAddress = asyncHandler(async (req, res) => {
   console.log(req.body);
-  
+
   const { firstname, lastname, phone, pincode, address, state, locality, city } = req.body
   const id = req.user
   try {

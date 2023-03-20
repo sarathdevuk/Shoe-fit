@@ -32,8 +32,8 @@ const productController = {
 
 
 
-      let image = req.files.image[0]
-      let sideImage = req.files.sideImage
+          let image = req.files.image[0]
+          let sideImage = req.files.sideImage
 
 
       let imageFile=await cloudinary.uploader.upload(image.path,{folder:'Shopfit'})
@@ -115,43 +115,62 @@ const productController = {
 
 
   updateProductById: async (req, res) => {
+
     const _id = req.params.id
     const { name, price, description, quantity, mrp, category } = req.body
     console.log("image", req.files.image );
     try {
+
   //  Image Crop using sharp
-      if(req.files.image){
-        await sharp(req.files.image[0].path)
-        .png()
-        .resize(540, 720, {
-            kernel: sharp.kernel.nearest,
-            fit: 'contain',
-            position: 'center',
-            background: { r: 255, g: 255, b: 255, alpha: 0 }
-        })
-        .toFile(req.files.image[0].path + ".png")
-    req.files.image[0].filename = req.files.image[0].filename + ".png"
-    req.files.image[0].path = req.files.image[0].path + ".png"
-      }
 
+  if (req.files.image) {
+    await sharp(req.files.image[0].path)
+      .png()
+      .resize(540, 720, {
+        kernel: sharp.kernel.nearest,
+        fit: 'contain',
+        position: 'center',
+        background: { r: 255, g: 255, b: 255, alpha: 0 }
+      })
+      .toFile(req.files.image[0].path + ".png");
 
+    req.files.image[0].filename += ".png";
+    req.files.image[0].path += ".png";
+  }
 
+  // Upload images to cloudinary
+
+  let image = req.files?.image?.[0];
+  let sideImage = req.files?.sideImage;
+
+  if (image) {
+    let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' });
+    image = imageFile;
+  }
+
+  if (sideImage) {
+    for (let i in sideImage) {
+      let imageFile = await cloudinary.uploader.upload(sideImage[i].path, { folder: 'Shopfit' });
+      sideImage[i] = imageFile;
+    }
+  }
 
 // edit Product
+
       const product = await Product.updateOne({ _id: _id }, {
         $set: {
           name, price, description, quantity, mrp, category,
-          image: req.files?.image?.[0],
-          sideImage: req.files?.sideImage
+          image: image?.image,
+          sideImage: sideImage?.sideImage,
         },
       })
-
+      
       res.redirect("/admin/product")
     }
     catch (error) {
       res.status(404)
       console.log(error);
-      // throw new Error("Cant update product")
+      throw new Error("not found")
     }
   },
    

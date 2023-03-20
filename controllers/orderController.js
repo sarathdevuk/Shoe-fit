@@ -47,7 +47,7 @@ const orderController = {
         res.render('checkout', { cart, user, err: true, message: "Wallet amount can't be higher than Total.! " });
         req.session.walletHigh=null
       }else{
-        res.render('checkout', { cart, user, wallet });
+        res.render('test', { cart, user, wallet });
       }
 
 

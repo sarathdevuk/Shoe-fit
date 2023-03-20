@@ -292,19 +292,22 @@ const cartController = {
       const total = cart.totalAfterDiscount || cart.cartTotal;
       const newCartTotal = total - wallet;
     
-      if (wallet > user.wallet || wallet > newCartTotal) {
-        req.session.noWallet = wallet > user.wallet;
-        req.session.walletHigh = wallet > newCartTotal;
+      if (wallet > user.wallet) {
+        req.session.noWallet = true;
+        return res.redirect('/checkout');
+      }
+    
+      if (wallet > total) {
+        req.session.walletHigh = true;
         return res.redirect('/checkout');
       }
     
       cart.totalAfterDiscount = newCartTotal;
       cart.wallet = true;
-      
-      await Promise.all([
-        cart.save(),
-        User.findByIdAndUpdate(userId, { $inc: { wallet: -wallet } })
-      ]);
+      await cart.save();
+    
+      user.wallet -= wallet;
+      await user.save();
     
       res.redirect('back');
     
