@@ -295,7 +295,7 @@
                           <div class="form-group">
                             <label for="form_price">MRP</label>
                             <input id="form_number" type="number" name="mrp" class="form-control"
-                              value="{{product.price}}" required="required" min="0" data-error="Valid email is required.">
+                              value="{{product.mrp}}" required="required" min="0" data-error="Please enter a valid number (greater than or equal to 0).">
 
                           </div>
                         </div>
@@ -332,7 +332,7 @@
                         <div class="row">
 
                           <div class="col-md-6 productlist d-flex">
-                            <img id="imageView" src="/uploads/{{product.image.url}}" alt="Product_IMG">
+                            <img id="imageView" src="{{product.image.url}}" alt="Product_IMG">
                           </div>
 
                           <div class="mb-8 mt-2">
@@ -342,7 +342,7 @@
 
                           <div class="col-md-6 productlist d-flex">
                             {{#each product.sideImage}}
-                            <img class="sideImageView" src="/uploads/{{this.url}}" alt="Product_IMG">
+                            <img class="sideImageView" src="{{this.url}}" alt="Product_IMG">
                             {{/each}}
                           </div>
 
