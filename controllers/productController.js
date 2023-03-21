@@ -146,6 +146,7 @@ const productController = {
   if (image) {
     let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' });
     image = imageFile;
+    console.log(image);
   }
 
   if (sideImage) {
@@ -160,8 +161,8 @@ const productController = {
       const product = await Product.updateOne({ _id: _id }, {
         $set: {
           name, price, description, quantity, mrp, category,
-          image: image?.image,
-          sideImage: sideImage?.sideImage,
+          image: image,
+          sideImage: sideImage,
         },
       })
       

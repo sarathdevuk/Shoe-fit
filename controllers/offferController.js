@@ -5,9 +5,6 @@ const cloudinary = require("../config/cloudinary")
 
 const offerController = {
   addOffer: asyncHandler(async (req, res) => {
-    console.log("added offer", req.body);
-    console.log("adder", req.files.image[0]);
-
 
     try {
       const { name, description } = req.body
@@ -24,8 +21,7 @@ const offerController = {
       });
 
       const savedOffer = await offer.save();
-      console.log(savedOffer);
-      console.log("saved");
+  
       res.redirect("/admin/offer")
 
     } catch (err) {
@@ -39,7 +35,7 @@ const offerController = {
     try {
 
       const offer = await Offer.find().lean()
-      console.log(offer);
+
       res.render("admin/bannerManagement", { offer })
     } catch (error) {
       console.log(error);
@@ -73,24 +69,25 @@ const offerController = {
     const { name, description, discount, startDate, endDate } = req.body
     const id = req.params.id
     try {
-
       
-  let image = req.files?.image?.[0];
-  
+      
+      let image = req.files?.image?.[0];
 
-  if (image) {
-    let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' });
-    image = imageFile;
-  }
-
+      if (image) {
+        let imageFile = await cloudinary.uploader.upload(image.path, { folder: 'Shopfit' });
+        image = imageFile;
+      }
+    
+      
+      console.log("kjdfkjfdshgshgfshgkjj",image);
 
 
       const updatedOffer = await Offer.updateOne({ _id: id },
         {
           $set:
           {
-            name: name, description,
-            image: image?.image,
+            name, description,
+            image: image,
           }
         })
 

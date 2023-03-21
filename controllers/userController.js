@@ -6,6 +6,7 @@ const sentOTP = require("../services/otp");
 const otpGenerator = require("otp-generator");
 const Category = require("../model/categoryModel")
 const Offer = require("../model/offerModel")
+const Cart = require("../model/cartModel")
 const uniqid = require("uniqid");
 const { query } = require("express");
 
@@ -252,15 +253,28 @@ const getHomePage = asyncHandler(async (req, res) => {
 
   try {
 
-    const products = await Product.find({ unlist: false }).lean()
-    const offer = await Offer.find({unlist:false}).lean()
-    console.log(offer[0].image.filename);
-
+    const limit = 8; // limit to 10 products/offers per page
+    const page = req.query.page || 1;
+    
+    const [products, offer] = await Promise.all([
+      Product.find({ unlist: false })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .lean(),
+      Offer.find({ unlist: false })
+        .lean(),
+    ]);
+    
     if (req.session.user) {
-      Log = req.session.user;
-      res.render("homepage.hbs", { products,offer, Log })
+      const cartCount = await Cart.countDocuments({ orderBy: req.session.user._id }).lean();
+      const Log = req.session.user;
+    //  const WishCount= req.session.user.wishlist.length 
+    //  console.log(WishCount);
+      return res.render("homepage", { products, offer, cartCount, Log });
     }
-    res.render("homepage.hbs", { products,offer })
+    
+    return res.render("homepage", { products, offer });
+    
 
   } catch (error) {
     res.status(404)
