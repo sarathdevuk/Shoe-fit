@@ -277,7 +277,7 @@
                             <label for="form_need">Select Category</label>
                             <select id="form_need" name="category" class="form-control" required="required"
                               data-error="Please specify your need.">
-                              <option value="" selected disabled>Select Category</option>
+                              <option value="{{product.category}}" selected >{{product.category}}</option>
 
                               {{#each category}}
                               <option>{{this.name}}</option>
@@ -321,7 +321,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="form_message">Description</label>
-                            <textarea id="form_message" name="description" class="form-control" rows="4"
+                            <textarea id="form_message" maxlength="50" name="description" class="form-control" rows="4"
                               
                               data-error="Please, leave us a message.">{{product.description}}</textarea>
                           </div>

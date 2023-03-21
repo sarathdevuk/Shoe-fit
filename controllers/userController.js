@@ -255,7 +255,7 @@ const getHomePage = asyncHandler(async (req, res) => {
 
     const limit = 8; // limit to 10 products/offers per page
     const page = req.query.page || 1;
-    
+
     const [products, offer] = await Promise.all([
       Product.find({ unlist: false })
         .skip((page - 1) * limit)
@@ -264,17 +264,17 @@ const getHomePage = asyncHandler(async (req, res) => {
       Offer.find({ unlist: false })
         .lean(),
     ]);
-    
+
     if (req.session.user) {
       const cartCount = await Cart.countDocuments({ orderBy: req.session.user._id }).lean();
       const Log = req.session.user;
-    //  const WishCount= req.session.user.wishlist.length 
-    //  console.log(WishCount);
+      //  const WishCount= req.session.user.wishlist.length 
+      //  console.log(WishCount);
       return res.render("homepage", { products, offer, cartCount, Log });
     }
-    
+
     return res.render("homepage", { products, offer });
-    
+
 
   } catch (error) {
     res.status(404)
@@ -289,9 +289,18 @@ const profile = asyncHandler(async (req, res) => {
   const id = req.user
 
   try {
+
     const profile = await User.findById(id).lean()
 
-    res.render("newProfile", { profile })
+    if (req.session.addressMax) {
+
+      res.render("newProfile", { profile, error: true, message: "Maximum 3 address..! " })
+      req.session.addressMax = null;
+
+    } else {
+
+      res.render("newProfile", { profile })
+    }
   } catch (error) {
     console.log(error);
     res.status(404)
@@ -310,28 +319,36 @@ const postAddress = asyncHandler(async (req, res) => {
   const id = req.user
   try {
     const user = await User.findById(id)
-
-    let object = {
-      id: uniqid(),
-      firstname,
-      lastname,
-      phone,
-      address,
-      pincode,
-      state,
-      locality,
-      city,
-    }
-    user.address.push(object);
-
-
-    await user.save()
-    if (req.session.checkoutAddress) {
-      res.redirect("/checkout")
-      req.session.checkoutAddress = null;
+   
+    if (user.address.length >= 3) {
+      req.session.addressMax = true
+      return res.redirect("/profile")
     } else {
-      res.redirect("/profile")
+      let object = {
+        id: uniqid(),
+        firstname,
+        lastname,
+        phone,
+        address,
+        pincode,
+        state,
+        locality,
+        city,
+      }
+
+      user.address.push(object);
+
+      await user.save()
+      if (req.session.checkoutAddress) {
+        res.redirect("/checkout")
+        req.session.checkoutAddress = null;
+      } else {
+        res.redirect("/profile")
+      }
+
     }
+
+
 
   } catch (error) {
     console.log(error);
@@ -342,23 +359,25 @@ const postAddress = asyncHandler(async (req, res) => {
 })
 
 const updateProfile = asyncHandler(async (req, res) => {
-
+console.log(req.body);
   const id = req.user
   try {
 
     await User.updateOne(
-      { _id: id, address: { $elemMatch: { id: req.body.id } } },
+      { _id: id},
       {
         $set: {
-          "address.$": req.body,
+          username : req.body.name,
+          phone:req.body.phone,
         },
       }
     );
 
+
     res.redirect("/profile")
 
   } catch (error) {
-
+    console.log(error);
     res.status(404)
     throw new Error("Not Found")
   }

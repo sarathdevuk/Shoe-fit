@@ -59,8 +59,10 @@
 .small-container .show-small-img:last-of-type { margin-right: 0; }
 
 /* slider bug */
+.show div{
+  z-index:1100 !important;
+}
 
-/* 
 @media only screen and (max-width: 600px) {
   .show{
       width: 350px;
@@ -68,6 +70,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
+  }
+  .show div{
+    display: none !important;
+
   }
   .small-container .show-small-img {
       width: 50px;
@@ -82,6 +88,7 @@
       margin-top: 20px;
     }
 }
+/* 
 @media only screen and (max-height: 850px) {
   .show{
       width: 320px;
@@ -125,4 +132,4 @@
     margin-top: 20px;
   }
 
-} */
+}  */

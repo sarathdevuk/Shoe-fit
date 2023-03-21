@@ -181,7 +181,7 @@
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="form_pin">Pincode</label>
-                        <input id="form_number" type="number" name="pincode" class="form-control"
+                        <input id="form_number" type="number" min="0" name="pincode" class="form-control"
                           value="{{address.pincode }}" required="required" data-error="Valid Quantity is required.">
 
                       </div>
@@ -192,7 +192,7 @@
                       <div class="form-group">
                         <label for="form_message">Address</label>
                         <textarea id="form_message" name="address" class="form-control" rows="4" required="required"
-                          value="{{address.address}}" data-error="Please, leave us a message."></textarea>
+                          value="{{address.address}}" maxlength="150" data-error="Please, leave us a message."></textarea>
                       </div>
 
                     </div>

@@ -300,7 +300,7 @@
                         <div class="col-md-12">
                           <div class="form-group">
                             <label for="form_price">Discount (in percentage)</label>
-                            <input id="form_number" type="number" name="discount" class="form-control" value="{{coupon.discount}}"
+                            <input id="form_number" type="number" name="discount" class="form-control" max="100" value="{{coupon.discount}}"
                               required="required" data-error="price require.">
 
                           </div>
@@ -314,7 +314,7 @@
                             {{#if error}}
                             <p class="text-center fw-bold" style="color: rgb(190, 0, 0)">{{message}}</p>
                             {{/if}}
-                            <input id="f" type="date" name="expiry" class="form-control" value="{{coupon.expiry}}" required="required"
+                            <input id="date" type="date" name="expiry" class="form-control" value="{{coupon.expiry}}" required="required"
                               data-error="Firstname is required.">
 
                           </div>
@@ -342,6 +342,10 @@
 
         </div>
       </div>
+        <script>
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("date").setAttribute("min", today);
+      </script>
       <!-- ============================================================== -->
       <!-- End Wrapper -->
       <!-- ============================================================== -->
