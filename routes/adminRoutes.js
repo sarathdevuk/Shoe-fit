@@ -51,6 +51,10 @@ router.get('/listcategory/:id',verifyAdmin, listCategory)
 
 // @product Routes
 
+router.get("/check", (req, res)=>{
+  res.send("Hai App working")
+})
+
 router.post('/product', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]),verifyAdmin,  addProduct)
 router.get('/addProduct',verifyAdmin,getAddProductPage)
 router.get('/product',verifyAdmin,getAllProduct)

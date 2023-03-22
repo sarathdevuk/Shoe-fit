@@ -1,5 +1,6 @@
 const verifyAdmin=(req,res,next)=>{
-  if(req.session.admin){
+  if(req.session?.admin){
+    
     
     next();
     

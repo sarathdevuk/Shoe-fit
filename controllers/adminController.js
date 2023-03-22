@@ -14,12 +14,14 @@ const adminController = {
   // routes admin/login
 
   getAdminLogin: (req, res) => {
-  console.log(req.session.admin)
-
+    
     if (req.session?.admin) {
       res.redirect("/admin")
+      console.log("insied the adminfif",req.session.admin)
     } else {
       res.render("admin/adminlogin")
+      console.log(req.session.admin)
+
     }
 
   },
