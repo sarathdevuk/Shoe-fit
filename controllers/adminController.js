@@ -12,8 +12,11 @@ const cloudinary = require("../config/cloudinary")
 const adminController = {
   // @admin Login
   // routes admin/login
+
   getAdminLogin: (req, res) => {
-    if (req.session.admin) {
+  console.log(req.session.admin)
+
+    if (req.session?.admin) {
       res.redirect("/admin")
     } else {
       res.render("admin/adminlogin")
@@ -44,8 +47,8 @@ const adminController = {
   }),
   adminLogout: (req, res) => {
 
-    res.redirect("/admin/login")
     req.session.admin = null
+    res.redirect("/admin/login")
   },
   // desc Get all user list on dashboard
   // routes users/dashboard;
