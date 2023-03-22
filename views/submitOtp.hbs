@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>OTP Submit Form</title>
 	<!-- Add minimal CSS styles -->
 	<style>
 		body {
 			font-family: Arial, sans-serif;
-			 background: #9053c7;
-  background: linear-gradient(-135deg, #c850c0, #4158d0);
+			background: #9053c7;
+			background: linear-gradient(-135deg, #c850c0, #4158d0);
 		}
+
 		.container {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			height: 100vh;
 		}
+
 		.form-container {
 			max-width: 400px;
 			margin: 0 auto;
@@ -23,15 +26,18 @@
 			border-radius: 5px;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 		}
+
 		h1 {
-      font-size: medium;
-      font-weight: bold;
+			font-size: medium;
+			font-weight: bold;
 			text-align: center;
 			margin-bottom: 20px;
 		}
+
 		label {
 			font-weight: bold;
 		}
+
 		input {
 			display: block;
 			width: 100%;
@@ -41,6 +47,7 @@
 			border: 1px solid #ccc;
 			font-size: 16px;
 		}
+
 		button {
 			display: block;
 			width: 100%;
@@ -52,24 +59,51 @@
 			font-size: 16px;
 			cursor: pointer;
 		}
+
 		button:hover {
 			background-color: #0069d9;
 		}
 	</style>
 </head>
+
 <body>
 	<div class="container">
 		<div class="form-container">
-			<h1> Enter The OTP send to your Email </h1>
+			<div> <span>A code has been sent to</span> <small>email</small> </div>
+							<p id="countdown"></p>
+
 			<form action="/verifyOtp" method="post">
 				<label for="otp">OTP:</label>
-        {{#if error }}
-          <p class=" text- danger">Otp does not match.!</p>
-        {{/if}}
-				<input type="text" id="otp" name="otp" minlength="6" maxlength="6" required>
+				{{#if error }}
+				<p class=" text- danger">Otp does not match.!</p>
+				{{/if}}
+				<input type="number" id="otp" name="otp" minlength="6" maxlength="6" required>
+					<a href="/resendOtp" id="unhide">
+								<p>Resend OTP</p>
+							</a>
 				<button type="submit">Submit</button>
 			</form>
+
+		
 		</div>
 	</div>
+
+
+	<script>
+		document.getElementById("unhide").style.display = "none";
+		var countDownTime = 10000;
+		var seconds = 6;
+		var x = setInterval(function () {
+			seconds--;
+			document.getElementById("countdown").innerHTML = "OTP wil expire in " + seconds + "s ";
+			if (seconds < 0) {
+				clearInterval(x);
+				document.getElementById("countdown").innerHTML = ""
+				document.getElementById("unhide").style.display = "block";
+			}
+		}, 1000);
+	</script>
+
 </body>
+
 </html>

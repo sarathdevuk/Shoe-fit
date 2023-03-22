@@ -49,12 +49,47 @@ const registerUser = asyncHandler(async (req, res) => {
     res.render('signup', { err: true, message: "password and confirmed password does not macth.!" })
   }
   sentOTP(req.body.email, otp)
+  req.session.email = req.body.email
   req.session.otp = otp
-  res.render("submitOtp")
+  res.redirect("/submitOtp")
 
 })
 
+const submitOtp = asyncHandler((req,res)=>{
+  console.log("sufdksfhj");
+  if(req.session.error){
+    res.render("submitOtp",{error:true})
+    req.session.error=null
+  }else{
+    res.render("submitOtp")
+  }
+})
+
+
+const resendOtp =  asyncHandler((req, res) => {
+  try {
+     req.session.otp=null
+
+      sentOTP(req.session.email, otp)
+      req.session.otp = otp;
+      var countDownTime = 60000; 1
+      setTimeout(() => {
+          otp = undefined;
+      }, countDownTime);
+      res.redirect("/submitOtp");
+      console.log("resend otp" + otp);
+  } catch (error) {
+      console.error(error)
+      res.status(404)
+      throw new Error("not found")
+  }
+
+
+})
+
+
 const verifyOtp = asyncHandler(async (req, res) => {
+  console.log("verue");
   const { username, email,phone, password } = req.session.UserDetails
    console.log(phone);
   try {
@@ -73,7 +108,8 @@ const verifyOtp = asyncHandler(async (req, res) => {
       res.redirect("/")
   
     } else {
-      res.render("submitOtp", { error: true })
+      req.session.error =true
+      res.redirect("/submitOtp")
     }
   } catch (error) {
     console.log(error);
@@ -83,6 +119,9 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
 
 })
+
+
+
 const getForgotPass = async (req, res) => {
   if (req.session.otpPage) {
     res.render("forgotPass", { otpPage: true })
@@ -473,6 +512,8 @@ module.exports =
   shopPage,
   registerPage,
   profile,
+  submitOtp,
+  resendOtp,
   verifyOtp,
   getForgotPass,
   sendForgotOtp,
