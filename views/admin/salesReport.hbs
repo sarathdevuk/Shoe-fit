@@ -354,7 +354,7 @@
                       {{#each deliveredOrders}}
                       <tr>
                         <th scope="row">{{inc @index}}</th>
-                        <td>{{this.address.name}}</td>
+                        <td>{{this.address.firstname}}{{this.address.lastname}}</td>
                         <td>{{this.products.[0].product.name}}</td>
 
                         <td>{{this.createdAt}}</td>
@@ -388,12 +388,10 @@
 
       <script>
         let orders = []
-        { { #each deliveredOrders } }
-        orders.push(['{{this.address.name}}', '{{this.products.[0].product.name}}', '{{this.createdAt}}', '{{this.paymentIntent.amount}}', '{{this.products.[0].quantity}}'
+        {{#each deliveredOrders}}
+        orders.push(['{{this.address.firstname}}{{this.address.lastname}}', '{{this.products.[0].product.name}}', '{{this.createdAt}}', '{{this.paymentIntent.amount}}', '{{this.products.[0].quantity}}'
           , '{{this.orderStatus}}'])
-        {
-          {
-            /each}}
+        {{/each}}
             let totalRevenue = '{{salesSum}}'
             let totalOrders = '{{salesCount}}'
             let Customers = '{{userCount}}'

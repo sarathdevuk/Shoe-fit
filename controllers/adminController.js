@@ -196,7 +196,7 @@ const adminController = {
         console.log("result", result);
 
         salesSum = result[0]?.totalPrice
-        console.log("salessum", salesSum);
+     
       }
       const users = await Order.distinct('orderby')
       const userCount = users.length
@@ -210,70 +210,6 @@ const adminController = {
     }
   }), 
 
-  getSalesReport: async (req, res) => {
-    let startDate = new Date(new Date().setDate(new Date().getDate() - 8));
-    let endDate = new Date();
-    let filter = req.query.filter ?? "";
-
-    if (req.query.startDate) startDate = new Date(req.query.startDate);
-    if (req.query.endDate) endDate = new Date(req.query.endDate);
-
-    const currentDate = new Date();
-    switch (req.query.filter) {
-      case 'thisYear':
-        startDate = new Date(currentDate.getFullYear(), 0, 1);
-        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-        break;
-      case 'lastYear':
-        startDate = new Date(currentDate.getFullYear() - 1, 0, 1);
-        endDate = new Date(currentDate.getFullYear() - 1, 11, 31);
-        break;
-      case 'thisMonth':
-        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
-        break;
-      case 'lastMonth':
-        startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-        endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        break;
-      default:
-        if (!req.query.filter && !req.query.startDate) filter = "lastWeek";
-    }
-    startDate.setHours(0, 0, 0, 0);
-    endDate.setHours(24, 0, 0, 0);
-
-    const orders = await orderModel.find({ createdAt: { $gt: startDate, $lt: endDate } }).sort({ createdAt: -1 }).lean();
-    let totalOrders = orders.length;
-    let totalRevenue = 0;
-    let totalPending = 0;
-    let deliveredOrders = orders.filter((item) => {
-      if (item.orderStatus == "pending" || item.orderStatus == 'outForDelivery') totalPending++;
-      totalRevenue = totalRevenue + item.product.price;
-      return item.paid;
-    });
-    let totalDispatch = deliveredOrders.length;
-
-    let orderTable = orders.map(item => [item.product.name, item.total, item.orderStatus, item.quantity, item.createdAt.toLocaleDateString()]);
-    // let byCategory = await orderModel.aggregate([{ $match: { createdAt: { $gt: startDate, $lt: endDate } } }, { $group: { _id: "$product.categoryId", count: { $sum: 1 }, price: { $sum: "$product.price" } } }]);
-    // let categoryIds = byCategory.map(item => item._id);
-    // let categories = await categoryModel.find({ _id: { $in: categoryIds } }, { category: 1 }).lean();
-    // categories.forEach((item, index) => {
-    //   let category = byCategory.find(c => c._id == item._id);
-    //   categories[index].count = category.count;
-    //   categories[index].profit = category.price;
-    // });
-    // let byBrand = await orderModel.aggregate([{ $match: { createdAt: { $gt: startDate, $lt: endDate } } }, { $group: { _id: "$product.brand", count: { $sum: 1 }, profit: { $sum: "$product.price" } } }]);
-
-    res.render("admin/salesReport", {
-      orders,
-      totalDispatch,
-      totalOrders,
-      totalPending,
-      totalRevenue,
-      startDate: moment(new Date(startDate).setDate(new Date(startDate).getDate() + 1)).utc().format('YYYY-MM-DD'),
-      endDate: moment(endDate),
-    })
-  },
 
   getAdminHome: async (req, res) => {
     try {

@@ -305,12 +305,14 @@ const getHomePage = asyncHandler(async (req, res) => {
     const limit = 8; // limit to 10 products/offers per page
     const page = req.query.page || 1;
 
-    const [products, offer] = await Promise.all([
+    const [products, offer, category] = await Promise.all([
       Product.find({ unlist: false })
         .skip((page - 1) * limit)
         .limit(limit)
         .lean(),
       Offer.find({ unlist: false })
+        .lean(),
+        Category.find({unlist: false})
         .lean(),
     ]);
 
@@ -319,10 +321,10 @@ const getHomePage = asyncHandler(async (req, res) => {
       const Log = req.session.user;
       //  const WishCount= req.session.user.wishlist.length 
       //  console.log(WishCount);
-      return res.render("homepage", { products, offer, cartCount, Log });
+      return res.render("homepage", { products, offer,category, cartCount, Log });
     }
 
-    return res.render("homepage", { products, offer });
+    return res.render("homepage", { products, offer ,category });
 
 
   } catch (error) {
