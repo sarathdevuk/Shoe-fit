@@ -14,6 +14,10 @@ const adminController = {
   // routes admin/login
 
   getAdminLogin: (req, res) => {
+
+    try{
+
+    console.log("In login route")
     
     if (req.session?.admin) {
       res.redirect("/admin")
@@ -23,6 +27,11 @@ const adminController = {
       console.log(req.session.admin)
 
     }
+  }catch(err){
+    console.log(err)
+    res.json({erro:true, err})
+  }
+
 
   },
 
