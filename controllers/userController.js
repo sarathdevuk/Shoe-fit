@@ -55,20 +55,30 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 const verifyOtp = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.session.UserDetails
-  if (req.session.otp == req.body.otp) {
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    const user = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    req.session.user = user
-    res.redirect("/")
-
-  } else {
-    res.render("submitOtp", { error: true })
+  const { username, email,phone, password } = req.session.UserDetails
+   console.log(phone);
+  try {
+    
+    if (req.session.otp == req.body.otp) {
+      console.log("verified");
+      const hashedPassword = await bcrypt.hash(password, 10)
+  
+      const user = await User.create({
+        username,
+        email,
+        phone,
+        password: hashedPassword,
+      });
+      req.session.user = user
+      res.redirect("/")
+  
+    } else {
+      res.render("submitOtp", { error: true })
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(404)
+   throw new Error("OTP ERROR")
   }
 
 
@@ -292,6 +302,7 @@ const profile = asyncHandler(async (req, res) => {
 
     const profile = await User.findById(id).lean()
 
+
     if (req.session.addressMax) {
 
       res.render("newProfile", { profile, error: true, message: "Maximum 3 address..! " })
@@ -319,7 +330,7 @@ const postAddress = asyncHandler(async (req, res) => {
   const id = req.user
   try {
     const user = await User.findById(id)
-   
+
     if (user.address.length >= 3) {
       req.session.addressMax = true
       return res.redirect("/profile")
@@ -349,7 +360,6 @@ const postAddress = asyncHandler(async (req, res) => {
     }
 
 
-
   } catch (error) {
     console.log(error);
     res.status(404)
@@ -359,16 +369,16 @@ const postAddress = asyncHandler(async (req, res) => {
 })
 
 const updateProfile = asyncHandler(async (req, res) => {
-console.log(req.body);
+
   const id = req.user
   try {
 
     await User.updateOne(
-      { _id: id},
+      { _id: id },
       {
         $set: {
-          username : req.body.name,
-          phone:req.body.phone,
+          username: req.body.name,
+          phone: req.body.phone,
         },
       }
     );
@@ -440,7 +450,6 @@ const deleteAddress = asyncHandler(async (req, res) => {
       { _id: id },
       { $pull: { address: { id: req.params.id } } }
     );
-    console.log(result);
 
     res.redirect("/profile");
   } catch (error) {

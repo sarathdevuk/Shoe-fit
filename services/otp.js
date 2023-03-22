@@ -20,7 +20,7 @@ const sentOTP = (email, otp) => {
       to: email,
       subject: " Email verification",
       html: `
-              <h1>Verify Your Email For Croza store</h1>
+              <h1>Verify Your Email For ShoeFit store</h1>
                 <h3>use this code to verify your email</h3>
                 <h2>${otp}</h2>
               `,

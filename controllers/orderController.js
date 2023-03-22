@@ -19,17 +19,17 @@ var instance = new Razorpay({
 const orderController = {
 
   getCheckoutPage: asyncHandler(async (req, res) => {
-    
+
     const id = req.user
     req.session.checkoutAddress = true
-      discount = req.session.discount
+    discount = req.session.discount
     try {
 
 
       const cart = await Cart.findOne({ orderby: id }).populate('products.product').lean();
       const user = await User.findById(id).lean();
       const wallet = user?.wallet.toFixed(0)
-    console.log(cart);
+
 
       const outOfStockProducts = cart.products.filter(p => (p.product.quantity - p.quantity) < 1);
 
@@ -42,18 +42,18 @@ const orderController = {
 
       if (req.session.noWallet) {
 
-        res.render('checkout', { cart, user,discount,wallet, err: true, message: "insufficient Balance ..!" });
-        req.session.noWallet=null;
-      } else if(req.session.walletHigh){
-        res.render('checkout', { cart, user,discount,wallet,  err: true, message: "Wallet amount can't be higher than Total.! " });
-        req.session.walletHigh=null
-      }else{
-        res.render('checkout', { cart, user,discount,wallet });
+        res.render('checkout', { cart, user, discount, wallet, err: true, message: "insufficient Balance ..!" });
+        req.session.noWallet = null;
+      } else if (req.session.walletHigh) {
+        res.render('checkout', { cart, user, discount, wallet, err: true, message: "Wallet amount can't be higher than Total.! " });
+        req.session.walletHigh = null
+      } else {
+        res.render('checkout', { cart, user, discount, wallet });
       }
 
 
     } catch (error) {
-     console.log(error);
+      console.log(error);
       res.status(404)
       throw new Error("not found")
     }
@@ -98,7 +98,7 @@ const orderController = {
           if (err) {
             console.log(err);
           }
-  
+
 
           res.json(order)
         });
@@ -122,17 +122,28 @@ const orderController = {
         })
         newOrder.save();
 
-        for (let i = 0; i < userCart.products.length; i++) {
+        // Create an array of bulk operations for each product in the cart
+        const bulkOps = userCart.products.map(product => {
+          return {
+            updateOne: {
+              // Set the filter to match the product ID
+              filter: { _id: product.product._id },
+              // Use the $inc operator to decrement the quantity and increment the sold fields
+              update: { $inc: { quantity: -1 * product.quantity, sold: 1 * product.quantity } }
+            }
+          };
+        });
 
-          await Product.updateOne({ _id: userCart.products[i].product._id }, { $inc: { quantity: -1 * userCart.products[i].quantity, sold: 1 * userCart.products[i].quantity } });
-        }
+        // Execute all the bulk operations in one go using bulkWrite
+        await Product.bulkWrite(bulkOps);
+
 
         await userCart.remove();
         res.json(status = false)
 
       }
     } catch (error) {
-      
+
       res.status(404)
       throw new Error("not found")
 
@@ -141,15 +152,15 @@ const orderController = {
   }),
 
   verifyPayment: asyncHandler(async (req, res) => {
-  
+
     try {
       let hmac = crypto.createHmac('sha256', 'j44gx6znDQHHOLOebYixLt0W')
       hmac.update(req.body.payment.razorpay_order_id + '|' + req.body.payment.razorpay_payment_id)
       hmac = hmac.digest('hex')
       if (hmac == req.body.payment.razorpay_signature) {
-        
+
         const id = req.user
-       
+
 
         let userCart = await Cart.findOne({ orderby: id })
 
@@ -185,7 +196,7 @@ const orderController = {
         res.json({ status: true })
       }
     } catch (error) {
-      
+
       res.json(error, { msg: true })
     }
 
@@ -199,10 +210,10 @@ const orderController = {
         i.dispatch = new Date(i.dispatch).toLocaleString();
       }
 
-      
+
       res.render("viewOrder", { order })
     } catch (error) {
-     
+
       res.status(404)
       throw new Error("not found")
     }
@@ -232,7 +243,7 @@ const orderController = {
 
     } catch (error) {
       res.status(404)
-     throw new Error("Not found")
+      throw new Error("Not found")
     }
 
 
@@ -245,7 +256,7 @@ const orderController = {
         .populate('orderby', 'username email')
         .lean()
         .exec();
-    
+
       res.render("admin/editOrder", { order })
 
     } catch (error) {
@@ -255,7 +266,7 @@ const orderController = {
 
   }),
   updateOrder: asyncHandler(async (req, res) => {
-    
+
     try {
       const { status } = req.body
       const { id } = req.params
@@ -269,7 +280,7 @@ const orderController = {
       // res.json(updatedOrder)
       res.redirect("/admin/orders")
     } catch (error) {
-      
+
       res.status(404)
       throw new Error("not found")
     }
@@ -282,7 +293,7 @@ const orderController = {
         .sort("-createdAt")
         .lean()
         .exec();
-     
+
       res.render("admin/orderDetails", { order })
 
     } catch (error) {
@@ -293,14 +304,14 @@ const orderController = {
 
   }),
   returnOrder: asyncHandler(async (req, res) => {
-    
+
     const id = req.user
     try {
 
       const order = await Order.findById(req.params.id)
 
-      const amount = order.paymentIntent.amount
-     
+      const amount = Number(order.paymentIntent.amount.toFixed(2))
+
       const user = await User.findByIdAndUpdate(id, { $inc: { wallet: amount } })
 
       const updatedOrder = await Order.findByIdAndUpdate(req.params.id, {
@@ -309,38 +320,38 @@ const orderController = {
 
       res.redirect("back")
     } catch (error) {
-      
+
       res.status(404)
       throw new Error("Not found")
     }
 
 
   }),
-  cancelOrder: asyncHandler(async(req,res)=>{
+  cancelOrder: asyncHandler(async (req, res) => {
     try {
-      
+
       const id = req.user
 
       const order = await Order.findById(req.params.id)
-      const amount = order.paymentIntent.amount
-      
-      if(order.paymentIntent.method =="ONLINE PAYMENT"){
+      const amount = Number(order.paymentIntent.amount.toFixed(2))
 
-         await User.findByIdAndUpdate(id, { $inc: { wallet: amount } })
+      if (order.paymentIntent.method == "ONLINE PAYMENT") {
+
+        await User.findByIdAndUpdate(id, { $inc: { wallet: amount } })
 
       }
-      
+
 
       const updatedOrder = await Order.findByIdAndUpdate(req.params.id, {
-        $set: { orderStatus:"Cancelled" }
+        $set: { orderStatus: "Cancelled" }
       }, { new: true })
 
-   
+
 
       res.redirect("back")
-      
+
     } catch (error) {
-     
+
       res.status(404)
       throw new Error("cant cancel")
     }

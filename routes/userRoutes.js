@@ -42,7 +42,8 @@ router.get("/cart", verifyUser , getUserCart  )
 router.get("/cart/:id", verifyUser , userCart  )
 router.get("/delete-cart/:id", verifyUser , deleteCartItem  )
 router.post("/change-product-quantity", verifyUser , changeQuantity  )
-// router.delete("/cart", verifyUser , emptyCart  )
+router.get("/emptyCart",verifyUser, emptyCart)
+
 router.post("/applyCoupon" ,verifyUser, applyCoupon  )
 router.post("/applyWallet" ,verifyUser, applyWallet  )
 router.get("/checkout" ,verifyUser, getCheckoutPage  )
@@ -51,12 +52,6 @@ router.get("/checkout" ,verifyUser, getCheckoutPage  )
 router.get("/" ,verifyUser, getCheckoutPage  )
 router.get("/query" ,verifyUser, getCheckoutPage  )
 router.post("/search-product" ,verifyUser, getCheckoutPage  )
-
-
-//@cart Routes
-// router.post("/cart", addToCart);
-// router.get("/cart", getAllCart);
-router.get("/emptyCart",verifyUser, emptyCart)
 
 
 
