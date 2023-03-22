@@ -26,6 +26,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
+router.get("/check", (req, res)=>{
+  res.send("Hai App working")
+})
+
+
 router.get("/",verifyAdmin ,getAdminHome)
 router.get("/login", getAdminLogin)
 router.post("/login", adminLogin)
@@ -51,9 +56,7 @@ router.get('/listcategory/:id',verifyAdmin, listCategory)
 
 // @product Routes
 
-router.get("/check", (req, res)=>{
-  res.send("Hai App working")
-})
+
 
 router.post('/product', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'sideImage', maxCount: 12 }]),verifyAdmin,  addProduct)
 router.get('/addProduct',verifyAdmin,getAddProductPage)
