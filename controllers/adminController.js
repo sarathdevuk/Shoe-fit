@@ -23,7 +23,7 @@ const adminController = {
       res.redirect("/admin")
       console.log("insied the adminfif",req.session.admin)
     } else {
-      res.render("admin/adminlogin")
+      res.render("admin/adminLogin")
       console.log(req.session.admin)
 
     }
