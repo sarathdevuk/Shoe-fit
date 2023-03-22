@@ -2,7 +2,8 @@ const express = require('express')
 require('dotenv').config()
 const session = require('express-session')
 
-const errorHandler = require('./middleware/errorHandler')
+// const errorHandler = require('./middleware/errorHandler')
+
 const userRoutes = require("./routes/userRoutes")
 const adminRoutes = require("./routes/adminRoutes")
 const { engine } = require("express-handlebars")
@@ -64,7 +65,7 @@ app.use("*", (req,res)=>{
   throw new Error("Page not found")
 })
 
-app.use(errorHandler)
+// app.use(errorHandler)
 // app.use('/product',productRoutes)
 
 app.listen(3000, () => {
