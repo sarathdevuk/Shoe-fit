@@ -17,7 +17,7 @@ const adminUserSchema = mongoose.Schema({
   },
   phone:{
     type:String,
-    
+    required:true
     
   },
   ban:{ 

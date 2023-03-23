@@ -30,16 +30,17 @@ const registerPage = (req, res) => {
 const registerUser = asyncHandler(async (req, res) => {
 
   const { username, email, cfmPassword, password } = req.body
-  if (!username || !email || !password || !cfmPassword) {
-    res.status(400)
-    throw new Error("All fields are mandatory")
-  }
-  // // to find the same person with the email
 
-  const userAvailable = await User.findOne({ email })
+  try {
+    if (!username || !email || !password || !cfmPassword) {
+      res.status(400)
+      throw new Error("All fields are mandatory")
+    }
+
+    // // to find the same person with the email
+    const userAvailable = await User.findOne({ email })
   if (userAvailable) {
-    res.status(404);
-    throw new Error("The user already registered! ")
+   return res.render('signup', { err: true, message: "The email already exist.!" })
   }
   //  check both password
   if (cfmPassword == password) {
@@ -48,15 +49,23 @@ const registerUser = asyncHandler(async (req, res) => {
   } else {
     res.render('signup', { err: true, message: "password and confirmed password does not macth.!" })
   }
+ 
   sentOTP(req.body.email, otp)
   req.session.email = req.body.email
   req.session.otp = otp
   res.redirect("/submitOtp")
+    
+  } catch (error) {
+    console.log(error)
+    res.status(404)
+    throw new Error("page not found")
+
+  }
 
 })
 
 const submitOtp = asyncHandler((req,res)=>{
-  console.log("sufdksfhj");
+  
   if(req.session.error){
     res.render("submitOtp",{error:true})
     req.session.error=null
@@ -77,7 +86,7 @@ const resendOtp =  asyncHandler((req, res) => {
           otp = undefined;
       }, countDownTime);
       res.redirect("/submitOtp");
-      console.log("resend otp" + otp);
+     
   } catch (error) {
       console.error(error)
       res.status(404)
@@ -319,8 +328,7 @@ const getHomePage = asyncHandler(async (req, res) => {
     if (req.session.user) {
       const cartCount = await Cart.countDocuments({ orderBy: req.session.user._id }).lean();
       const Log = req.session.user;
-      //  const WishCount= req.session.user.wishlist.length 
-      //  console.log(WishCount);
+   
       return res.render("homepage", { products, offer,category, cartCount, Log });
     }
 

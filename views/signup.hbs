@@ -54,7 +54,7 @@
           </div>
 
           <div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-            <input id="phone" class="input100" type="number" name="phone" placeholder="Phone" required>
+            <input id="phone" class="input100" type="number" min="0" minlength="10" maxlength="10" name="phone" placeholder="Phone" required>
             <span class="focus-input100"></span>
             <span class="symbol-input100">
                <i class="fa fa-mobile" aria-hidden="true"></i>
@@ -77,8 +77,9 @@
             </span>
           </div>
           <div id="error2"></div>
-          {{!-- <p id="error" class="text-center fw-bold" style="color: rgb(190, 0, 0)"> </p> --}}
-
+          {{#if err}}
+          <p id="er" class="text-center fw-bold" style="color: rgb(190, 0, 0)"> {{message}} </p>
+        {{/if}}
           <div class="container-login100-form-btn">
             <button class="login100-form-btn" type="submit">
               Create Account
@@ -98,6 +99,7 @@
 
     const form = document.querySelector("#form");
     const username = form.querySelector("#name");
+    const phone = form.querySelector("#phone");
     const email = form.querySelector("#email");
     const password = form.querySelector("#password");
     const cfmPassword = form.querySelector("#cfmPassword");

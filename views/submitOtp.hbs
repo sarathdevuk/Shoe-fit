@@ -69,7 +69,7 @@
 <body>
 	<div class="container">
 		<div class="form-container">
-			<div> <span>A code has been sent to</span> <small>email</small> </div>
+			<div> <span class="text-dark fw-bold" >Enter the otp to verify email</span> </div>
 							<p id="countdown"></p>
 
 			<form action="/verifyOtp" method="post">
@@ -92,7 +92,7 @@
 	<script>
 		document.getElementById("unhide").style.display = "none";
 		var countDownTime = 10000;
-		var seconds = 6;
+		var seconds = 60;
 		var x = setInterval(function () {
 			seconds--;
 			document.getElementById("countdown").innerHTML = "OTP wil expire in " + seconds + "s ";

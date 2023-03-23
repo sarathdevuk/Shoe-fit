@@ -1,22 +1,27 @@
 const nodemailer = require("nodemailer");
 // const dotenv = require('dotenv').config()
 const sentOTP = (email, otp) => {
+  
   return new Promise((resolve, reject) => {
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com", // SMTP server address (usually mail.your-domain.com)
       port: 465, // Port for SMTP (usually 465)
       secure: true, // Usually true if connecting to port 465
+
+      tls:{
+        rejectUnauthorized:false
+      },
       auth: {
         // user: process.env.SITE_EMAIL,
         // pass: process.env.SITE_PASSWORD,
-        user: "offisarathdev733@gmail.com",
-        pass: "oseewrnsculwswih",
+        user: process.env.OTP_EMAIL,
+        pass: process.env.APP_PASSWORD,
       },
 
     });
     var mailOptions = {
       // from: process.env.SITE_EMAIL,
-      from: "offisarathdev733@gmail.com",
+      from:process.env.OTP_EMAIL,
       to: email,
       subject: " Email verification",
       html: `
