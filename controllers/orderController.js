@@ -242,6 +242,7 @@ const orderController = {
 
 
     } catch (error) {
+      console.log(error);
       res.status(404)
       throw new Error("Not found")
     }
