@@ -104,7 +104,7 @@ const verifyOtp = asyncHandler(async (req, res) => {
   try {
     
     if (req.session.otp == req.body.otp) {
-      console.log("verified");
+  
       const hashedPassword = await bcrypt.hash(password, 10)
   
       const user = await User.create({
